@@ -365,40 +365,15 @@
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
 
-        // Template generator helper for generic blanks
-        function genTemplate(brandName, templateName) {
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
-                    <div style="background-color: #f4f4f4; padding: 15px; margin-bottom: 20px; font-weight: bold; font-size: 20px;">
-                        ${brandName}
-                    </div>
-                    <h3 style="margin-bottom: 5px;">${templateName}</h3>
-                    <p>Dear {{recipient_name}},</p>
-                    <p>{{body_text}}</p>
-                    <p>Kind regards,<br><strong>${brandName} Customer Service</strong></p>
-                    <hr style="border: 0; border-top: 1px solid #eaeaea; margin: 30px 0;">
-                    <p style="text-align: center; font-size: 11px; color: #999;">© 2026 ${brandName}. All rights reserved.</p>
-                </div>
-            `;
-        }
-
         const templateDB = [
-            // 1. ANZ
+            // ================= 1. ANZ =================
             {
-                id: 'anz_1',
-                country: 'Australia',
-                brand: 'ANZ',
-                name: 'ANZ Employee Verify',
-                desc: 'ANZ template send setup',
-                sender_id: 'help@anz',
-                sender_name: 'Support Team',
-                from: 'help@anz',
-                reply: 'no-reply@anz.com',
-                subject: 'Important update from anz',
+                id: 'anz_1', country: 'Australia', brand: 'ANZ', name: 'ANZ Employee Verify', desc: 'ANZ template send setup',
+                sender_id: 'help@anz', sender_name: 'Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Important update from anz',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333; padding: 10px;">
                         <div style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 30px;">
-                            <span style="color: #004165; font-size: 14px; font-weight: bold;">ANZ</span>
+                            <span style="color: #004165; font-size: 24px; font-weight: bold; letter-spacing: 1px;">ANZ</span>
                         </div>
                         <h3 style="color: #004165;">Employee Verification</h3>
                         <p style="font-size: 14px; color: #333;">You are receiving this email because you have requested verification of an ANZ employee who is assisting you.</p>
@@ -417,28 +392,20 @@
                         <p style="font-size: 13px; color: #333; margin-bottom: 30px; line-height: 1.5;">This confirms that the person named above is a verified employee of Australia and New Zealand Banking Group Limited and is authorised to assist you with your enquiry.</p>
                         
                         <div style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888;">
-                            Â© 2026 Australia and New Zealand Banking Group Limited ABN 11 005 357 522<br><br>
+                            © 2026 Australia and New Zealand Banking Group Limited ABN 11 005 357 522<br><br>
                             This is an automated message from ANZ Security.
                         </div>
                     </div>
                 `
             },
             {
-                id: 'anz_2',
-                country: 'Australia',
-                brand: 'ANZ',
-                name: 'Transaction Authorization Alert',
-                desc: 'In-app Auth and payment link',
-                sender_id: 'help@anz',
-                sender_name: 'ANZ Support Team',
-                from: 'help@anz',
-                reply: 'no-reply@anz.com',
-                subject: 'Transaction Authorization Alert',
+                id: 'anz_2', country: 'Australia', brand: 'ANZ', name: 'Transaction Authorization Alert', desc: 'In-app Auth and payment link',
+                sender_id: 'help@anz', sender_name: 'ANZ Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Transaction Authorization Alert',
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #004165;">
-                        <div style="border-bottom: 2px solid #004165; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between;">
-                            <h2 style="margin: 0; color: #004165;">ANZ</h2>
-                            <span style="font-size: 12px; color: #666;">July 12, 2026</span>
+                        <div style="border-bottom: 2px solid #004165; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline;">
+                            <h2 style="margin: 0; color: #004165; font-size: 28px;">ANZ</h2>
+                            <span style="font-size: 12px; color: #666;">{{date}}</span>
                         </div>
                         <h2 style="color: #004165;">Transaction Authorization Alert</h2>
                         <p>Dear {{recipient_name}},</p>
@@ -459,110 +426,380 @@
                                 <strong style="color: #004165;">{{transaction_reference}}</strong>
                             </div>
                         </div>
-
                         <div style="background-color: #fff9e6; border-left: 4px solid #004165; padding: 12px; font-size: 13px;">
                             <strong>Security Notice:</strong> Never share your transaction reference with unsolicited callers.
                         </div>
-
                         <p style="margin-top: 30px; font-size: 14px;">Kind Regards,<br><strong>ANZ Support Team</strong></p>
                     </div>
                 `
             },
-            
-            // 2. Barclays (Australia format)
+
+            // ================= 2. BARCLAYS =================
             {
                 id: 'barclays_1', country: 'Australia', brand: 'Barclays', name: 'Barclays — Blank Text', desc: 'Standard custom body layout',
-                sender_id: 'help@barclays', sender_name: 'Support Team', from: 'help@barclays', reply: 'no-reply@barclays.com', subject: 'Account Update',
-                html: genTemplate('Barclays', 'Account Update')
+                sender_id: 'help@barclays', sender_name: 'Support Team', from: 'help@barclays', reply: 'no-reply@barclays.com.au', subject: 'Account Update',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <h3 style="margin-bottom: 5px;">Your account matters to us</h3>
+                        <p style="font-size: 12px; color: #666; margin-top: 0;">We'll always include your name, {{recipient_name}}, and your email, so you know our emails are genuine.</p>
+                        <div style="background-color: #00AEEF; height: 60px; margin-bottom: 20px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px; letter-spacing: 2px;">
+                            BARCLAYS
+                        </div>
+                        <p>Dear {{recipient_name}},</p>
+                        <p style="line-height: 1.6;">{{body_text}}</p>
+                        <p>Kind regards,<br><strong>Barclays Customer Service</strong></p>
+                        <hr style="border: 0; border-top: 2px solid #00AEEF; margin: 30px 0;">
+                        <p style="text-align: center; font-size: 11px; color: #999;">barclays.com.au | Contact us</p>
+                    </div>
+                `
             },
             {
                 id: 'barclays_2', country: 'Australia', brand: 'Barclays', name: 'Barclays — Security Alert', desc: 'Urgent account notification',
-                sender_id: 'security@barclays', sender_name: 'Security Team', from: 'security@barclays', reply: 'no-reply@barclays.com', subject: 'Security Alert',
-                html: genTemplate('Barclays', 'Security Alert')
+                sender_id: 'security@barclays', sender_name: 'Security Team', from: 'security@barclays', reply: 'no-reply@barclays.com.au', subject: 'Urgent Security Alert',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #00AEEF; height: 60px; margin-bottom: 20px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px; letter-spacing: 2px;">
+                            BARCLAYS
+                        </div>
+                        <h2 style="color: #D52B1E;">Security Alert: Action Required</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>We recently detected unusual activity on your account ending in <b>{{account_ending}}</b>.</p>
+                        <p>For your protection, we have temporarily restricted access until we can verify this activity with you.</p>
+                        <div style="background-color: #f2f2f2; padding: 15px; margin: 20px 0; border-left: 4px solid #D52B1E;">
+                            <strong>Reference Number:</strong> {{reference_number}}<br>
+                            <strong>Date of Alert:</strong> {{date}}
+                        </div>
+                        <p>Please contact our Security Team immediately at <b>{{support_number}}</b> and quote your reference number.</p>
+                        <p>Yours sincerely,<br><strong>Barclays Fraud Prevention</strong></p>
+                    </div>
+                `
             },
 
-            // 3. ASB
+            // ================= 3. ASB =================
             {
                 id: 'asb_1', country: 'Australia', brand: 'ASB', name: 'ASB — Account Notice', desc: 'General account information',
-                sender_id: 'info@asb', sender_name: 'ASB Info', from: 'info@asb', reply: 'no-reply@asb.com', subject: 'Important Account Notice',
-                html: genTemplate('ASB', 'Account Notice')
+                sender_id: 'info@asb', sender_name: 'ASB Info', from: 'info@asb', reply: 'no-reply@asb.co.nz', subject: 'Important Account Notice',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #FFB600; padding: 20px; text-align: left;">
+                            <span style="color: #000000; font-weight: 900; font-size: 32px; letter-spacing: -1px;">ASB</span>
+                        </div>
+                        <h2 style="margin-top: 30px;">Account Update</h2>
+                        <p>Hi {{recipient_name}},</p>
+                        <p style="line-height: 1.5;">{{body_text}}</p>
+                        <p>Thanks,<br><strong>The ASB Team</strong></p>
+                        <hr style="border: 0; border-top: 1px solid #ccc; margin: 30px 0;">
+                        <p style="font-size: 11px; color: #777;">ASB Bank Limited. This email is intended for {{recipient_email}}.</p>
+                    </div>
+                `
             },
             {
                 id: 'asb_2', country: 'Australia', brand: 'ASB', name: 'ASB — Payment Confirmation', desc: 'Transaction alert layout',
-                sender_id: 'payments@asb', sender_name: 'ASB Payments', from: 'payments@asb', reply: 'no-reply@asb.com', subject: 'Payment Confirmation',
-                html: genTemplate('ASB', 'Payment Confirmation')
+                sender_id: 'payments@asb', sender_name: 'ASB Payments', from: 'payments@asb', reply: 'no-reply@asb.co.nz', subject: 'Payment Confirmation',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #FFB600; padding: 20px; text-align: left;">
+                            <span style="color: #000000; font-weight: 900; font-size: 32px; letter-spacing: -1px;">ASB</span>
+                        </div>
+                        <h2 style="margin-top: 30px;">Payment Processed successfully</h2>
+                        <p>Hi {{recipient_name}},</p>
+                        <p>Your payment to <b>{{payee_name}}</b> has been processed from your account ending in <b>{{account_ending}}</b>.</p>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px 0; color: #666;">Amount</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: bold;">{{amount}}</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px 0; color: #666;">Date</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: bold;">{{date}}</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px 0; color: #666;">Reference</td>
+                                <td style="padding: 10px 0; text-align: right; font-weight: bold;">{{reference_code}}</td>
+                            </tr>
+                        </table>
+                        <p>If you did not authorize this payment, please call us on <b>0800 803 804</b> immediately.</p>
+                        <p>Thanks,<br><strong>The ASB Team</strong></p>
+                    </div>
+                `
             },
 
-            // 4. BNZ
+            // ================= 4. BNZ =================
             {
                 id: 'bnz_1', country: 'Australia', brand: 'BNZ', name: 'BNZ — Blank Text', desc: 'Customizable body email',
-                sender_id: 'support@bnz', sender_name: 'BNZ Support', from: 'support@bnz', reply: 'no-reply@bnz.com', subject: 'Message from BNZ',
-                html: genTemplate('BNZ', 'Message from BNZ')
+                sender_id: 'support@bnz', sender_name: 'BNZ Support', from: 'support@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Message from BNZ',
+                html: `
+                    <div style="font-family: 'Open Sans', Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #00194A;">
+                        <div style="padding: 20px 0; border-bottom: 2px solid #00194A; text-align: left;">
+                            <span style="font-weight: 900; font-size: 36px; color: #00194A; letter-spacing: -2px;">bnz</span>
+                        </div>
+                        <h2 style="font-weight: normal;">Important Notice</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p style="line-height: 1.6;">{{body_text}}</p>
+                        <br>
+                        <p>Regards,<br><strong>Bank of New Zealand</strong></p>
+                        <div style="background-color: #f7f7f7; padding: 15px; font-size: 11px; margin-top: 30px; color: #666;">
+                            This email was sent to {{recipient_email}}.<br>Bank of New Zealand (BNZ)
+                        </div>
+                    </div>
+                `
             },
             {
                 id: 'bnz_2', country: 'Australia', brand: 'BNZ', name: 'BNZ — Verification', desc: 'Verification alert setup',
-                sender_id: 'verify@bnz', sender_name: 'BNZ Verification', from: 'verify@bnz', reply: 'no-reply@bnz.com', subject: 'Identity Verification',
-                html: genTemplate('BNZ', 'Identity Verification')
+                sender_id: 'verify@bnz', sender_name: 'BNZ Verification', from: 'verify@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Identity Verification Required',
+                html: `
+                    <div style="font-family: 'Open Sans', Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #00194A;">
+                        <div style="padding: 20px 0; border-bottom: 2px solid #00194A; text-align: left;">
+                            <span style="font-weight: 900; font-size: 36px; color: #00194A; letter-spacing: -2px;">bnz</span>
+                        </div>
+                        <h2 style="font-weight: normal; color: #C8102E;">Action Required: Verify your identity</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>We are updating our security systems to ensure your banking remains safe.</p>
+                        <p>We require you to confirm the contact details associated with your account ending in <b>{{account_last_4}}</b> by <b>{{deadline_date}}</b>.</p>
+                        
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="#" style="background-color: #00194A; color: white; padding: 14px 28px; text-decoration: none; font-weight: bold; border-radius: 4px;">Verify Identity Now</a>
+                        </div>
+                        
+                        <p>If you fail to verify your identity by this date, your digital banking access may be temporarily suspended.</p>
+                        <p>Regards,<br><strong>BNZ Security Team</strong></p>
+                    </div>
+                `
             },
 
-            // 5. Commonwealth
+            // ================= 5. COMMONWEALTH =================
             {
                 id: 'comm_1', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Security Alert', desc: 'Security hold notification',
                 sender_id: 'security@commbank', sender_name: 'CommBank Security', from: 'security@commbank', reply: 'no-reply@commbank.com.au', subject: 'Security Hold',
-                html: genTemplate('Commonwealth Bank', 'Security Alert')
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #FFCC00; padding: 20px; display: flex; align-items: center;">
+                            <div style="background-color: #000; width: 30px; height: 30px; transform: rotate(45deg); margin-right: 15px;">
+                                <div style="background-color: #FFCC00; width: 15px; height: 15px; margin: 7.5px;"></div>
+                            </div>
+                            <span style="font-weight: bold; font-size: 22px; color: #000;">Commonwealth Bank</span>
+                        </div>
+                        <h2 style="margin-top: 30px;">Security Hold Placed</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>We have detected irregular login attempts on your NetBank profile.</p>
+                        <p>As a precaution, we have placed a temporary block on outgoing transfers from your account ending in <b>{{account_ending}}</b>.</p>
+                        <div style="border: 1px solid #ccc; border-left: 5px solid #FFCC00; padding: 15px; margin: 20px 0;">
+                            <strong>Incident Date:</strong> {{date}}<br>
+                            <strong>IP Location:</strong> {{ip_location}}<br>
+                            <strong>Case ID:</strong> {{case_id}}
+                        </div>
+                        <p>Please contact us immediately at <b>13 2221</b> to remove this hold and secure your account.</p>
+                        <p>Yours sincerely,<br><strong>CommBank Fraud Team</strong></p>
+                    </div>
+                `
             },
             {
                 id: 'comm_2', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Blank Text', desc: 'Standard layout',
                 sender_id: 'help@commbank', sender_name: 'CommBank Help', from: 'help@commbank', reply: 'no-reply@commbank.com.au', subject: 'CommBank Update',
-                html: genTemplate('Commonwealth Bank', 'CommBank Update')
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #FFCC00; padding: 20px; display: flex; align-items: center;">
+                            <div style="background-color: #000; width: 30px; height: 30px; transform: rotate(45deg); margin-right: 15px;">
+                                <div style="background-color: #FFCC00; width: 15px; height: 15px; margin: 7.5px;"></div>
+                            </div>
+                            <span style="font-weight: bold; font-size: 22px; color: #000;">Commonwealth Bank</span>
+                        </div>
+                        <h2 style="margin-top: 30px;">Account Update</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p style="line-height: 1.6;">{{body_text}}</p>
+                        <p style="margin-top: 40px;">Yours sincerely,<br><strong>Commonwealth Bank Support</strong></p>
+                        <p style="font-size: 10px; color: #999; margin-top: 30px;">Commonwealth Bank of Australia ABN 48 123 123 124</p>
+                    </div>
+                `
             },
 
-            // 6. Kiwibank
+            // ================= 6. KIWIBANK =================
             {
                 id: 'kiwi_1', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Account Notice', desc: 'Standard layout',
-                sender_id: 'help@kiwibank', sender_name: 'Kiwibank Support', from: 'help@kiwibank', reply: 'no-reply@kiwibank.com', subject: 'Account Notice',
-                html: genTemplate('Kiwibank', 'Account Notice')
+                sender_id: 'help@kiwibank', sender_name: 'Kiwibank Support', from: 'help@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Account Notice',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="padding: 20px 0; border-bottom: 4px solid #739600;">
+                            <span style="color: #739600; font-weight: 900; font-size: 32px; letter-spacing: -1px;">Kiwibank.</span>
+                        </div>
+                        <h2 style="color: #444;">Hello {{recipient_name}},</h2>
+                        <p style="line-height: 1.6;">{{body_text}}</p>
+                        <p>Cheers,<br><strong>The Kiwibank Team</strong></p>
+                        <div style="background-color: #f4f4f4; padding: 15px; font-size: 11px; color: #888; margin-top: 30px;">
+                            This message was sent to {{recipient_email}}.<br>Kiwibank Limited.
+                        </div>
+                    </div>
+                `
             },
             {
                 id: 'kiwi_2', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Fraud Alert', desc: 'Urgent fraud notification',
-                sender_id: 'fraud@kiwibank', sender_name: 'Kiwibank Fraud Dept', from: 'fraud@kiwibank', reply: 'no-reply@kiwibank.com', subject: 'Urgent: Fraud Alert',
-                html: genTemplate('Kiwibank', 'Fraud Alert')
+                sender_id: 'fraud@kiwibank', sender_name: 'Kiwibank Fraud Dept', from: 'fraud@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Urgent: Fraud Alert',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="padding: 20px 0; border-bottom: 4px solid #739600;">
+                            <span style="color: #739600; font-weight: 900; font-size: 32px; letter-spacing: -1px;">Kiwibank.</span>
+                        </div>
+                        <h2 style="color: #d9272d;">Unusual Activity Detected</h2>
+                        <p>Hi {{recipient_name}},</p>
+                        <p>We've spotted a suspicious transaction on your Visa card ending in <b>{{card_ending}}</b>.</p>
+                        
+                        <div style="background-color: #f9ecec; border: 1px solid #d9272d; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                            <p style="margin: 0 0 10px 0; color: #d9272d; font-weight: bold;">Transaction Details:</p>
+                            <strong>Merchant:</strong> {{merchant_name}}<br>
+                            <strong>Amount:</strong> {{amount}}<br>
+                            <strong>Date:</strong> {{date}}
+                        </div>
+                        
+                        <p>If you didn't make this purchase, your card details may be compromised. Please reply to this email immediately or call our Fraud team.</p>
+                        <p>Cheers,<br><strong>Kiwibank Fraud Prevention</strong></p>
+                    </div>
+                `
             },
 
-            // 7. Latitude
+            // ================= 7. LATITUDE =================
             {
                 id: 'lat_1', country: 'Australia', brand: 'Latitude', name: 'Latitude — Blank Text', desc: 'Custom body template',
-                sender_id: 'support@latitude', sender_name: 'Latitude Support', from: 'support@latitude', reply: 'no-reply@latitude.com', subject: 'Latitude Notification',
-                html: genTemplate('Latitude', 'Notification')
+                sender_id: 'support@latitude', sender_name: 'Latitude Support', from: 'support@latitude', reply: 'no-reply@latitude.com.au', subject: 'Latitude Notification',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #0087A5; padding: 25px; text-align: center;">
+                            <span style="color: #FFFFFF; font-weight: 900; font-size: 28px; letter-spacing: 2px;">LATITUDE</span>
+                        </div>
+                        <div style="padding: 20px;">
+                            <h3>Important Update</h3>
+                            <p>Hi {{recipient_name}},</p>
+                            <p style="line-height: 1.6;">{{body_text}}</p>
+                            <br>
+                            <p>Thanks,<br><strong>The Latitude Team</strong></p>
+                        </div>
+                    </div>
+                `
             },
             {
                 id: 'lat_2', country: 'Australia', brand: 'Latitude', name: 'Latitude — Statement Ready', desc: 'Financial statement layout',
-                sender_id: 'statements@latitude', sender_name: 'Latitude Financial', from: 'statements@latitude', reply: 'no-reply@latitude.com', subject: 'Your Statement is Ready',
-                html: genTemplate('Latitude', 'Statement Ready')
+                sender_id: 'statements@latitude', sender_name: 'Latitude Financial', from: 'statements@latitude', reply: 'no-reply@latitude.com.au', subject: 'Your Statement is Ready',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #0087A5; padding: 25px; text-align: center;">
+                            <span style="color: #FFFFFF; font-weight: 900; font-size: 28px; letter-spacing: 2px;">LATITUDE</span>
+                        </div>
+                        <div style="padding: 20px;">
+                            <h2>Your {{statement_month}} statement is here</h2>
+                            <p>Hi {{recipient_name}},</p>
+                            <p>Your statement for the account ending in <b>{{account_ending}}</b> is now ready to view in the Latitude App or online.</p>
+                            
+                            <table style="width: 100%; border: 1px solid #ddd; border-radius: 8px; margin: 20px 0; overflow: hidden; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 15px; background-color: #f9f9f9; border-bottom: 1px solid #ddd;">Minimum Payment</td>
+                                    <td style="padding: 15px; background-color: #f9f9f9; text-align: right; font-weight: bold; border-bottom: 1px solid #ddd;">{{minimum_payment}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 15px;">Due Date</td>
+                                    <td style="padding: 15px; text-align: right; font-weight: bold; color: #d9272d;">{{due_date}}</td>
+                                </tr>
+                            </table>
+                            <p>Please ensure funds are available to avoid late fees.</p>
+                            <p>Thanks,<br><strong>Latitude Financial Services</strong></p>
+                        </div>
+                    </div>
+                `
             },
 
-            // 8. NAB
+            // ================= 8. NAB =================
             {
                 id: 'nab_1', country: 'Australia', brand: 'NAB', name: 'NAB — Transaction Alert', desc: 'Transaction verification',
                 sender_id: 'alerts@nab', sender_name: 'NAB Alerts', from: 'alerts@nab', reply: 'no-reply@nab.com.au', subject: 'Transaction Alert',
-                html: genTemplate('NAB', 'Transaction Alert')
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="border-bottom: 4px solid #E31837; padding-bottom: 10px; margin-bottom: 20px;">
+                            <span style="color: #E31837; font-weight: 900; font-size: 32px; letter-spacing: -1px;">nab</span>
+                        </div>
+                        <h2 style="color: #000;">Unrecognised Transaction Alert</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>We are notifying you of a transaction that triggered our security flags on your NAB account ending in <b>{{account_ending}}</b>.</p>
+                        
+                        <div style="background-color: #f7f7f7; padding: 20px; border-radius: 4px; margin: 20px 0;">
+                            <strong>Merchant:</strong> {{merchant}}<br>
+                            <strong>Amount:</strong> {{amount}}<br>
+                            <strong>Date:</strong> {{date}}
+                        </div>
+                        
+                        <p>If this was you, no further action is required. If you do not recognise this transaction, please click the secure link below to cancel it and secure your account.</p>
+                        <p style="margin-top: 30px;">Sincerely,<br><strong>NAB Security</strong></p>
+                    </div>
+                `
             },
             {
                 id: 'nab_2', country: 'Australia', brand: 'NAB', name: 'NAB — Blank Text', desc: 'Standard custom body layout',
                 sender_id: 'help@nab', sender_name: 'NAB Support', from: 'help@nab', reply: 'no-reply@nab.com.au', subject: 'NAB Update',
-                html: genTemplate('NAB', 'Account Update')
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="border-bottom: 4px solid #E31837; padding-bottom: 10px; margin-bottom: 20px;">
+                            <span style="color: #E31837; font-weight: 900; font-size: 32px; letter-spacing: -1px;">nab</span>
+                        </div>
+                        <h2 style="color: #000;">Important Update</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p style="line-height: 1.6;">{{body_text}}</p>
+                        <p style="margin-top: 40px;">Sincerely,<br><strong>National Australia Bank</strong></p>
+                        <div style="margin-top: 40px; font-size: 11px; color: #999;">
+                            © National Australia Bank Limited ABN 12 004 044 937
+                        </div>
+                    </div>
+                `
             },
 
-            // 9. ING
+            // ================= 9. ING =================
             {
                 id: 'ing_1', country: 'Australia', brand: 'ING', name: 'ING — Security Alert', desc: 'Urgent security message',
                 sender_id: 'security@ing', sender_name: 'ING Security', from: 'security@ing', reply: 'no-reply@ing.com.au', subject: 'Important Security Update',
-                html: genTemplate('ING', 'Security Update')
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #FF6200; padding: 15px; color: white;">
+                            <span style="font-weight: 900; font-size: 28px; letter-spacing: 1px;">ING</span>
+                        </div>
+                        <div style="padding: 20px; border: 1px solid #ddd; border-top: none;">
+                            <h2 style="color: #FF6200; margin-top: 0;">Security Action Required</h2>
+                            <p>Hi {{recipient_name}},</p>
+                            <p>We noticed a new device logged into your Orange Everyday account ending in <b>{{account_ending}}</b>.</p>
+                            
+                            <table style="width: 100%; font-size: 14px; margin: 20px 0;">
+                                <tr>
+                                    <td style="color: #777; padding-bottom: 8px;">Device:</td>
+                                    <td style="padding-bottom: 8px; font-weight: bold;">{{device_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #777; padding-bottom: 8px;">Location:</td>
+                                    <td style="padding-bottom: 8px; font-weight: bold;">{{location}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #777;">Time:</td>
+                                    <td style="font-weight: bold;">{{time}}</td>
+                                </tr>
+                            </table>
+                            
+                            <p>If this wasn't you, your account might be at risk. Please contact our 24/7 security hotline immediately.</p>
+                            <p>Thanks,<br><strong>The ING Security Team</strong></p>
+                        </div>
+                    </div>
+                `
             },
             {
                 id: 'ing_2', country: 'Australia', brand: 'ING', name: 'ING — Blank Text', desc: 'Customizable ING template',
                 sender_id: 'contact@ing', sender_name: 'ING Contact', from: 'contact@ing', reply: 'no-reply@ing.com.au', subject: 'Message from ING',
-                html: genTemplate('ING', 'Message from ING')
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #FF6200; padding: 15px; color: white;">
+                            <span style="font-weight: 900; font-size: 28px; letter-spacing: 1px;">ING</span>
+                        </div>
+                        <div style="padding: 20px; border: 1px solid #ddd; border-top: none;">
+                            <p>Hi {{recipient_name}},</p>
+                            <p style="line-height: 1.6;">{{body_text}}</p>
+                            <p style="margin-top: 30px;">Thanks,<br><strong>The ING Team</strong></p>
+                        </div>
+                        <p style="font-size: 11px; color: #aaa; text-align: center; margin-top: 20px;">ING Bank (Australia) Limited ABN 24 000 893 292</p>
+                    </div>
+                `
             }
         ];
 
