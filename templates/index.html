@@ -189,7 +189,7 @@
         }
         #preview-frame-container {
             flex: 1;
-            background: white; /* Email templates are usually white background */
+            background: white;
             margin: 16px;
             border-radius: 12px;
             overflow: auto;
@@ -247,7 +247,7 @@
             Templates
             <div class="header-subtitle" id="header-subtitle">HTML email library</div>
         </div>
-        <div style="width: 40px;"></div> <!-- Spacer for flex alignment -->
+        <div style="width: 40px;"></div>
     </div>
 
     <!-- Screen 1: Categories -->
@@ -300,7 +300,6 @@
 
     <!-- Screen 5: Dynamic Send Setup -->
     <div id="screen-setup" class="screen">
-        
         <div class="list-card" style="cursor: default;">
             <div class="list-text">
                 <div class="list-title" id="setup-title">Template Name</div>
@@ -308,7 +307,6 @@
             </div>
         </div>
 
-        <!-- Static Config Fields -->
         <div class="form-group">
             <label class="form-label">Preset sender ID</label>
             <input type="text" class="form-input" id="conf-sender-id" value="help@brand">
@@ -326,7 +324,6 @@
             <input type="text" class="form-input" id="conf-reply-to" value="no-reply@brand.com">
         </div>
 
-        <!-- DYNAMIC FIELDS GENERATED HERE -->
         <div class="section-title" id="dynamic-fields-header">Template Parameters</div>
         <div id="dynamic-fields-container"></div>
 
@@ -337,7 +334,6 @@
 
         <button class="btn-primary" onclick="Telegram.WebApp.showAlert('Email queued for sending!')">Send Email</button>
         <button class="btn-secondary" onclick="openPreview()">Preview Email</button>
-
     </div>
 
     <!-- Live Preview Modal -->
@@ -370,12 +366,10 @@
 
     <!-- JAVASCRIPT ENGINE -->
     <script>
+        {% raw %}
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
 
-        // ---------------------------------------------------------
-        // TEMPLATE DATABASE (Modular structure - Add new ones here)
-        // ---------------------------------------------------------
         const templateDB = [
             {
                 id: 'anz_1',
@@ -449,9 +443,6 @@
             }
         ];
 
-        // ---------------------------------------------------------
-        // NAVIGATION & STATE ENGINE
-        // ---------------------------------------------------------
         let navigationStack = ['screen-categories'];
         let activeTemplate = null;
 
@@ -468,13 +459,12 @@
 
         function goBack() {
             if (navigationStack.length > 1) {
-                navigationStack.pop(); // remove current
+                navigationStack.pop();
                 const previousScreen = navigationStack[navigationStack.length - 1];
                 
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
                 document.getElementById(previousScreen).classList.add('active');
 
-                // Quick logic to reset titles based on screen
                 if(previousScreen === 'screen-categories') {
                     document.getElementById('header-title').innerText = 'Templates';
                     document.getElementById('header-subtitle').innerText = 'HTML email library';
@@ -484,7 +474,6 @@
         }
 
         function loadBrands(country) {
-            // Filter unique brands for this country
             const brands = [...new Set(templateDB.filter(t => t.country === country).map(t => t.brand))];
             const container = document.getElementById('brands-container');
             container.innerHTML = '';
@@ -528,25 +517,20 @@
             navTo('screen-templates', brand, 'Select a template');
         }
 
-        // ---------------------------------------------------------
-        // DYNAMIC VARIABLE EXTRACTION & FORM GENERATION
-        // ---------------------------------------------------------
         function setupTemplate(templateId) {
             activeTemplate = templateDB.find(t => t.id === templateId);
             
-            // Set Static defaults
             document.getElementById('setup-title').innerText = activeTemplate.name;
             document.getElementById('conf-sender-id').value = activeTemplate.sender_id;
             document.getElementById('conf-sender-name').value = activeTemplate.sender_name;
             document.getElementById('conf-from-address').value = activeTemplate.from;
             document.getElementById('conf-reply-to').value = activeTemplate.reply;
 
-            // Extract variables e.g. {{recipient_name}} using Regex
             const regex = /{{(.*?)}}/g;
             let match;
             const variables = new Set();
             while ((match = regex.exec(activeTemplate.html)) !== null) {
-                variables.add(match[1]); // match[1] is the text inside braces
+                variables.add(match[1]);
             }
 
             const varArray = Array.from(variables);
@@ -555,12 +539,9 @@
             
             document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${varArray.length} detected)`;
 
-            // Auto-generate input fields
             varArray.forEach(v => {
-                // Format label: "recipient_name" -> "Recipient Name"
                 const labelName = v.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
                 
-                // If it's a body text, make it a textarea
                 const inputHtml = v.includes('body') ? 
                     `<textarea class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}"></textarea>` :
                     `<input type="text" class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}">`;
@@ -573,7 +554,6 @@
                 `;
             });
 
-            // Add event listeners to newly created fields to update preview automatically
             document.querySelectorAll('.dynamic-input').forEach(input => {
                 input.addEventListener('input', renderLivePreview);
             });
@@ -581,19 +561,14 @@
             navTo('screen-setup', activeTemplate.name, 'Fill the preview details');
         }
 
-        // ---------------------------------------------------------
-        // LIVE PREVIEW ENGINE
-        // ---------------------------------------------------------
         function renderLivePreview() {
             if(!activeTemplate) return;
             
             let htmlCompiled = activeTemplate.html;
             
-            // Grab all dynamic inputs and replace their values in the HTML
             document.querySelectorAll('.dynamic-input').forEach(input => {
                 const varName = input.getAttribute('data-var');
-                const val = input.value || `{{${varName}}}`; // fallback to placeholder if empty
-                // Global replace using split/join to avoid regex escaping issues
+                const val = input.value || `{{${varName}}}`;
                 htmlCompiled = htmlCompiled.split(`{{${varName}}}`).join(val); 
             });
 
@@ -601,14 +576,14 @@
         }
 
         function openPreview() {
-            renderLivePreview(); // Ensure it's up to date before opening
+            renderLivePreview();
             document.getElementById('preview-modal').style.display = 'flex';
         }
 
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
         }
-
+        {% endraw %}
     </script>
 </body>
 </html>
