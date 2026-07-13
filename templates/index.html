@@ -2,425 +2,917 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONYX Mailer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dynamic Template Engine</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg-color: #080A1A;
+            --panel-bg: #121429;
+            --border-color: #1F2340;
+            --text-main: #FFFFFF;
+            --text-muted: #8E92B2;
+            --accent: #8E54E9;
+            --accent-glow: #A476F0;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0b0c0e;
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
-            padding-bottom: 100px; /* Space for fixed nav bar */
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            padding: 8px 16px 8px 0;
+        }
+
+        .header-title {
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            flex-grow: 1;
         }
         
-        /* Header & Navigation */
-        .header-top { display: flex; align-items: center; margin-bottom: 20px; }
-        .back-btn { 
-            background-color: #161a24; 
-            border: 1px solid #2d3446; 
-            border-radius: 50%; 
-            width: 35px; 
-            height: 35px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            margin-right: 15px;
-            cursor: pointer;
-            font-size: 18px;
+        .header-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: normal;
         }
-        .header-title-container { display: flex; flex-direction: column; }
-        .header-title { font-size: 20px; font-weight: bold; margin: 0; }
-        .header-subtitle { font-size: 13px; color: #a0aec0; margin: 0; }
 
-        /* Search Bar */
-        .search-container { margin-bottom: 20px; display: none; }
-        .search-input {
-            width: 100%;
-            background-color: #11141d;
-            border: 1px solid #1f2533;
-            border-radius: 12px;
-            padding: 14px 16px;
-            box-sizing: border-box;
-            color: #ffffff;
-            font-size: 15px;
-            outline: none;
+        .screen {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            padding-bottom: 100px;
         }
-        .search-input::placeholder { color: #52627a; }
+        .screen.active {
+            display: block;
+        }
 
-        /* Upload Card */
-        .upload-card {
-            background: linear-gradient(90deg, #2a2f42 0%, #1a1e2b 100%);
-            border: 1px solid #3e465e;
+        .list-card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 16px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Menu & Brand Cards */
-        .card {
-            background-color: #0f1219;
-            border: 1px solid #1f2533;
-            border-radius: 16px;
-            padding: 14px 16px;
             margin-bottom: 12px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            transition: background 0.2s;
         }
-        .card-left { display: flex; align-items: center; }
-        .bank-icon {
-            background-color: #1a2238;
-            color: #6b8cd6;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
+        .list-card:active {
+            background-color: #1a1d36;
+        }
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: #1F2340;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            font-size: 18px;
-        }
-        .brand-name { font-weight: bold; font-size: 16px; margin-bottom: 4px; }
-        .brand-templates { font-size: 13px; color: #a0aec0; }
-        .arrow { color: #a0aec0; }
-
-        /* Pagination Layout */
-        .pagination { display: none; justify-content: space-between; align-items: center; margin-top: 20px; }
-        .page-btn {
-            background-color: #161a24;
-            border: 1px solid #2d3446;
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .page-indicator { font-size: 14px; color: #ffffff; }
-
-        /* Bottom Nav Bar */
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #0b0c0e;
-            border-top: 1px solid #1f2d3d;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            font-size: 11px;
-            color: #a0aec0;
-            z-index: 1000;
-        }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .nav-item.active { color: #ffffff; font-weight: bold; }
-        .nav-center-btn {
-            background: linear-gradient(135deg, #a764ff 0%, #6b8cd6 100%);
-            width: 60px;
-            height: 45px;
-            border-radius: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            top: -15px;
-            box-shadow: 0 4px 15px rgba(167, 100, 255, 0.4);
-            color: white;
+            margin-right: 16px;
             font-size: 20px;
         }
+        .list-text { flex-grow: 1; }
+        .list-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .list-subtitle { font-size: 13px; color: var(--text-muted); }
+        .list-arrow { color: var(--text-muted); font-weight: bold; }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+        .form-input {
+            width: 100%;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        textarea.form-input {
+            resize: vertical;
+            min-height: 80px;
+        }
         
-        /* Views visibility handler */
-        .view-section { display: none; }
-        .view-section.active { display: block; }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 24px 0 16px 0;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-secondary {
+            width: 100%;
+            background: transparent;
+            color: var(--accent-glow);
+            border: none;
+            padding: 16px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        #preview-modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: var(--bg-color);
+            align-items: center;
+        }
+        .preview-close {
+            color: white;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #preview-frame-container {
+            flex: 1;
+            background: white;
+            margin: 16px;
+            border-radius: 12px;
+            overflow: auto;
+            padding: 16px;
+            color: black;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px 0;
+            z-index: 50;
+        }
+        .nav-item {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            color: var(--accent-glow);
+        }
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .nav-fab {
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -24px;
+            box-shadow: 0 4px 15px rgba(142, 84, 233, 0.4);
+            color: white;
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Dynamic Header -->
-    <div class="header-top">
-        <div id="global-back-btn" class="back-btn" onclick="goBack()" style="visibility: hidden;">&lt;</div>
-        <div class="header-title-container">
-            <h2 id="global-title" class="header-title">Choose Category</h2>
-            <p id="global-subtitle" class="header-subtitle">Select a category</p>
+    <div class="header">
+        <button class="back-btn" id="back-btn" onclick="goBack()">❮</button>
+        <div class="header-title" id="header-title">
+            Templates
+            <div class="header-subtitle" id="header-subtitle">HTML email library</div>
+        </div>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <!-- Screen 1: Categories -->
+    <div id="screen-categories" class="screen active">
+        <div class="list-card" onclick="navTo('screen-countries', 'Choose Country', 'Select a country')">
+            <div class="icon-box">🏛️</div>
+            <div class="list-text">
+                <div class="list-title">Bank</div>
+                <div class="list-subtitle">Professional banking letters</div>
+            </div>
+            <div class="list-arrow">›</div>
+        </div>
+        <div class="list-card">
+            <div class="icon-box">₿</div>
+            <div class="list-text">
+                <div class="list-title">Crypto</div>
+                <div class="list-subtitle">Exchanges & crypto wallets</div>
+            </div>
+            <div class="list-arrow">›</div>
         </div>
     </div>
 
-    <!-- Global Upload Card -->
-    <div class="upload-card">
-        <div class="card-left">
-            <div class="bank-icon" style="background-color: transparent; border: 1px solid #4a5568;">↑</div>
-            <div>
-                <div style="font-weight: bold; font-size: 15px;">Upload a template</div>
-                <div style="font-size: 13px; color: #a0aec0;">Active membership required</div>
+    <!-- Screen 2: Countries -->
+    <div id="screen-countries" class="screen">
+        <div class="list-card" onclick="loadBrands('Australia')">
+            <div class="icon-box">🇦🇺</div>
+            <div class="list-text">
+                <div class="list-title">Australia</div>
             </div>
+            <div class="list-arrow">›</div>
         </div>
-        <div class="arrow">&gt;</div>
-    </div>
-
-    <!-- Search Input Container (Visible mainly in Australia view) -->
-    <div id="search-container" class="search-container">
-        <input type="text" id="search-bar" class="search-input" placeholder="🔍 Search templates" onkeyup="filterAusBrands()">
-    </div>
-
-
-    <!-- SECTION 1: MAIN CATEGORIES VIEW -->
-    <div id="view-categories" class="view-section active">
-        <div class="card" onclick="switchView('countries')">
-            <div class="card-left">
-                <div class="bank-icon">🏛</div>
-                <div>
-                    <div class="brand-name">Bank</div>
-                    <div class="brand-templates">Professional banking letters</div>
-                </div>
+        <div class="list-card" onclick="loadBrands('United Kingdom')">
+            <div class="icon-box">🇬🇧</div>
+            <div class="list-text">
+                <div class="list-title">United Kingdom</div>
             </div>
-            <div class="arrow">&gt;</div>
-        </div>
-        <div class="card" onclick="alert('Crypto features loaded')">
-            <div class="card-left">
-                <div class="bank-icon">₿</div>
-                <div>
-                    <div class="brand-name">Crypto</div>
-                    <div class="brand-templates">Exchanges & crypto wallets</div>
-                </div>
-            </div>
-            <div class="arrow">&gt;</div>
-        </div>
-        <div class="card" onclick="alert('Other features coming soon')">
-            <div class="card-left">
-                <div class="bank-icon">❓</div>
-                <div>
-                    <div class="brand-name">Others</div>
-                    <div class="brand-templates">Other categories — coming soon</div>
-                </div>
-            </div>
-            <div class="arrow">&gt;</div>
+            <div class="list-arrow">›</div>
         </div>
     </div>
 
-
-    <!-- SECTION 2: CHOOSE COUNTRY VIEW -->
-    <div id="view-countries" class="view-section">
-        <div class="card" onclick="switchView('australia')">
-            <div class="card-left">
-                <div class="bank-icon">🇦🇺</div>
-                <div>
-                    <div class="brand-name">Australia</div>
-                    <div class="brand-templates">Global templates included</div>
-                </div>
-            </div>
-            <div class="arrow">&gt;</div>
-        </div>
-        <div class="card" onclick="switchView('uk')">
-            <div class="card-left">
-                <div class="bank-icon">🇬🇧</div>
-                <div>
-                    <div class="brand-name">United Kingdom</div>
-                    <div class="brand-templates">Global templates included</div>
-                </div>
-            </div>
-            <div class="arrow">&gt;</div>
-        </div>
-        <div class="card" onclick="alert('United States templates coming soon')">
-            <div class="card-left">
-                <div class="bank-icon">🇺🇸</div>
-                <div>
-                    <div class="brand-name">United States</div>
-                    <div class="brand-templates">Global templates included</div>
-                </div>
-            </div>
-            <div class="arrow">&gt;</div>
-        </div>
+    <!-- Screen 3: Brands -->
+    <div id="screen-brands" class="screen">
+        <div id="brands-container"></div>
     </div>
 
-
-    <!-- SECTION 3: AUSTRALIA BRANDS VIEW -->
-    <div id="view-australia" class="view-section">
-        <div id="aus-brands-list"></div>
-        <div class="pagination-indicator" style="text-align: center; color: #a0aec0; font-size: 14px; margin-top: 20px;">Page 1 of 1</div>
+    <!-- Screen 4: Templates -->
+    <div id="screen-templates" class="screen">
+        <div id="templates-container"></div>
     </div>
 
-
-    <!-- SECTION 4: UNITED KINGDOM BRANDS VIEW -->
-    <div id="view-uk" class="view-section">
-        <div id="uk-brands-list"></div>
-        <!-- Pagination Controls for UK -->
-        <div id="uk-pagination" class="pagination">
-            <button id="prev-btn" class="page-btn" onclick="changeUKPage(-1)">Back</button>
-            <div id="page-text" class="page-indicator">Page 1 of 2</div>
-            <button id="next-btn" class="page-btn" onclick="changeUKPage(1)">Next</button>
+    <!-- Screen 5: Dynamic Send Setup -->
+    <div id="screen-setup" class="screen">
+        <div class="list-card" style="cursor: default;">
+            <div class="list-text">
+                <div class="list-title" id="setup-title">Template Name</div>
+                <div class="list-subtitle" id="setup-subtitle">Template send setup</div>
+            </div>
         </div>
+
+        <div class="form-group">
+            <label class="form-label">Preset sender ID</label>
+            <input type="text" class="form-input" id="conf-sender-id" value="help@brand">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Sender name</label>
+            <input type="text" class="form-input" id="conf-sender-name" value="Support Team">
+        </div>
+        <div class="form-group">
+            <label class="form-label">From address</label>
+            <input type="text" class="form-input" id="conf-from-address" value="help@brand">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Reply-To address</label>
+            <input type="text" class="form-input" id="conf-reply-to" value="no-reply@brand.com">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-input" id="conf-subject" value="Important update">
+        </div>
+
+        <div class="section-title" id="dynamic-fields-header">Template Parameters</div>
+        <div id="dynamic-fields-container"></div>
+
+        <div class="form-group" style="margin-top: 24px;">
+            <label class="form-label">Recipient email</label>
+            <input type="email" class="form-input" placeholder="recipient@example.com">
+        </div>
+
+        <button class="btn-primary" onclick="Telegram.WebApp.showAlert('Email queued for sending!')">Send Email</button>
+        <button class="btn-secondary" onclick="openPreview()">Preview Email</button>
     </div>
 
+    <!-- Live Preview Modal -->
+    <div id="preview-modal">
+        <div class="preview-header">
+            <div style="font-weight: bold; font-size: 18px;">Email Preview</div>
+            <button class="preview-close" onclick="closePreview()">×</button>
+        </div>
+        <div id="preview-frame-container"></div>
+    </div>
 
-    <!-- Bottom Global Menu Bar -->
-    <div class="nav-bar">
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
         <div class="nav-item">
-            <span style="font-size: 18px;">🏠</span>
-            Home
+            <span class="nav-icon">🏠</span> Home
         </div>
         <div class="nav-item active">
-            <span style="font-size: 18px; color: #a764ff;">📄</span>
-            Templates
+            <span class="nav-icon">📄</span> Templates
         </div>
-        <div class="nav-center-btn">✉</div>
-        <div class="nav-item">
-            <span style="font-size: 18px;">🛒</span>
-            Shop
+        <div class="nav-fab">
+            ✉
         </div>
         <div class="nav-item">
-            <span style="font-size: 18px;">⚙</span>
-            Account
+            <span class="nav-icon">🛒</span> Shop
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon">⚙️</span> Account
         </div>
     </div>
 
     <script>
+        {% raw %}
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
 
-        // View tracking stack history
-        let currentView = 'categories';
-        let viewHistory = ['categories'];
+        const templateDB = [
+            // =========================================================
+            // ==================== UNITED KINGDOM =====================
+            // =========================================================
+            
+            // 1. FCA
+            {
+                id: 'fca_1', country: 'United Kingdom', brand: 'FCA', name: 'FCA — Callback Scheduled', desc: 'Callback confirmation letter',
+                sender_id: 'appointments@fca.org.uk', sender_name: 'Financial Conduct Authority', from: 'appointments@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Callback Successfully Scheduled Confirmation',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.5; padding: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 40px;">
+                            <div style="color: #72243D; font-size: 42px; font-weight: bold; letter-spacing: -2px; margin-right: 15px; font-family: 'Trebuchet MS', sans-serif;">FCA</div>
+                            <div style="color: #72243D; font-size: 11px; font-weight: bold; line-height: 1.2; border-left: 2px solid #72243D; padding-left: 10px; font-family: 'Trebuchet MS', sans-serif;">FINANCIAL<br>CONDUCT<br>AUTHORITY</div>
+                        </div>
+                        <p>{{date}}</p>
+                        <p style="margin-bottom: 25px;">Dear {{customer_name}},</p>
+                        <h3 style="color: #72243D; margin-bottom: 15px; font-size: 16px;">Callback Successfully Scheduled Confirmation</h3>
+                        <hr style="border: 0; border-top: 1px solid #eaeaea; margin-bottom: 25px;">
+                        <p>Your callback with the Financial Conduct Authority has been arranged. The call may come from a withheld or private number.</p>
+                        <p>Thank you for arranging a callback with the Financial Conduct Authority. We are writing to confirm that your appointment has been successfully scheduled.</p>
+                        <p style="margin-top: 25px;"><strong>The assigned representative is authorised to:</strong></p>
+                        <ul style="margin-bottom: 25px; padding-left: 20px;">
+                            <li style="margin-bottom: 8px;">Assist you with your scheduled callback</li>
+                            <li style="margin-bottom: 8px;">Answer queries related to your callback</li>
+                        </ul>
+                        <p>Please keep your reference number ready for your call.</p>
+                        <p style="margin-top: 30px;">Yours faithfully,<br><br>Financial Conduct Authority</p>
+                        <div style="background-color: #f2f3f5; padding: 30px; text-align: center; font-size: 11px; color: #666; margin-top: 50px;">
+                            <p style="line-height: 1.5; margin-bottom: 20px;">Financial Conduct Authority<br>12 Endeavour Square<br>London E20 1JN</p>
+                            <p style="margin-bottom: 0;">© {{current_year}} Financial Conduct Authority. All rights reserved.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'fca_2', country: 'United Kingdom', brand: 'FCA', name: 'FCA — Regulatory Update', desc: 'Custom regulatory notice',
+                sender_id: 'notices@fca.org.uk', sender_name: 'Financial Conduct Authority', from: 'notices@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Important Regulatory Update',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; padding: 20px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 40px;">
+                            <div style="color: #72243D; font-size: 42px; font-weight: bold; letter-spacing: -2px; margin-right: 15px; font-family: 'Trebuchet MS', sans-serif;">FCA</div>
+                            <div style="color: #72243D; font-size: 11px; font-weight: bold; line-height: 1.2; border-left: 2px solid #72243D; padding-left: 10px; font-family: 'Trebuchet MS', sans-serif;">FINANCIAL<br>CONDUCT<br>AUTHORITY</div>
+                        </div>
+                        <p>Dear {{customer_name}},</p>
+                        <h3 style="color: #72243D;">Important Information Regarding Your Profile</h3>
+                        <p style="line-height: 1.6;">{{body_text}}</p>
+                        <p style="margin-top: 30px;">Yours faithfully,<br><br>Financial Conduct Authority</p>
+                    </div>
+                `
+            },
 
-        // Brand Datasets
-        const ausBrands = [
-            { name: "Barclays", templates: 1 }, { name: "ANZ", templates: 2 },
-            { name: "ASB", templates: 2 }, { name: "BNZ", templates: 2 },
-            { name: "Commonwealth", templates: 2 }, { name: "Kiwibank", templates: 2 },
-            { name: "Latitude", templates: 2 }, { name: "NAB", templates: 4 },
-            { name: "ING", templates: 2 }
-        ];
+            // 2. BARCLAYS UK
+            {
+                id: 'barc_uk_1', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays — Security Notice', desc: 'UK Security verification layout',
+                sender_id: 'security@barclays.co.uk', sender_name: 'Barclays Bank UK', from: 'security@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Security Notification: Verification Needed',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px; letter-spacing: 2px;">BARCLAYS</div>
+                        <div style="padding: 20px; border: 1px solid #eaeaea; border-top: none;">
+                            <h3>Security Review Required</h3>
+                            <p>Dear {{recipient_name}},</p>
+                            <p>We need you to verify a recent change on your Online Banking login credentials. If you did not make this modification, action is required immediately.</p>
+                            <div style="background: #f4f6f8; padding: 15px; border-radius: 6px; margin: 15px 0;">
+                                <strong>Temporary Reference:</strong> {{reference_id}}<br>
+                                <strong>Date Registered:</strong> {{date}}
+                            </div>
+                            <p>Please log on to your application or call support to review this entry.</p>
+                            <p>Kind regards,<br><strong>Barclays Digital Security</strong></p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'barc_uk_2', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays — Statement Updated', desc: 'Standard monthly billing info',
+                sender_id: 'statements@barclays.co.uk', sender_name: 'Barclays Bank UK', from: 'statements@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Your Monthly Statement is Available',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px; letter-spacing: 2px;">BARCLAYS</div>
+                        <div style="padding: 20px; border: 1px solid #eaeaea; border-top: none;">
+                            <p>Dear {{recipient_name}},</p>
+                            <p>Your latest digital statement for your account ending in <b>{{account_last4}}</b> is now ready to view inside your online portal.</p>
+                            <p style="line-height: 1.6;">{{body_text}}</p>
+                            <hr style="border: 0; border-top: 1px solid #eaeaea; margin: 20px 0;">
+                            <p style="text-align: center; font-size: 11px; color: #999;">Barclays Bank UK PLC. Registered in England No. 9740322.</p>
+                        </div>
+                    </div>
+                `
+            },
 
-        const ukBrands = [
-            { name: "Barclays", templates: 3 }, { name: "Danske", templates: 2 },
-            { name: "Natwest", templates: 2 }, { name: "RBS", templates: 2 },
-            { name: "Revolut", templates: 2 }, { name: "Nationwide", templates: 2 },
-            { name: "Santander", templates: 4 }, { name: "Starling", templates: 2 },
-            { name: "TSB", templates: 4 }, { name: "Vanquis", templates: 2 },
-            { name: "Virgin Money", templates: 4 }, { name: "Wise", templates: 6 },
-            { name: "FSCS", templates: 3 }, { name: "Halifax", templates: 2 },
-            { name: "HSBC", templates: 2 }, { name: "Lloyds", templates: 2 },
-            { name: "Monzo", templates: 2 }, { name: "Coutts", templates: 2 },
-            { name: "FCA", templates: 3 }, { name: "First", templates: 2 },
-            { name: "Tesco Bank", templates: 2 }, { name: "Tide", templates: 2 }
-        ];
+            // 3. DANSKE
+            {
+                id: 'danske_1', country: 'United Kingdom', brand: 'Danske', name: 'Danske — Device Registration', desc: 'New system verification notice',
+                sender_id: 'security@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'security@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Security Notice: New Mobile Device Detected',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002F6C;">
+                        <div style="background-color: #002F6C; padding: 20px; color: white; font-weight: bold; font-size: 24px;">Danske Bank</div>
+                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
+                            <h3>New Device Login Notification</h3>
+                            <p>Hello {{recipient_name}},</p>
+                            <p>A new electronic identity card profile or application device has linked to your ID number ending in <b>{{id_ending}}</b>.</p>
+                            <table style="width: 100%; font-size: 14px; margin: 15px 0; background: #f9f9f9; padding: 12px; border-radius: 4px;">
+                                <tr><td><strong>Device Type:</strong></td><td>{{device_name}}</td></tr>
+                                <tr><td><strong>Location/IP:</strong></td><td>{{location}}</td></tr>
+                            </table>
+                            <p>If this log was not performed by you, contact our customer helpdesk immediately to prevent unauthorized activity.</p>
+                            <p>Sincerely,<br><strong>Danske Bank Security Operations</strong></p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'danske_2', country: 'United Kingdom', brand: 'Danske', name: 'Danske — Account Alert', desc: 'Custom parameter update alert',
+                sender_id: 'info@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'info@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Important Information Regarding Your Account',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002F6C;">
+                        <div style="background-color: #002F6C; padding: 20px; color: white; font-weight: bold; font-size: 24px;">Danske Bank</div>
+                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
+                            <p>Dear {{recipient_name}},</p>
+                            <p style="line-height: 1.6;">{{body_text}}</p>
+                            <p>For more specific details relative to this notification, reference tracking index: <b>{{reference_number}}</b></p>
+                            <p>Regards,<br><strong>Danske Bank Support Team</strong></p>
+                        </div>
+                    </div>
+                `
+            },
 
-        // UK Pagination values
-        let ukCurrentPage = 1;
-        const ukItemsPerPage = 11;
-        const ukTotalPages = Math.ceil(ukBrands.length / ukItemsPerPage);
+            // 4. NATWEST
+            {
+                id: 'natwest_1', country: 'United Kingdom', brand: 'Natwest', name: 'NatWest — Outgoing Transfer Hold', desc: 'Transaction pending review',
+                sender_id: 'alerts@natwest.com', sender_name: 'NatWest Security', from: 'alerts@natwest.com', reply: 'no-reply@natwest.com', subject: 'Urgent: Outgoing Payment Placed On Hold',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #42145F;">
+                        <div style="background-color: #42145F; padding: 15px; color: white; font-weight: bold; font-size: 26px; letter-spacing: -1px;">NatWest</div>
+                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
+                            <h3 style="color: #42145F;">Transaction Pending Security Release</h3>
+                            <p>Dear {{recipient_name}},</p>
+                            <p>An outgoing transaction from your card/profile has been temporarily suspended by our automated verification system.</p>
+                            <div style="background-color: #fdf8e2; border-left: 4px solid #42145F; padding: 12px; margin: 15px 0;">
+                                <strong>Destination Payee:</strong> {{payee_name}}<br>
+                                <strong>Transfer Value:</strong> {{amount}}<br>
+                                <strong>Hold Reference:</strong> {{hold_ref}}
+                            </div>
+                            <p>Please authorize this item immediately via your application dashboard or visit an official branch office to confirm authorization rules.</p>
+                            <p>Sincerely,<br><strong>NatWest Security Team</strong></p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'natwest_2', country: 'United Kingdom', brand: 'Natwest', name: 'NatWest — Custom Update', desc: 'Standard structural notice',
+                sender_id: 'info@natwest.com', sender_name: 'NatWest Services', from: 'info@natwest.com', reply: 'no-reply@natwest.com', subject: 'Account Security Review Update',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #42145F;">
+                        <div style="background-color: #42145F; padding: 15px; color: white; font-weight: bold; font-size: 26px; letter-spacing: -1px;">NatWest</div>
+                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
+                            <p>Dear {{recipient_name}},</p>
+                            <p style="line-height: 1.6;">{{body_text}}</p>
+                            <p>Thank you for choosing NatWest as your financial partner.</p>
+                            <p style="font-size: 11px; color: #999; margin-top: 30px;">National Westminster Bank PLC. Registered in England and Wales No. 929027.</p>
+                        </div>
+                    </div>
+                `
+            },
 
-        // View Management Engine
-        function switchView(targetView) {
-            // Deactivate current active panels
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('search-container').style.display = 'none';
-            document.getElementById('uk-pagination').style.display = 'none';
+            // 5. RBS
+            {
+                id: 'rbs_1', country: 'United Kingdom', brand: 'RBS', name: 'RBS — Irregular Login Warning', desc: 'Profile access tracking setup',
+                sender_id: 'security@rbs.co.uk', sender_name: 'Royal Bank of Scotland', from: 'security@rbs.co.uk', reply: 'no-reply@rbs.co.uk', subject: 'Alert: Unrecognized Device Access Detected',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002C53;">
+                        <div style="background-color: #002C53; padding: 20px; color: white; font-weight: bold; font-size: 22px;">The Royal Bank of Scotland</div>
+                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
+                            <h3>Access Warning Notification</h3>
+                            <p>Dear {{recipient_name}},</p>
+                            <p>We monitored a digital session initiating from outside your routine location parameters for account ending in <b>{{account_suffix}}</b>.</p>
+                            <div style="background: #f7f7f7; padding: 12px; margin: 15px 0; border-radius: 4px; font-size: 14px;">
+                                <strong>Operating Platform:</strong> {{platform}}<br>
+                                <strong>Network Location:</strong> {{location_ip}}
+                            </div>
+                            <p>If you do not recognize this verification prompt, reset your personal PIN code immediately via our official channels.</p>
+                            <p>Regards,<br><strong>RBS Customer Protection Group</strong></p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'rbs_2', country: 'United Kingdom', brand: 'RBS', name: 'RBS — General Notice', desc: 'Standard communications form',
+                sender_id: 'notices@rbs.co.uk', sender_name: 'Royal Bank of Scotland', from: 'notices@rbs.co.uk', reply: 'no-reply@rbs.co.uk', subject: 'Important Notice from Royal Bank of Scotland',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002C53;">
+                        <div style="background-color: #002C53; padding: 20px; color: white; font-weight: bold; font-size: 22px;">The Royal Bank of Scotland</div>
+                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
+                            <p>Dear {{recipient_name}},</p>
+                            <p style="line-height: 1.6;">{{body_text}}</p>
+                            <p>Should you require further clarity, reach out to our team citing document tracker: <b>{{doc_id}}</b></p>
+                        </div>
+                    </div>
+                `
+            },
 
-            // Show and set labels depending on selection
-            if (targetView === 'categories') {
-                updateHeader("Choose Category", "Select a category", false);
-                document.getElementById('view-categories').classList.add('active');
-            } 
-            else if (targetView === 'countries') {
-                updateHeader("Choose Country", "Select a country (global templates included)", true);
-                document.getElementById('view-countries').classList.add('active');
-            } 
-            else if (targetView === 'australia') {
-                updateHeader("Australia", "9 brands", true);
-                document.getElementById('search-container').style.display = 'block';
-                document.getElementById('view-australia').classList.add('active');
-                renderAusBrands(ausBrands);
-            } 
-            else if (targetView === 'uk') {
-                updateHeader("United Kingdom", "22 brands", true);
-                document.getElementById('uk-pagination').style.display = 'flex';
-                document.getElementById('view-uk').classList.add('active');
-                renderUKBrands();
+            // 6. REVOLUT
+            {
+                id: 'rev_1', country: 'United Kingdom', brand: 'Revolut', name: 'Revolut — Operation Confirmation', desc: 'High-value crypto/asset auth',
+                sender_id: 'no-reply@revolut.com', sender_name: 'Revolut Security', from: 'no-reply@revolut.com', reply: 'no-reply@revolut.com', subject: 'Action Needed: Approve Transaction Authorization Request',
+                html: `
+                    <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 480px; margin: 0 auto; color: #000000; padding: 15px;">
+                        <div style="margin-bottom: 30px; font-weight: 800; font-size: 26px; letter-spacing: -0.5px;">R<span style="font-weight:300;">evolut</span></div>
+                        <h2>Confirm Payment Request</h2>
+                        <p>Hi {{recipient_name}},</p>
+                        <p>A request to transfer funds from your digital wallet configuration has been staged for processing clearance.</p>
+                        <div style="background-color: #f4f4f6; border-radius: 12px; padding: 20px; margin: 24px 0;">
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">TRANSACTION AMOUNT</div>
+                            <div style="font-size: 28px; font-weight: bold; margin-bottom: 16px;">{{amount}}</div>
+                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">TARGET MERCHANT / BENEFICIARY</div>
+                            <div style="font-size: 16px; font-weight: bold;">{{merchant_payee}}</div>
+                        </div>
+                        <p>If this parameter was not initiated by your personal application device, reject the configuration protocol inside your dashboard at once.</p>
+                        <p style="color: #666; font-size: 14px; margin-top: 30px;">The Revolut Security Protocol Team</p>
+                    </div>
+                `
+            },
+            {
+                id: 'rev_2', country: 'United Kingdom', brand: 'Revolut', name: 'Revolut — Security Lock Reset', desc: 'Access token configuration prompt',
+                sender_id: 'no-reply@revolut.com', sender_name: 'Revolut Support', from: 'no-reply@revolut.com', reply: 'no-reply@revolut.com', subject: 'Your Access Passcode Configuration',
+                html: `
+                    <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 480px; margin: 0 auto; color: #000000; padding: 15px;">
+                        <div style="margin-bottom: 30px; font-weight: 800; font-size: 26px; letter-spacing: -0.5px;">R<span style="font-weight:300;">evolut</span></div>
+                        <h2>Verification Code Required</h2>
+                        <p>Hi {{recipient_name}},</p>
+                        <p>Use the temporary authorization variable code listed below to proceed with your authentication loop or security changes.</p>
+                        <div style="text-align: center; background: #000000; color: #ffffff; font-size: 32px; font-weight: bold; padding: 15px; border-radius: 8px; letter-spacing: 4px; margin: 25px 0;">
+                            {{one_time_passcode}}
+                        </div>
+                        <p>This entry token code remains valid for a limited timeframe. Never disclose this value string to helpdesk agents.</p>
+                        <p style="color: #666; font-size: 13px; margin-top: 40px;">© 2026 Revolut Ltd. All rights reserved.</p>
+                    </div>
+                `
+            },
+
+            // =========================================================
+            // ======================= AUSTRALIA =======================
+            // =========================================================
+            // 1. ANZ
+            {
+                id: 'anz_1', country: 'Australia', brand: 'ANZ', name: 'ANZ Employee Verify', desc: 'ANZ template send setup',
+                sender_id: 'help@anz', sender_name: 'Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Important update from anz',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333; padding: 10px;">
+                        <div style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 30px;">
+                            <span style="color: #004165; font-size: 24px; font-weight: bold; letter-spacing: 1px;">ANZ</span>
+                        </div>
+                        <h3 style="color: #004165;">Employee Verification</h3>
+                        <p style="font-size: 14px; color: #333;">You are receiving this email because you have requested verification of an ANZ employee who is assisting you.</p>
+                        <div style="background-color: #f5f5f5; border-radius: 6px; padding: 16px; margin: 20px 0;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-size: 12px; color: #888;">Employee Name</span><br>
+                                <strong style="font-size: 15px;">{{employee_name}}</strong>
+                            </div>
+                            <div>
+                                <span style="font-size: 12px; color: #888;">Reference Number</span><br>
+                                <strong style="font-size: 15px;">{{case_id}}</strong>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: #333; margin-bottom: 30px; line-height: 1.5;">This confirms that the person named above is a verified employee of Australia and New Zealand Banking Group Limited and is authorised to assist you with your enquiry.</p>
+                        <div style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888;">
+                            © 2026 Australia and New Zealand Banking Group Limited ABN 11 005 357 522<br><br>
+                            This is an automated message from ANZ Security.
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 'anz_2', country: 'Australia', brand: 'ANZ', name: 'Transaction Authorization Alert', desc: 'In-app Auth and payment link',
+                sender_id: 'help@anz', sender_name: 'ANZ Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Transaction Authorization Alert',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #004165;">
+                        <div style="border-bottom: 2px solid #004165; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline;">
+                            <h2 style="margin: 0; color: #004165; font-size: 28px;">ANZ</h2>
+                            <span style="font-size: 12px; color: #666;">{{date}}</span>
+                        </div>
+                        <h2 style="color: #004165;">Transaction Authorization Alert</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>Your advisor will shortly direct you to complete a manual cancellation or order replication to prevent the transaction on your card ending in <b>{{card_last4}}</b>.</p>
+                        <div style="background-color: #f5f7f9; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                            <p style="font-size: 11px; font-weight: bold; color: #004165; margin-top:0;">TRANSACTION DETAILS</p>
+                            <div style="margin-bottom: 12px;"><strong>{{merchant}}</strong></div>
+                            <div><strong>{{transaction_reference}}</strong></div>
+                        </div>
+                        <p style="margin-top: 30px; font-size: 14px;">Kind Regards,<br><strong>ANZ Support Team</strong></p>
+                    </div>
+                `
+            },
+
+            // 2. BARCLAYS AUS
+            {
+                id: 'barclays_1', country: 'Australia', brand: 'Barclays', name: 'Barclays — Blank Text', desc: 'Standard custom body layout',
+                sender_id: 'help@barclays', sender_name: 'Support Team', from: 'help@barclays', reply: 'no-reply@barclays.com.au', subject: 'Account Update',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <h3 style="margin-bottom: 5px;">Your account matters to us</h3>
+                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px;">BARCLAYS</div>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>{{body_text}}</p>
+                    </div>
+                `
+            },
+            {
+                id: 'barclays_2', country: 'Australia', brand: 'Barclays', name: 'Barclays — Security Alert', desc: 'Urgent account notification',
+                sender_id: 'security@barclays', sender_name: 'Security Team', from: 'security@barclays', reply: 'no-reply@barclays.com.au', subject: 'Urgent Security Alert',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
+                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px;">BARCLAYS</div>
+                        <h2>Security Alert: Action Required</h2>
+                        <p>Dear {{recipient_name}},</p>
+                        <p>We recently detected unusual activity on your account ending in <b>{{account_ending}}</b>.</p>
+                    </div>
+                `
+            },
+
+            // 3. ASB
+            {
+                id: 'asb_1', country: 'Australia', brand: 'ASB', name: 'ASB — Account Notice', desc: 'General account information',
+                sender_id: 'info@asb', sender_name: 'ASB Info', from: 'info@asb', reply: 'no-reply@asb.co.nz', subject: 'Important Account Notice',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFB600; padding:20px; font-size:32px; font-weight:bold;">ASB</div><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div>`
+            },
+            {
+                id: 'asb_2', country: 'Australia', brand: 'ASB', name: 'ASB — Payment Confirmation', desc: 'Transaction alert layout',
+                sender_id: 'payments@asb', sender_name: 'ASB Payments', from: 'payments@asb', reply: 'no-reply@asb.co.nz', subject: 'Payment Confirmation',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFB600; padding:20px; font-size:32px; font-weight:bold;">ASB</div><p>Hi {{recipient_name}},</p><p>Processed {{amount}} to {{payee_name}}.</p></div>`
+            },
+
+            // 4. BNZ
+            {
+                id: 'bnz_1', country: 'Australia', brand: 'BNZ', name: 'BNZ — Blank Text', desc: 'Customizable body email',
+                sender_id: 'support@bnz', sender_name: 'BNZ Support', from: 'support@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Message from BNZ',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#00194A;">bnz</h2><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>`
+            },
+            {
+                id: 'bnz_2', country: 'Australia', brand: 'BNZ', name: 'BNZ — Verification', desc: 'Verification alert setup',
+                sender_id: 'verify@bnz', sender_name: 'BNZ Verification', from: 'verify@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Identity Verification Required',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#00194A;">bnz</h2><p>Dear {{recipient_name}},</p><p>Please confirm profile data by {{deadline_date}}.</p></div>`
+            },
+
+            // 5. COMMONWEALTH
+            {
+                id: 'comm_1', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Security Alert', desc: 'Security hold notification',
+                sender_id: 'security@commbank', sender_name: 'CommBank Security', from: 'security@commbank', reply: 'no-reply@commbank.com.au', subject: 'Security Hold',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFCC00; padding:20px; font-weight:bold;">Commonwealth Bank</div><p>Dear {{recipient_name}},</p><p>Hold on account profile {{case_id}}.</p></div>`
+            },
+            {
+                id: 'comm_2', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Blank Text', desc: 'Standard layout',
+                sender_id: 'help@commbank', sender_name: 'CommBank Help', from: 'help@commbank', reply: 'no-reply@commbank.com.au', subject: 'CommBank Update',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFCC00; padding:20px; font-weight:bold;">Commonwealth Bank</div><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>`
+            },
+
+            // 6. KIWIBANK
+            {
+                id: 'kiwi_1', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Account Notice', desc: 'Standard layout',
+                sender_id: 'help@kiwibank', sender_name: 'Kiwibank Support', from: 'help@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Account Notice',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#739600;">Kiwibank.</h2><p>{{body_text}}</p></div>`
+            },
+            {
+                id: 'kiwi_2', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Fraud Alert', desc: 'Urgent fraud notification',
+                sender_id: 'fraud@kiwibank', sender_name: 'Kiwibank Fraud Dept', from: 'fraud@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Urgent: Fraud Alert',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#739600;">Kiwibank.</h2><p>Suspicious transaction at {{merchant_name}} for {{amount}}.</p></div>`
+            },
+
+            // 7. LATITUDE
+            {
+                id: 'lat_1', country: 'Australia', brand: 'Latitude', name: 'Latitude — Blank Text', desc: 'Custom body template',
+                sender_id: 'support@latitude', sender_name: 'Latitude Support', from: 'support@latitude', reply: 'no-reply@latitude.com.au', subject: 'Latitude Notification',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#0087A5; padding:20px; color:white;">LATITUDE</div><p>{{body_text}}</p></div>`
+            },
+            {
+                id: 'lat_2', country: 'Australia', brand: 'Latitude', name: 'Latitude — Statement Ready', desc: 'Financial statement layout',
+                sender_id: 'statements@latitude', sender_name: 'Latitude Financial', from: 'statements@latitude', reply: 'no-reply@latitude.com.au', subject: 'Your Statement is Ready',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#0087A5; padding:20px; color:white;">LATITUDE</div><p>Minimum Payment: {{minimum_payment}} due on {{due_date}}.</p></div>`
+            },
+
+            // 8. NAB
+            {
+                id: 'nab_1', country: 'Australia', brand: 'NAB', name: 'NAB — Transaction Alert', desc: 'Transaction verification',
+                sender_id: 'alerts@nab', sender_name: 'NAB Alerts', from: 'alerts@nab', reply: 'no-reply@nab.com.au', subject: 'Transaction Alert',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#E31837;">nab</h2><p>Unrecognised activity for amount {{amount}} on {{date}}.</p></div>`
+            },
+            {
+                id: 'nab_2', country: 'Australia', brand: 'NAB', name: 'NAB — Blank Text', desc: 'Standard custom body layout',
+                sender_id: 'help@nab', sender_name: 'NAB Support', from: 'help@nab', reply: 'no-reply@nab.com.au', subject: 'NAB Update',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#E31837;">nab</h2><p>{{body_text}}</p></div>`
+            },
+
+            // 9. ING
+            {
+                id: 'ing_1', country: 'Australia', brand: 'ING', name: 'ING — Security Alert', desc: 'Urgent security message',
+                sender_id: 'security@ing', sender_name: 'ING Security', from: 'security@ing', reply: 'no-reply@ing.com.au', subject: 'Important Security Update',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FF6200; padding:15px; color:white;">ING</div><p>New device {{device_name}} near {{location}}.</p></div>`
+            },
+            {
+                id: 'ing_2', country: 'Australia', brand: 'ING', name: 'ING — Blank Text', desc: 'Customizable ING template',
+                sender_id: 'contact@ing', sender_name: 'ING Contact', from: 'contact@ing', reply: 'no-reply@ing.com.au', subject: 'Message from ING',
+                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FF6200; padding:15px; color:white;">ING</div><p>{{body_text}}</p></div>`
             }
+        ];
 
-            viewHistory.push(targetView);
-            window.scrollTo(0, 0);
+        let navigationStack = ['screen-categories'];
+        let activeTemplate = null;
+
+        function navTo(screenId, title, subtitle) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            document.getElementById('header-title').innerText = title;
+            document.getElementById('header-subtitle').innerText = subtitle || '';
+            document.getElementById('back-btn').style.display = 'block';
+            
+            navigationStack.push(screenId);
         }
 
         function goBack() {
-            if (viewHistory.length > 1) {
-                viewHistory.pop(); // Remove current view
-                const previousView = viewHistory.pop(); // Grab structural index back
-                switchView(previousView);
+            if (navigationStack.length > 1) {
+                navigationStack.pop();
+                const previousScreen = navigationStack[navigationStack.length - 1];
+                
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(previousScreen).classList.add('active');
+
+                if(previousScreen === 'screen-categories') {
+                    document.getElementById('header-title').innerText = 'Templates';
+                    document.getElementById('header-subtitle').innerText = 'HTML email library';
+                    document.getElementById('back-btn').style.display = 'none';
+                }
             }
         }
 
-        function updateHeader(title, subtitle, showBackBtn) {
-            document.getElementById('global-title').innerText = title;
-            document.getElementById('global-subtitle').innerText = subtitle;
-            document.getElementById('global-back-btn').style.visibility = showBackBtn ? 'visible' : 'hidden';
+        function loadBrands(country) {
+            const brands = [...new Set(templateDB.filter(t => t.country === country).map(t => t.brand))];
+            const container = document.getElementById('brands-container');
+            container.innerHTML = '';
+
+            if(brands.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding: 20px; color: #8E92B2;">No brands found for ${country}</div>`;
+            } else {
+                brands.forEach(brand => {
+                    const count = templateDB.filter(t => t.brand === brand).length;
+                    container.innerHTML += `
+                        <div class="list-card" onclick="loadTemplates('${brand}')">
+                            <div class="icon-box">🏛️</div>
+                            <div class="list-text">
+                                <div class="list-title">${brand}</div>
+                                <div class="list-subtitle">${count} preset template(s)</div>
+                            </div>
+                            <div class="list-arrow">›</div>
+                        </div>
+                    `;
+                });
+            }
+            navTo('screen-brands', country, `${brands.length} brands`);
         }
 
-        // Render Australia list
-        function renderAusBrands(list) {
-            const container = document.getElementById("aus-brands-list");
-            container.innerHTML = "";
-            list.forEach(brand => {
-                container.appendChild(createBrandCard(brand));
-            });
-        }
+        function loadTemplates(brand) {
+            const templates = templateDB.filter(t => t.brand === brand);
+            const container = document.getElementById('templates-container');
+            container.innerHTML = '';
 
-        // Search algorithm for Australia
-        function filterAusBrands() {
-            const query = document.getElementById("search-bar").value.toLowerCase();
-            const filtered = ausBrands.filter(b => b.name.toLowerCase().includes(query));
-            renderAusBrands(filtered);
-        }
-
-        // Render UK list with pagination
-        function renderUKBrands() {
-            const container = document.getElementById("uk-brands-list");
-            container.innerHTML = "";
-
-            const start = (ukCurrentPage - 1) * ukItemsPerPage;
-            const end = start + ukItemsPerPage;
-            const currentItems = ukBrands.slice(start, end);
-
-            currentItems.forEach(brand => {
-                container.appendChild(createBrandCard(brand));
-            });
-
-            document.getElementById("page-text").innerText = `Page ${ukCurrentPage} of ${ukTotalPages}`;
-            document.getElementById("prev-btn").disabled = (ukCurrentPage === 1);
-            document.getElementById("next-btn").disabled = (ukCurrentPage === ukTotalPages);
-        }
-
-        function changeUKPage(direction) {
-            ukCurrentPage += direction;
-            renderUKBrands();
-            window.scrollTo(0, 0);
-        }
-
-        // Helper interface item card creator
-        function createBrandCard(brand) {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.onclick = () => alert(`Loading Send Flow setup for ${brand.name}`);
-            card.innerHTML = `
-                <div class="card-left">
-                    <div class="bank-icon">🏛</div>
-                    <div>
-                        <div class="brand-name">${brand.name}</div>
-                        <div class="brand-templates">${brand.templates} preset template${brand.templates > 1 ? 's' : ''}</div>
+            templates.forEach(t => {
+                container.innerHTML += `
+                    <div class="list-card" onclick="setupTemplate('${t.id}')">
+                        <div class="list-text">
+                            <div class="list-title">${t.name}</div>
+                            <div class="list-subtitle">${t.desc}</div>
+                        </div>
+                        <div class="list-arrow">›</div>
                     </div>
-                </div>
-                <div class="arrow">&gt;</div>
-            `;
-            return card;
+                `;
+            });
+            navTo('screen-templates', brand, 'Select a template');
         }
+
+        function setupTemplate(templateId) {
+            activeTemplate = templateDB.find(t => t.id === templateId);
+            
+            document.getElementById('setup-title').innerText = activeTemplate.name;
+            document.getElementById('setup-subtitle').innerText = activeTemplate.desc;
+            document.getElementById('conf-sender-id').value = activeTemplate.sender_id;
+            document.getElementById('conf-sender-name').value = activeTemplate.sender_name;
+            document.getElementById('conf-from-address').value = activeTemplate.from;
+            document.getElementById('conf-reply-to').value = activeTemplate.reply;
+            document.getElementById('conf-subject').value = activeTemplate.subject || 'Important update';
+
+            const regex = /{{(.*?)}}/g;
+            let match;
+            const variables = new Set();
+            while ((match = regex.exec(activeTemplate.html)) !== null) {
+                variables.add(match[1]);
+            }
+
+            const varArray = Array.from(variables);
+            const container = document.getElementById('dynamic-fields-container');
+            container.innerHTML = '';
+            
+            document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${varArray.length} detected)`;
+
+            varArray.forEach(v => {
+                const labelName = v.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                
+                const inputHtml = v.includes('body') ? 
+                    `<textarea class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}"></textarea>` :
+                    `<input type="text" class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}">`;
+
+                container.innerHTML += `
+                    <div class="form-group">
+                        <label class="form-label">${labelName}</label>
+                        ${inputHtml}
+                    </div>
+                `;
+            });
+
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                input.addEventListener('input', renderLivePreview);
+            });
+
+            navTo('screen-setup', activeTemplate.name, 'Fill the preview details');
+        }
+
+        function renderLivePreview() {
+            if(!activeTemplate) return;
+            
+            let htmlCompiled = activeTemplate.html;
+            
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                const varName = input.getAttribute('data-var');
+                const val = input.value || `{{${varName}}}`;
+                htmlCompiled = htmlCompiled.split(`{{${varName}}}`).join(val); 
+            });
+
+            document.getElementById('preview-frame-container').innerHTML = htmlCompiled;
+        }
+
+        function openPreview() {
+            renderLivePreview();
+            document.getElementById('preview-modal').style.display = 'flex';
+        }
+
+        function closePreview() {
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+        {% endraw %}
     </script>
 </body>
 </html>
