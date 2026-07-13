@@ -7,10 +7,17 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 
 app = Flask(__name__)
 
+# 1. Main App Route (This fixes the 404 Not Found error)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# 2. Bank Templates Route
 @app.route('/bank')
 def bank_templates():
     return render_template('bank_templates.html')
 
+# 3. Crypto Templates Route
 @app.route('/crypto')
 def crypto_templates():
     return render_template('crypto_templates.html')
