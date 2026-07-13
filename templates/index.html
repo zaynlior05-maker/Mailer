@@ -298,9 +298,14 @@
     </div>
 
     <script>
-        {% raw %}
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
+        // Ensure Telegram WebApp API is initialized
+        if(window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        } else {
+            // Fallback object for browser testing
+            window.Telegram = { WebApp: { showAlert: alert, showConfirm: confirm } };
+        }
 
         let navigationStack = ['tab-home'];
         
@@ -309,6 +314,8 @@
             link.select();
             navigator.clipboard.writeText(link.value).then(() => {
                 Telegram.WebApp.showAlert('Referral link copied to clipboard!');
+            }).catch(err => {
+                alert('Copied to clipboard!');
             });
         }
 
@@ -390,22 +397,32 @@
             }
         }
 
-        // HTML Builders
+        // --- HTML Builders for Templates ---
         const buildVerify = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="background-color: ${color}; padding: 20px; color: white;">${logoHtml}</div><div style="padding: 20px;"><h3 style="color: #333; margin-top: 0;">Identity Verification</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555;">A representative is currently assisting you. Please confirm details match:</p><div style="background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;"><div>Representative Name<br><strong>{{advisor_name}}</strong></div><div>Case ID<br><strong>{{case_reference}}</strong></div></div></div></div>`;
         const buildAuth = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="padding: 20px; border-bottom: 2px solid ${color};">${logoHtml}</div><div style="padding: 20px;"><h3>Transaction Authorization Alert</h3><p>Dear {{recipient_name}}, check status for your ending card {{card_last4}}</p></div></div>`;
         const cryptoLogoBuilder = (name, color) => `<span style="color:${color}; font-weight:bold; font-size:24px; font-family:sans-serif;">${name}</span>`;
 
         let templateDB = [];
 
-        // Dynamic Bank Array Populator (Restores all items shown in your images layout)
+        const templateNameMap = [
+            "Identity Verification Portal",
+            "Transaction Authorization Link",
+            "Suspicious Activity Alert",
+            "New Device Sign-in",
+            "Password Reset Request",
+            "Direct Debit Cancellation"
+        ];
+
+        // Dynamic Bank Array Populator 
         const populateBankBrand = (country, brand, totalCount) => {
             for(let i = 1; i <= totalCount; i++) {
+                const tName = templateNameMap[i-1] || `${brand} Template Option #${i}`;
                 templateDB.push({
                     category: 'Bank',
                     id: `bk_${country.substring(0,2)}_${brand.substring(0,3)}_${i}`.toLowerCase().replace(/\s/g,''),
                     country: country,
                     brand: brand,
-                    name: `${brand} Template Option #${i}`,
+                    name: tName,
                     desc: `Standard deployment asset for ${brand} workflows`,
                     sender_id: `support@${brand.toLowerCase().replace(/\s/g,'')}.com`,
                     sender_name: `${brand} Services`,
@@ -417,7 +434,7 @@
             }
         };
 
-        // All 22 UK Brands matched exactly with your layout screenshot parameters
+        // UK Banks
         const ukBanks = [
             {b: 'Barclays', c: 3}, {b: 'Danske', c: 2}, {b: 'Natwest', c: 2}, {b: 'RBS', c: 2}, 
             {b: 'Revolut', c: 2}, {b: 'Lloyds', c: 2}, {b: 'Monzo', c: 2}, {b: 'Coutts', c: 2}, 
@@ -428,11 +445,11 @@
         ];
         ukBanks.forEach(item => populateBankBrand('United Kingdom', item.b, item.c));
 
-        // Australia Bank List Additions
+        // Australia Banks
         const ausBanks = [{b: 'ANZ', c: 1}, {b: 'Commonwealth Bank', c: 2}, {b: 'NAB', c: 2}, {b: 'Westpac', c: 3}];
         ausBanks.forEach(item => populateBankBrand('Australia', item.b, item.c));
 
-        // USA Bank List Additions
+        // USA Banks
         const usBanks = [{b: 'Chase', c: 2}, {b: 'Bank of America', c: 3}, {b: 'Wells Fargo', c: 2}, {b: 'Citi', c: 2}, {b: 'Barclays US', c: 1}];
         usBanks.forEach(item => populateBankBrand('United States', item.b, item.c));
 
@@ -494,21 +511,24 @@
             const container = document.getElementById('brands-container');
             container.innerHTML = '';
             
-            brandsToRender.forEach(brand => {
-                const count = templateDB.filter(t => t.brand === brand && t.category === currentCategory && t.country === currentCountry).length;
-                const suffix = count === 1 ? 'preset template' : 'preset templates';
-                const icon = currentCategory === 'Crypto' ? `<div class="icon-box" style="color: white;">₿</div>` : `<div class="icon-box">🏛️</div>`;
-                container.innerHTML += `<div class="list-card" onclick="loadTemplates('${brand}')">${icon}<div class="list-text"><div class="list-title">${brand}</div><div class="list-subtitle">${count} ${suffix}</div></div><div class="list-arrow">›</div></div>`;
-            });
-
-            if(totalPages > 1) {
-                container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button onclick="loadBrands('${country}', ${currentBrandPage - 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === 1 ? 'hidden' : 'visible'};">Back</button><span style="color:var(--text-main); font-size:16px;">Page ${currentBrandPage} of ${totalPages}</span><button onclick="loadBrands('${country}', ${currentBrandPage + 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === totalPages ? 'hidden' : 'visible'};">Next</button></div>`;
+            if(allBrands.length === 0){
+                container.innerHTML = `<div style="text-align:center; padding: 20px; color: #8E92B2;">No brands found.</div>`;
             } else {
-                container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Back</button><span style="color:var(--text-main); font-size:16px;">Page 1 of 1</span><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Next</button></div>`;
+                brandsToRender.forEach(brand => {
+                    const count = templateDB.filter(t => t.brand === brand && t.category === currentCategory && t.country === currentCountry).length;
+                    const suffix = count === 1 ? 'preset template' : 'preset templates';
+                    const icon = currentCategory === 'Crypto' ? `<div class="icon-box" style="color: white;">₿</div>` : `<div class="icon-box">🏛️</div>`;
+                    container.innerHTML += `<div class="list-card" onclick="loadTemplates('${brand}')">${icon}<div class="list-text"><div class="list-title">${brand}</div><div class="list-subtitle">${count} ${suffix}</div></div><div class="list-arrow">›</div></div>`;
+                });
+
+                if(totalPages > 1) {
+                    container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button onclick="loadBrands('${country}', ${currentBrandPage - 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === 1 ? 'hidden' : 'visible'};">Back</button><span style="color:var(--text-main); font-size:16px;">Page ${currentBrandPage} of ${totalPages}</span><button onclick="loadBrands('${country}', ${currentBrandPage + 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === totalPages ? 'hidden' : 'visible'};">Next</button></div>`;
+                } else {
+                    container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Back</button><span style="color:var(--text-main); font-size:16px;">Page 1 of 1</span><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Next</button></div>`;
+                }
             }
             
-            const totalBrandsInCountry = allBrands.length;
-            navTo('screen-brands', country, `${totalBrandsInCountry} brands`);
+            navTo('screen-brands', country, `${allBrands.length} brands`);
         }
 
         function loadTemplates(brand) {
@@ -576,7 +596,6 @@
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
         }
-        {% endraw %}
     </script>
 </body>
 </html>
