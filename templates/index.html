@@ -13,8 +13,11 @@
         .back-btn:active{background-color:#2a2f4c;}
         .header-title{font-weight:bold;font-size:18px;flex-grow:1;text-align:left;}
         .header-subtitle{font-size:13px;color:var(--text-muted);font-weight:normal;margin-top:2px;}
+        .header-right-action{font-size:12px;background:#1F2340;padding:4px 10px;border-radius:8px;color:var(--text-muted);display:none;}
+        
         .screen{display:none;flex:1;overflow-y:auto;padding:16px;padding-bottom:100px}
         .screen.active{display:block}
+        
         .list-card{background-color:var(--panel-bg);border:1px solid var(--border-color);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;cursor:pointer;transition:background 0.2s}
         .list-card:active{background-color:#1a1d36}
         .icon-box{width:40px;height:40px;border-radius:10px;background-color:#1F2340;display:flex;align-items:center;justify-content:center;margin-right:16px;font-size:20px}
@@ -22,23 +25,66 @@
         .list-title{font-size:16px;font-weight:600;margin-bottom:4px}
         .list-subtitle{font-size:13px;color:var(--text-muted)}
         .list-arrow{color:var(--text-muted);font-weight:bold}
+        
         .form-group{margin-bottom:16px}
-        .form-label{font-size:13px;color:var(--text-muted);margin-bottom:6px;display:block}
+        .form-label{font-size:12px;color:var(--text-muted);margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:0.5px;}
         .form-input{width:100%;background-color:var(--panel-bg);border:1px solid var(--border-color);color:var(--text-main);padding:14px;border-radius:12px;box-sizing:border-box;font-size:15px}
         .form-input:focus{outline:none;border-color:var(--accent)}
         textarea.form-input{resize:vertical;min-height:80px}
-        .section-title{font-size:16px;font-weight:bold;margin:24px 0 16px 0}
+        .section-title{font-size:16px;font-weight:bold;margin:24px 0 16px 0;text-transform:uppercase;color:var(--text-muted);letter-spacing:1px;font-size:12px;}
+        
         .btn-primary{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-glow));color:white;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px}
         .btn-secondary{width:100%;background:transparent;color:var(--accent-glow);border:none;padding:16px;font-size:14px;cursor:pointer;margin-top:5px}
+
+        /* Home & Account Specific Styles */
+        .profile-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+        .profile-left{display:flex;align-items:center;}
+        .avatar-placeholder{width:50px;height:50px;border-radius:12px;background:#fff;margin-right:12px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:bold;font-size:20px;}
+        .profile-name{font-size:18px;font-weight:bold;}
+        .profile-username{font-size:13px;color:var(--text-muted);margin:2px 0;}
+        .badge-trial{color:#F5A623;font-size:12px;font-weight:bold;}
+        .profile-right{text-align:right;}
+        .token-label{font-size:11px;color:var(--text-muted);}
+        .token-amount{font-size:24px;font-weight:bold;color:var(--accent-glow);margin:2px 0;}
+        .btn-topup{background:transparent;border:1px solid #28A745;color:#28A745;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold;cursor:pointer;}
+        
+        .welcome-card{background:linear-gradient(135deg, #2A1B54, #48298C);border-radius:16px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden;}
+        .welcome-card::after{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:rgba(255,255,255,0.05);border-radius:50%;}
+        .send-email-large{background:linear-gradient(90deg, #8E54E9, #B388FF);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;align-items:center;cursor:pointer;box-shadow:0 8px 20px rgba(142,84,233,0.2);}
+        .send-email-icon{background:rgba(255,255,255,0.2);width:48px;height:48px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:24px;margin-right:16px;}
+        
+        .free-tokens-card{border:1px solid #F5A623;background:rgba(245,166,35,0.05);border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center;}
+        .btn-upgrade{background:linear-gradient(90deg, #F5A623, #FFC107);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;}
+
+        .membership-card{border:1px solid #FF4D4D;background:rgba(255,77,77,0.05);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;align-items:center;}
+        
+        /* App Password Styles */
+        .tabs-container{display:flex;background:var(--panel-bg);border-radius:12px;padding:4px;margin-bottom:20px;}
+        .tab-btn{flex:1;text-align:center;padding:10px;border-radius:10px;font-size:14px;color:var(--text-muted);cursor:pointer;}
+        .tab-btn.active{background:#2a2f4c;color:white;font-weight:bold;}
+        .keypad{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;margin-bottom:20px;}
+        .keypad-btn{background:var(--panel-bg);border:none;color:white;font-size:20px;padding:16px;border-radius:12px;cursor:pointer;}
+        .keypad-btn:active{background:#2a2f4c;}
+        .warning-box{background:rgba(255,77,77,0.1);border:1px solid rgba(255,77,77,0.3);color:#FF8A8A;padding:16px;border-radius:12px;font-size:13px;line-height:1.5;margin-bottom:20px;}
+
+        /* Referrals Styles */
+        .referral-box{background:var(--panel-bg);border:1px solid #1A3B3B;border-radius:16px;padding:16px;margin-bottom:16px;}
+        .stat-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px dashed var(--border-color);}
+        .stat-row:last-child{border-bottom:none;}
+        .stat-label{color:#2E8B8B;font-size:13px;font-weight:bold;letter-spacing:1px;}
+        .stat-value{font-size:16px;font-weight:bold;}
+
         #preview-modal{position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.9);z-index:100;display:none;flex-direction:column}
         .preview-header{display:flex;justify-content:space-between;padding:16px;background-color:var(--bg-color);align-items:center}
         .preview-close{color:white;background:none;border:none;font-size:24px;cursor:pointer}
         #preview-frame-container{flex:1;background:white;margin:16px;border-radius:12px;overflow:auto;padding:16px;color:black}
+        
+        /* Bottom Navigation */
         .bottom-nav{position:fixed;bottom:0;width:100%;background-color:var(--bg-color);border-top:1px solid var(--border-color);display:flex;justify-content:space-around;padding:12px 0 24px 0;z-index:50}
-        .nav-item{color:var(--text-muted);text-align:center;font-size:10px;cursor:pointer}
+        .nav-item{color:var(--text-muted);text-align:center;font-size:10px;cursor:pointer;flex:1;}
         .nav-item.active{color:var(--accent-glow)}
         .nav-icon{font-size:20px;margin-bottom:4px;display:block}
-        .nav-fab{background:linear-gradient(135deg,var(--accent),var(--accent-glow));width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-top:-24px;box-shadow:0 4px 15px rgba(142,84,233,0.4);color:white;font-size:24px}
+        .nav-fab{background:linear-gradient(135deg,var(--accent),var(--accent-glow));width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-top:-24px;box-shadow:0 4px 15px rgba(142,84,233,0.4);color:white;font-size:24px;cursor:pointer;}
     </style>
 </head>
 <body>
@@ -46,34 +92,201 @@
     <div class="header" id="main-header">
         <button class="back-btn" id="back-btn" onclick="goBack()">❮</button>
         <div class="header-title" id="header-title-container">
-            <span id="header-title">Choose Category</span>
-            <div class="header-subtitle" id="header-subtitle">Select a category</div>
+            <span id="header-title">ONYX Mailer</span>
+            <div class="header-subtitle" id="header-subtitle">mini app</div>
         </div>
-        <div style="width: 38px;"></div>
+        <div class="header-right-action" id="header-right-action">📄 94 Total</div>
+        <div style="width: 38px;" id="header-spacer"></div>
     </div>
 
-    <!-- Screen 1: Categories -->
-    <div id="screen-categories" class="screen active">
-        <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
+    <!-- ROOT TAB 1: Home -->
+    <div id="tab-home" class="screen active">
+        <div class="profile-row">
+            <div class="profile-left">
+                <div class="avatar-placeholder">🤵</div>
+                <div>
+                    <div class="profile-name">MZ7</div>
+                    <div class="profile-username">@MZ78666</div>
+                    <div class="badge-trial">Trial</div>
+                </div>
+            </div>
+            <div class="profile-right">
+                <div class="token-label">1 Mail Token</div>
+                <div class="token-amount">$0.00</div>
+                <button class="btn-topup">+ Top Up</button>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <div style="font-size:11px; color:#A476F0; font-weight:bold; letter-spacing:1px; margin-bottom:8px;">✉ ONYX MAILER</div>
+            <div style="font-size:24px; font-weight:bold; margin-bottom:8px;">Welcome, <span style="color:#B388FF;">MZ7</span></div>
+            <div style="font-size:14px; color:#D1C4E9;">The reliable tool for callers with no downtime.</div>
+        </div>
+
+        <div class="send-email-large" onclick="navTo('screen-categories', 'Send an email', 'Select a category')">
+            <div class="send-email-icon">✉</div>
+            <div class="list-text">
+                <div class="list-title" style="font-size:22px; margin-bottom:4px;">Send an email</div>
+                <div style="color:rgba(255,255,255,0.8); font-size:14px;">Choose sender & template</div>
+            </div>
+            <div class="list-arrow" style="color:white; font-size:20px;">›</div>
+        </div>
+
+        <div class="free-tokens-card">
+            <div>
+                <div style="color:#F5A623; font-weight:bold; font-size:15px; margin-bottom:4px;">You have free tokens!</div>
+                <div style="color:#8E92B2; font-size:13px;">x1 mail remaining</div>
+            </div>
+            <button class="btn-upgrade">Upgrade ★</button>
+        </div>
+    </div>
+
+    <!-- ROOT TAB 2: Templates Home -->
+    <div id="tab-templates" class="screen">
+        <div class="list-card" style="margin-bottom: 20px; cursor: default;">
+            <div class="icon-box" style="background:transparent; font-size:24px;">📥</div>
+            <div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div>
+            <div class="list-arrow">›</div>
+        </div>
+        <div class="list-card" onclick="navTo('screen-categories', 'Send an email', 'Select a category')">
+            <div class="icon-box">🌐</div>
+            <div class="list-text"><div class="list-title">Global Templates</div><div class="list-subtitle">Preset templates ready to use</div></div>
+            <div class="list-arrow">›</div>
+        </div>
+        <div class="list-card">
+            <div class="icon-box">↑</div>
+            <div class="list-text"><div class="list-title">Custom Templates</div><div class="list-subtitle">Your own uploaded HTML templates</div></div>
+            <div class="list-arrow">›</div>
+        </div>
+    </div>
+
+    <!-- ROOT TAB 3: Shop -->
+    <div id="tab-shop" class="screen">
+        <div style="text-align:center; padding:50px 20px; color:var(--text-muted);">
+            <div style="font-size:48px; margin-bottom:16px;">🛒</div>
+            <h2 style="color:white; margin-bottom:8px;">Shop Store</h2>
+            <p>Purchase additional tokens, templates, and subscriptions here.</p>
+            <div style="margin-top:20px; font-size:12px; background:var(--panel-bg); padding:10px; border-radius:8px; display:inline-block;">Coming Soon</div>
+        </div>
+    </div>
+
+    <!-- ROOT TAB 4: Account -->
+    <div id="tab-account" class="screen">
+        <div class="profile-row">
+            <div class="profile-left">
+                <div class="avatar-placeholder">🤵</div>
+                <div><div class="profile-name">MZ7</div><div class="profile-username">@MZ78666</div><div class="badge-trial">Trial</div></div>
+            </div>
+            <div class="profile-right">
+                <div class="token-label">1 Mail Token</div><div class="token-amount">$0.00</div><button class="btn-topup">+ Top Up</button>
+            </div>
+        </div>
+
+        <div class="membership-card">
+            <div class="icon-box" style="background:transparent; color:#FF4D4D; font-size:24px; border:1px solid #FF4D4D; border-radius:50%; width:40px; height:40px;">☆</div>
+            <div class="list-text">
+                <div style="color:#FFB6B6; font-size:15px; font-weight:bold; margin-bottom:4px;">Membership Status</div>
+                <div style="color:#FF4D4D; font-size:13px; font-weight:bold; margin-bottom:8px;">You have 0 days left ⏰</div>
+                <button class="btn-upgrade" style="padding:6px 16px; font-size:11px;">★ UPGRADE</button>
+            </div>
+        </div>
+
+        <div class="list-card" onclick="navTo('screen-app-password', 'Set App Password', 'ACCOUNT SECURITY')">
+            <div class="icon-box" style="background:transparent; border:1px solid var(--text-muted); border-radius:8px;">🔒</div>
+            <div class="list-text"><div class="list-title">Set App Password</div></div><div class="list-arrow">›</div>
+        </div>
+
+        <div class="list-card" onclick="navTo('screen-referrals', 'Easy passive income', 'REFERRAL HUB')" style="border-color:#1A3B3B;">
+            <div class="icon-box" style="background:transparent; color:#2E8B8B; border:1px solid #2E8B8B; border-radius:8px;">↑</div>
+            <div class="list-text"><div class="list-title">Referrals</div><div class="list-subtitle" style="color:#2E8B8B;">Earn passive money with referrals</div></div><div class="list-arrow">›</div>
+        </div>
+
+        <div class="list-card" style="margin-top:20px;">
+            <div class="icon-box" style="background:transparent; border:1px solid var(--text-muted); border-radius:8px;">🗑️</div>
+            <div class="list-text"><div class="list-title">Delete My Account</div></div>
+        </div>
+    </div>
+
+    <!-- SUB-SCREEN: App Password -->
+    <div id="screen-app-password" class="screen">
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px; margin-top:0;">Choose PIN or text password for app lock.</p>
         
-        <div class="list-card" onclick="selectCategory('Bank')">
-            <div class="icon-box">🏛️</div>
-            <div class="list-text"><div class="list-title">Bank</div><div class="list-subtitle">Professional banking letters</div></div>
-            <div class="list-arrow">›</div>
+        <div class="form-label">PASSWORD TYPE</div>
+        <div class="tabs-container">
+            <div class="tab-btn active">PIN</div>
+            <div class="tab-btn">Text Password</div>
         </div>
-        <div class="list-card" onclick="selectCategory('Crypto')">
-            <div class="icon-box" style="color:#A476F0;">₿</div>
-            <div class="list-text"><div class="list-title">Crypto</div><div class="list-subtitle">Exchanges & crypto wallets</div></div>
-            <div class="list-arrow">›</div>
+
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none; font-size:13px; color:white;">New Password</label>
+            <input type="password" class="form-input" placeholder="Enter 4-8 digit PIN" readonly value="••••">
         </div>
-        <div class="list-card" style="opacity: 0.6; cursor: default;">
-            <div class="icon-box">❓</div>
-            <div class="list-text"><div class="list-title">Others</div><div class="list-subtitle">Other categories — coming soon</div></div>
-            <div class="list-arrow">›</div>
+        <div class="form-group" style="margin-bottom:24px;">
+            <label class="form-label" style="text-transform:none; font-size:13px; color:white;">Confirm Password</label>
+            <input type="password" class="form-input" placeholder="Re-enter PIN" readonly value="••••">
+        </div>
+
+        <div class="keypad">
+            <button class="keypad-btn">1</button><button class="keypad-btn">2</button><button class="keypad-btn">3</button>
+            <button class="keypad-btn">4</button><button class="keypad-btn">5</button><button class="keypad-btn">6</button>
+            <button class="keypad-btn">7</button><button class="keypad-btn">8</button><button class="keypad-btn">9</button>
+            <button class="keypad-btn" style="font-size:14px;">Clear</button><button class="keypad-btn">0</button><button class="keypad-btn">⌫</button>
+        </div>
+
+        <div class="warning-box">Warning: if you lose this password, your account data will be reset.</div>
+        <button class="btn-primary" style="margin-top:0;">Enable App Lock</button>
+    </div>
+
+    <!-- SUB-SCREEN: Referrals -->
+    <div id="screen-referrals" class="screen">
+        <p style="color:var(--text-main); font-size:15px; margin-bottom:24px; margin-top:0; line-height:1.5;">Invite people with your link and earn 10% of every deposit they make.</p>
+
+        <div class="referral-box">
+            <div class="form-label">YOUR REFERRAL CODE</div>
+            <input type="text" class="form-input" value="ref-ed5526dc" readonly style="margin-bottom:12px; text-align:center; font-weight:bold;">
+            <button class="btn-secondary" style="background:#1F2340; color:white; border-radius:12px; padding:12px; margin-top:0;">Save</button>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:16px;">Loading your referral data...</div>
+        </div>
+
+        <div class="referral-box">
+            <div class="form-label">YOUR REFERRAL LINK</div>
+            <input type="text" class="form-input" value="https://t.me/Onyx_MailerBot?start=ref_r" readonly style="margin-bottom:12px; font-size:13px; color:var(--text-muted);">
+            <button class="btn-primary" style="padding:12px; margin-top:0; margin-bottom:8px; border-radius:12px;">Copy</button>
+            <button class="btn-secondary" style="background:#1F2340; color:white; border-radius:12px; padding:12px; margin-top:0;">Share</button>
+        </div>
+
+        <div class="referral-box" style="background:rgba(46,139,139,0.05); border-color:#1A3B3B;">
+            <div class="form-label">WITHDRAW OVERVIEW</div>
+            <div class="stat-row"><div class="stat-label">BALANCE</div><div class="stat-value">$0.00</div></div>
+            <div class="stat-row"><div class="stat-label">TOTAL EARNED</div><div class="stat-value">$0.00</div></div>
+        </div>
+
+        <div class="referral-box" style="border-color:#1A3B3B;">
+            <div class="form-label">TOTAL REFERRALS</div>
+            <div style="font-size:20px; font-weight:bold; color:white;">0</div>
+        </div>
+
+        <div class="referral-box">
+            <div class="form-label">WITHDRAW</div>
+            <p style="font-size:13px; color:var(--text-muted); margin-top:0; margin-bottom:16px; line-height:1.4;">Referral earnings will appear here after your referred users deposit.</p>
+            <button class="btn-primary" style="padding:14px; border-radius:12px; margin-top:0;">Request Withdraw</button>
+        </div>
+
+        <div class="referral-box">
+            <div class="form-label">RECENT REFERRALS</div>
+            <div style="border:1px dashed var(--border-color); border-radius:12px; padding:20px; text-align:center; color:var(--text-muted); font-size:14px;">No referrals yet.</div>
         </div>
     </div>
 
-    <!-- Screen 2: Countries -->
+
+    <!-- DYNAMIC FLOW SCREENS (Categories -> Countries -> Brands -> Templates -> Setup) -->
+    <div id="screen-categories" class="screen">
+        <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
+        <div class="list-card" onclick="selectCategory('Bank')"><div class="icon-box">🏛️</div><div class="list-text"><div class="list-title">Bank</div><div class="list-subtitle">Professional banking letters</div></div><div class="list-arrow">›</div></div>
+        <div class="list-card" onclick="selectCategory('Crypto')"><div class="icon-box" style="color:#A476F0;">₿</div><div class="list-text"><div class="list-title">Crypto</div><div class="list-subtitle">Exchanges & crypto wallets</div></div><div class="list-arrow">›</div></div>
+        <div class="list-card" style="opacity: 0.6; cursor: default;"><div class="icon-box">❓</div><div class="list-text"><div class="list-title">Others</div><div class="list-subtitle">Other categories — coming soon</div></div><div class="list-arrow">›</div></div>
+    </div>
+
     <div id="screen-countries" class="screen">
         <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
         <div class="list-card" onclick="loadBrands('Australia')"><div class="icon-box">🇦🇺</div><div class="list-text"><div class="list-title">Australia</div></div><div class="list-arrow">›</div></div>
@@ -81,53 +294,42 @@
         <div class="list-card" onclick="loadBrands('United States')"><div class="icon-box">🇺🇸</div><div class="list-text"><div class="list-title">United States</div></div><div class="list-arrow">›</div></div>
     </div>
 
-    <!-- Screen 3: Brands (Paginated) -->
     <div id="screen-brands" class="screen">
         <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
-        
-        <!-- Crypto Specific Search Bar (Visual only to match screenshot) -->
-        <div id="search-bar-container" style="display:none; margin-bottom:16px;">
-            <div style="background-color:var(--panel-bg); border:1px solid var(--border-color); border-radius:12px; padding:12px 16px; color:var(--text-muted); display:flex; align-items:center;">
-                <span style="margin-right:10px;">🔍</span> Search templates
-            </div>
-        </div>
-
+        <div id="search-bar-container" style="display:none; margin-bottom:16px;"><div style="background-color:var(--panel-bg); border:1px solid var(--border-color); border-radius:12px; padding:12px 16px; color:var(--text-muted); display:flex; align-items:center;"><span style="margin-right:10px;">🔍</span> Search templates</div></div>
         <div id="brands-container"></div>
     </div>
 
-    <!-- Screen 4: Templates -->
     <div id="screen-templates" class="screen">
         <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
         <div id="templates-container"></div>
     </div>
 
-    <!-- Screen 5: Dynamic Send Setup -->
     <div id="screen-setup" class="screen">
         <div class="list-card" style="cursor: default;"><div class="list-text"><div class="list-title" id="setup-title">Template Name</div><div class="list-subtitle" id="setup-subtitle">Template send setup</div></div></div>
-        <div class="form-group"><label class="form-label">Preset sender ID</label><input type="text" class="form-input" id="conf-sender-id" value="help@brand"></div>
-        <div class="form-group"><label class="form-label">Sender name</label><input type="text" class="form-input" id="conf-sender-name" value="Support Team"></div>
-        <div class="form-group"><label class="form-label">From address</label><input type="text" class="form-input" id="conf-from-address" value="help@brand"></div>
-        <div class="form-group"><label class="form-label">Reply-To address</label><input type="text" class="form-input" id="conf-reply-to" value="no-reply@brand.com"></div>
-        <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" id="conf-subject" value="Important update"></div>
-        <div class="section-title" id="dynamic-fields-header">Template Parameters</div><div id="dynamic-fields-container"></div>
-        <div class="form-group" style="margin-top: 24px;"><label class="form-label">Recipient email</label><input type="email" class="form-input" placeholder="recipient@example.com"></div>
+        <div class="form-group"><label class="form-label" style="text-transform:none;">Preset sender ID</label><input type="text" class="form-input" id="conf-sender-id" value="help@brand"></div>
+        <div class="form-group"><label class="form-label" style="text-transform:none;">Sender name</label><input type="text" class="form-input" id="conf-sender-name" value="Support Team"></div>
+        <div class="form-group"><label class="form-label" style="text-transform:none;">From address</label><input type="text" class="form-input" id="conf-from-address" value="help@brand"></div>
+        <div class="form-group"><label class="form-label" style="text-transform:none;">Reply-To address</label><input type="text" class="form-input" id="conf-reply-to" value="no-reply@brand.com"></div>
+        <div class="form-group"><label class="form-label" style="text-transform:none;">Subject</label><input type="text" class="form-input" id="conf-subject" value="Important update"></div>
+        <div class="section-title" id="dynamic-fields-header" style="text-transform:none;">Template Parameters</div><div id="dynamic-fields-container"></div>
+        <div class="form-group" style="margin-top: 24px;"><label class="form-label" style="text-transform:none;">Recipient email</label><input type="email" class="form-input" placeholder="recipient@example.com"></div>
         <button class="btn-primary" onclick="Telegram.WebApp.showAlert('Email queued for sending!')">Send Email</button>
         <button class="btn-secondary" onclick="openPreview()">Preview Email</button>
     </div>
 
-    <!-- Live Preview Modal -->
     <div id="preview-modal">
         <div class="preview-header"><div style="font-weight: bold; font-size: 18px;">Email Preview</div><button class="preview-close" onclick="closePreview()">×</button></div>
         <div id="preview-frame-container"></div>
     </div>
 
-    <!-- Bottom Navigation -->
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
-        <div class="nav-item"><span class="nav-icon">🏠</span> Home</div>
-        <div class="nav-item active"><span class="nav-icon">📄</span> Templates</div>
-        <div class="nav-fab">✉</div>
-        <div class="nav-item"><span class="nav-icon">🛒</span> Shop</div>
-        <div class="nav-item"><span class="nav-icon">⚙️</span> Account</div>
+        <div class="nav-item active" onclick="switchTab('tab-home', this)"><span class="nav-icon">🏠</span> Home</div>
+        <div class="nav-item" onclick="switchTab('tab-templates', this)"><span class="nav-icon">📄</span> Templates</div>
+        <div class="nav-fab" onclick="switchTab('tab-home', null); navTo('screen-categories', 'Send an email', 'Select a category');">✉</div>
+        <div class="nav-item" onclick="switchTab('tab-shop', this)"><span class="nav-icon">🛒</span> Shop</div>
+        <div class="nav-item" onclick="switchTab('tab-account', this)"><span class="nav-icon">⚙️</span> Account</div>
     </div>
 
     <script>
@@ -135,141 +337,53 @@
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
 
-        // Standardized HTML Generators for massive footprint reduction
-        const buildVerify = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="background-color: ${color}; padding: 20px; color: white;">${logoHtml}</div><div style="padding: 20px;"><h3 style="color: #333; margin-top: 0;">Identity Verification</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555;">A representative is currently assisting you. Please confirm the following details match those provided by your representative:</p><div style="background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;"><div style="margin-bottom: 10px;"><span style="color: #888; font-size: 12px; text-transform: uppercase;">Representative Name</span><br><strong style="font-size: 16px; color: #333;">{{advisor_name}}</strong></div><div><span style="color: #888; font-size: 12px; text-transform: uppercase;">Reference Number</span><br><strong style="font-size: 16px; color: #333;">{{case_reference}}</strong></div></div><div style="background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 14px;">✓ You are currently connected to a verified member of staff</div><p style="color: #555; margin-top: 20px;">Kind regards,<br><strong>Customer Services Team</strong></p></div></div>`;
-        const buildAuth = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; background: #fff;"><div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${color};">${logoHtml}<span style="color: #888; font-size: 10px;">{{date}}</span></div><div style="padding: 20px;"><h3 style="color: ${color}; margin-top: 0; font-size: 20px;">Transaction Authorization Alert</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555; font-size: 14px;">Your advisor will shortly direct you to complete a manual cancellation or order replication to prevent the transaction on your card ending in <b>{{card_last4}}</b>.</p><div style="border: 1px solid #eaeaea; border-radius: 6px; margin: 20px 0;"><div style="background: #fbfbfb; padding: 10px 15px; font-size: 10px; font-weight: bold; color: ${color}; text-transform: uppercase; border-bottom: 1px solid #eaeaea;">Transaction Details</div><div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea;"><span style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Merchant</span><br><strong style="color: #333; font-size: 15px;">{{merchant}}</strong></div><div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea;"><span style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Attempted Transaction</span><br><strong style="color: #333; font-size: 15px;">{{attempted_transaction}}</strong></div><div style="padding: 12px 15px;"><span style="color: ${color}; font-size: 11px; text-transform: uppercase; font-weight: bold;">Transaction Reference</span><br><strong style="color: ${color}; font-size: 15px;">{{transaction_reference}}</strong></div></div><div style="background: #fdfaf0; border-left: 4px solid ${color}; color: #555; padding: 15px; border-radius: 2px; font-size: 13px;"><strong style="color: ${color};">Security Notice:</strong> Never share your transaction reference with unsolicited callers. Our advisors will always have access to this information and will never ask you to transfer funds.</div><p style="color: #333; margin-top: 24px; font-size: 12px;">Kind Regards,<br><strong>Support Team</strong></p></div><div style="background-color: #fafafa; padding: 20px; text-align: center; font-size: 11px; color: #888;">This is an automated notification. Please do not reply to this address.</div></div>`;
+        // ----------------------------------------------------
+        // NAVIGATION ENGINE
+        // ----------------------------------------------------
+        let navigationStack = ['tab-home'];
+        let baseTab = 'tab-home'; // Tracks which root tab we are currently in
 
-        const wiseLogo = `<svg width="80" viewBox="0 0 100 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.8 0L0 0L6.4 12.8L2.4 12.8L12.8 24L11.2 16L15.2 16L18.8 0Z" fill="#9FE870"/><text x="25" y="19" font-family="sans-serif" font-weight="900" font-size="24" fill="#163300" letter-spacing="-1">wise</text></svg>`;
-        const boaLogo = `<span style="color:#012169; font-weight:900; font-family:sans-serif; font-size:24px; letter-spacing:-1px;">BANK OF AMERICA</span>`;
-        const chaseLogo = `<span style="color:#117aca; font-weight:bold; font-family:sans-serif; font-size:24px;">CHASE</span>`;
-        const citiLogo = `<span style="color:#003b70; font-weight:bold; font-family:sans-serif; font-size:24px;">citi</span>`;
-        const wellsLogo = `<span style="color:#cd1409; font-weight:bold; font-family:sans-serif; font-size:22px;">WELLS FARGO</span>`;
-        const barcLogo = `<span style="color:#00AEEF; font-weight:900; font-family:sans-serif; font-size:24px; letter-spacing:2px;">BARCLAYS</span>`;
-
-        // Trezor specific exact match from image_45
-        const trezorHtml = `
-            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
-                <div style="font-size: 14px; line-height: 1.6;">
-                    <p>At Trezor, your account team is our top priority. To ensure you are always protected, we want to authenticate that you are speaking with a genuine Trezor representative. You have been assigned the case number <span style="background: #e0f2f1; color: #00796b; padding: 2px 6px; border-radius: 4px; font-weight: bold;">{{case_reference}}</span> for reference purposes.</p>
-                    <div style="background: #f4fbf9; border: 1px solid #e0f2f1; padding: 15px; border-radius: 6px; margin: 20px 0;">
-                        We can verify that <span style="color: #00796b; font-weight: bold;">{{advisor_name}}</span> is a certified member of our support team and that you are currently connected on a call with a genuine Trezor number.
-                    </div>
-                    <p><strong>Before continuing, please confirm:</strong></p>
-                    <ul style="padding-left: 20px; margin-bottom: 20px;">
-                        <li style="margin-bottom: 8px;">This email contains confidential details and should not be shared with anyone.</li>
-                        <li>Please confirm your representative with the case ID provided above.</li>
-                    </ul>
-                    <p>Thank you for choosing Trezor,<br><strong>Trezor account team</strong></p>
-                </div>
-                <div style="background: #f9f9f9; padding: 20px; text-align: center; font-size: 11px; color: #666; margin-top: 30px; border-radius: 0 0 8px 8px;">
-                    <p>You are receiving this email because you contacted Trezor Support. If you did not request this communication, please contact our support team.</p>
-                    <p><a href="#" style="color: #00796b; text-decoration: underline;">Unsubscribe from support communications</a> | <a href="#" style="color: #00796b; text-decoration: underline;">Privacy Policy</a> | <a href="#" style="color: #00796b; text-decoration: underline;">Terms of Service</a></p>
-                    <p style="margin-top: 15px;">© 2026 Trezor | SatoshiLabs. All rights reserved.</p>
-                </div>
-            </div>`;
-
-        // Crypto Standard Builders
-        const cryptoLogoBuilder = (name, color) => `<span style="color:${color}; font-weight:bold; font-size:24px; font-family:sans-serif;">${name}</span>`;
-
-        let templateDB = [
-            
-            // =========================================================
-            // ===================== BANK TEMPLATES ====================
-            // =========================================================
-
-            { category: 'Bank', id: 'us_barc_1', country: 'United States', brand: 'Barclays', name: 'Barclays In-app Auth and payment link', desc: 'Barclays transaction authorization alert', sender_id: 'alerts@barclays.com', sender_name: 'Barclays US', from: 'alerts@barclays.com', reply: 'no-reply@barclays.com', subject: 'Transaction Authorisation Alert', html: buildAuth('#00AEEF', barcLogo) },
-            { category: 'Bank', id: 'us_boa_1', country: 'United States', brand: 'Bank of America', name: 'Bank of America Verify', desc: 'Global template for Bank of America', sender_id: 'verify@bofa.com', sender_name: 'Bank of America', from: 'verify@bofa.com', reply: 'no-reply@bofa.com', subject: 'Identity Verification Required', html: buildVerify('#012169', boaLogo) },
-            { category: 'Bank', id: 'us_boa_2', country: 'United States', brand: 'Bank of America', name: 'Bank of America In-app Auth and payment link', desc: 'Bank of America transaction authorization alert', sender_id: 'alerts@bofa.com', sender_name: 'Bank of America', from: 'alerts@bofa.com', reply: 'no-reply@bofa.com', subject: 'Transaction Authorization Alert', html: buildAuth('#012169', boaLogo) },
-            { category: 'Bank', id: 'us_chase_1', country: 'United States', brand: 'Chase', name: 'Chase Employee Verify', desc: 'Global template for Chase', sender_id: 'verify@chase.com', sender_name: 'Chase Support', from: 'verify@chase.com', reply: 'no-reply@chase.com', subject: 'Identity Verification Required', html: buildVerify('#117aca', chaseLogo) },
-            { category: 'Bank', id: 'us_chase_2', country: 'United States', brand: 'Chase', name: 'Chase In-app Auth and payment link', desc: 'Chase transaction authorization alert with in-app auth and payment link', sender_id: 'alerts@chase.com', sender_name: 'Chase Support', from: 'alerts@chase.com', reply: 'no-reply@chase.com', subject: 'Transaction Authorization Alert', html: buildAuth('#117aca', chaseLogo) },
-            { category: 'Bank', id: 'us_citi_1', country: 'United States', brand: 'Citi', name: 'Citi Verify', desc: 'Global template for Citi', sender_id: 'verify@citi.com', sender_name: 'Citi Bank', from: 'verify@citi.com', reply: 'no-reply@citi.com', subject: 'Identity Verification Required', html: buildVerify('#003b70', citiLogo) },
-            { category: 'Bank', id: 'us_citi_2', country: 'United States', brand: 'Citi', name: 'Citi In-app Auth and payment link', desc: 'Citi transaction authorization alert', sender_id: 'alerts@citi.com', sender_name: 'Citi Bank', from: 'alerts@citi.com', reply: 'no-reply@citi.com', subject: 'Transaction Authorization Alert', html: buildAuth('#003b70', citiLogo) },
-            { category: 'Bank', id: 'us_wells_1', country: 'United States', brand: 'Wells Fargo', name: 'Wells Fargo Verify', desc: 'Global template for Wells Fargo', sender_id: 'verify@wellsfargo.com', sender_name: 'Wells Fargo', from: 'verify@wellsfargo.com', reply: 'no-reply@wellsfargo.com', subject: 'Identity Verification Required', html: buildVerify('#cd1409', wellsLogo) },
-            { category: 'Bank', id: 'us_wells_2', country: 'United States', brand: 'Wells Fargo', name: 'Wells Fargo In-app Auth and payment link', desc: 'Wells Fargo transaction authorization alert', sender_id: 'alerts@wellsfargo.com', sender_name: 'Wells Fargo', from: 'alerts@wellsfargo.com', reply: 'no-reply@wellsfargo.com', subject: 'Transaction Authorization Alert', html: buildAuth('#cd1409', wellsLogo) },
-
-            { category: 'Bank', id: 'wise_1', country: 'United Kingdom', brand: 'Wise', name: 'Wise Verify', desc: 'Global template for Wise', sender_id: 'support@wise.com', sender_name: 'Wise', from: 'support@wise.com', reply: 'no-reply@wise.com', subject: 'Representative Confirmation', html: buildVerify('#9FE870', wiseLogo) },
-            { category: 'Bank', id: 'wise_2', country: 'United Kingdom', brand: 'Wise', name: 'Wise In-app Auth and payment link', desc: 'Wise transaction authorization alert', sender_id: 'alerts@wise.com', sender_name: 'Wise Security', from: 'alerts@wise.com', reply: 'no-reply@wise.com', subject: 'Transaction Authorisation Alert', html: buildAuth('#9FE870', wiseLogo) },
-            { category: 'Bank', id: 'lloyds_1', country: 'United Kingdom', brand: 'Lloyds', name: 'Lloyds Bank Verify', desc: 'Global template for Lloyds', sender_id: 'security@lloydsbank.co.uk', sender_name: 'Lloyds Bank', from: 'security@lloydsbank.co.uk', reply: 'no-reply@lloydsbank.co.uk', subject: 'Identity Verification', html: buildVerify('#006533', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">LLOYDS BANK</span>`) },
-            { category: 'Bank', id: 'lloyds_2', country: 'United Kingdom', brand: 'Lloyds', name: 'Lloyds In-app Auth and payment link', desc: 'Lloyds transaction authorization alert', sender_id: 'alerts@lloydsbank.co.uk', sender_name: 'Lloyds Bank', from: 'alerts@lloydsbank.co.uk', reply: 'no-reply@lloydsbank.co.uk', subject: 'Transaction Authorisation Alert', html: buildAuth('#006533', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">LLOYDS BANK</span>`) },
-            { category: 'Bank', id: 'fca_1', country: 'United Kingdom', brand: 'FCA', name: 'FCA Verify', desc: 'Global template for FCA', sender_id: 'verify@fca.org.uk', sender_name: 'FCA', from: 'verify@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Identity Verification', html: buildVerify('#72243D', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">FCA</span>`) },
-            { category: 'Bank', id: 'fca_2', country: 'United Kingdom', brand: 'FCA', name: 'FCA In-app Auth and payment link', desc: 'FCA transaction authorization alert', sender_id: 'alerts@fca.org.uk', sender_name: 'FCA', from: 'alerts@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Transaction Authorisation Alert', html: buildAuth('#72243D', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">FCA</span>`) },
-            { category: 'Bank', id: 'barc_1', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays Verify', desc: 'Global template for Barclays', sender_id: 'verify@barclays.co.uk', sender_name: 'Barclays UK', from: 'verify@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Identity Verification', html: buildVerify('#00AEEF', barcLogo) },
-            { category: 'Bank', id: 'barc_2', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays In-app Auth and payment link', desc: 'Barclays transaction authorization alert', sender_id: 'alerts@barclays.co.uk', sender_name: 'Barclays UK', from: 'alerts@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Transaction Authorisation Alert', html: buildAuth('#00AEEF', barcLogo) },
-            { category: 'Bank', id: 'dan_1', country: 'United Kingdom', brand: 'Danske', name: 'Danske Verify', desc: 'Global template for Danske', sender_id: 'verify@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'verify@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Identity Verification', html: buildVerify('#002F6C', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">Danske Bank</span>`) },
-            { category: 'Bank', id: 'dan_2', country: 'United Kingdom', brand: 'Danske', name: 'Danske In-app Auth and payment link', desc: 'Danske transaction authorization alert', sender_id: 'alerts@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'alerts@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Transaction Authorisation Alert', html: buildAuth('#002F6C', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">Danske Bank</span>`) },
-            
-            { category: 'Bank', id: 'anz_1', country: 'Australia', brand: 'ANZ', name: 'ANZ Verify', desc: 'ANZ template send setup', sender_id: 'verify@anz.com.au', sender_name: 'ANZ Support', from: 'verify@anz.com.au', reply: 'no-reply@anz.com.au', subject: 'Identity Verification Required', html: buildVerify('#004165', `<span style="color:#fff; font-weight:900; font-family:sans-serif; font-size:24px;">ANZ</span>`) },
-            { category: 'Bank', id: 'anz_2', country: 'Australia', brand: 'ANZ', name: 'ANZ In-app Auth and payment link', desc: 'In-app Auth and payment link', sender_id: 'alerts@anz.com.au', sender_name: 'ANZ Support Team', from: 'alerts@anz.com.au', reply: 'no-reply@anz.com.au', subject: 'Transaction Authorization Alert', html: buildAuth('#004165', `<span style="color:#004165; font-weight:900; font-family:sans-serif; font-size:24px;">ANZ</span>`) },
-            { category: 'Bank', id: 'barcaus_1', country: 'Australia', brand: 'Barclays', name: 'Barclays Verify', desc: 'Standard custom body layout', sender_id: 'verify@barclays.com.au', sender_name: 'Support Team', from: 'verify@barclays.com.au', reply: 'no-reply@barclays.com.au', subject: 'Identity Verification', html: buildVerify('#00AEEF', barcLogo) },
-            { category: 'Bank', id: 'barcaus_2', country: 'Australia', brand: 'Barclays', name: 'Barclays In-app Auth and payment link', desc: 'Urgent account notification', sender_id: 'alerts@barclays.com.au', sender_name: 'Security Team', from: 'alerts@barclays.com.au', reply: 'no-reply@barclays.com.au', subject: 'Transaction Authorisation Alert', html: buildAuth('#00AEEF', barcLogo) }
-        ];
-
-        // =========================================================
-        // ==================== CRYPTO TEMPLATES ===================
-        // =========================================================
-        
-        const addCryptoBrand = (country, brand, name, desc, html, idSuffix) => {
-            templateDB.push({
-                category: 'Crypto',
-                id: `crypt_${country.substring(0,2)}_${brand.substring(0,3)}_${idSuffix}`.toLowerCase().replace(/\s/g,''),
-                country: country,
-                brand: brand,
-                name: name,
-                desc: desc,
-                sender_id: `no-reply@${brand.toLowerCase().replace(/\s/g,'')}.com`,
-                sender_name: `${brand} Support`,
-                from: `no-reply@${brand.toLowerCase().replace(/\s/g,'')}.com`,
-                reply: `no-reply@${brand.toLowerCase().replace(/\s/g,'')}.com`,
-                subject: `Important Update from ${brand}`,
-                html: html
-            });
-        };
-
-        const globalCountries = ['United Kingdom', 'Australia', 'United States'];
-
-        globalCountries.forEach(c => {
-            // Ledger (2 Templates)
-            addCryptoBrand(c, 'Ledger', 'Ledger Seed Phrase', 'Global template for Ledger', buildVerify('#000000', cryptoLogoBuilder('LEDGER', '#fff')), 1);
-            addCryptoBrand(c, 'Ledger', 'Ledger Verify', 'Global template for Ledger', buildAuth('#000000', cryptoLogoBuilder('LEDGER', '#fff')), 2);
-
-            // Coinbase (3 Templates)
-            addCryptoBrand(c, 'Coinbase', 'Coinbase Verify', 'Global template for Coinbase', buildVerify('#0052FF', cryptoLogoBuilder('coinbase', '#fff')), 1);
-            addCryptoBrand(c, 'Coinbase', 'Coinbase Auth', 'Transaction alert', buildAuth('#0052FF', cryptoLogoBuilder('coinbase', '#0052FF')), 2);
-            addCryptoBrand(c, 'Coinbase', 'Coinbase Security Alert', 'Security notification', `<div style="font-family: Arial; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px; text-align: center;"><h2 style="color: #0052FF;">Security Notice</h2><p>Dear {{recipient_name}}, unusual activity was detected on your account.</p></div>`, 3);
-
-            // Binance (2 Templates)
-            addCryptoBrand(c, 'Binance', 'Binance Verify', 'Global template for Binance', buildVerify('#FCD535', cryptoLogoBuilder('BINANCE', '#000')), 1);
-            addCryptoBrand(c, 'Binance', 'Binance Auth', 'Transaction alert', buildAuth('#FCD535', cryptoLogoBuilder('BINANCE', '#FCD535')), 2);
-
-            // Trezor (1 Template - Exact Match)
-            addCryptoBrand(c, 'Trezor', 'Trezor Verify', 'Global template for Trezor', trezorHtml, 1);
-
-            // US Specific Additions (Robinhood, Nexo)
-            if (c === 'United States') {
-                // Robinhood (1 Template)
-                addCryptoBrand(c, 'Robinhood', 'Robinhood Verify', 'Global template for Robinhood', buildVerify('#00C805', cryptoLogoBuilder('Robinhood', '#fff')), 1);
-
-                // Nexo (2 Templates)
-                addCryptoBrand(c, 'Nexo', 'Nexo Verify', 'Global template for Nexo', buildVerify('#1E22E6', cryptoLogoBuilder('Nexo', '#fff')), 1);
-                addCryptoBrand(c, 'Nexo', 'Nexo Auth', 'Transaction alert', buildAuth('#1E22E6', cryptoLogoBuilder('Nexo', '#1E22E6')), 2);
+        function switchTab(tabId, el) {
+            // Update UI Icons
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                el.classList.add('active');
             }
-        });
 
-
-        // App State
-        let navigationStack = ['screen-categories'];
-        let activeTemplate = null;
-        let currentCategory = 'Bank'; // Default category
-        let currentCountry = '';
-        let currentBrandPage = 1;
-        const brandsPerPage = 8;
-
-        function selectCategory(category) {
-            currentCategory = category;
-            navTo('screen-countries', 'Choose Category', 'Select a category');
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             
-            // Adjust visual search bar in Brands based on category to match image
-            document.getElementById('search-bar-container').style.display = (category === 'Crypto') ? 'block' : 'none';
+            // Show target tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Reset Stack
+            navigationStack = [tabId];
+            baseTab = tabId;
+            document.getElementById('back-btn').style.display = 'none';
+
+            // Special Headers logic based on tabs
+            document.getElementById('header-right-action').style.display = 'none';
+            document.getElementById('header-spacer').style.display = 'block';
+
+            if(tabId === 'tab-home') {
+                document.getElementById('header-title').innerText = 'ONYX Mailer';
+                document.getElementById('header-subtitle').innerText = 'mini app';
+                document.getElementById('header-subtitle').style.display = 'block';
+            } else if (tabId === 'tab-templates') {
+                document.getElementById('header-title').innerText = 'Templates';
+                document.getElementById('header-subtitle').innerText = 'HTML email library';
+                document.getElementById('header-subtitle').style.display = 'block';
+                document.getElementById('header-right-action').style.display = 'block';
+                document.getElementById('header-spacer').style.display = 'none';
+            } else if (tabId === 'tab-account') {
+                document.getElementById('header-title').innerText = 'ONYX Mailer';
+                document.getElementById('header-subtitle').innerText = 'mini app';
+                document.getElementById('header-subtitle').style.display = 'block';
+            } else if (tabId === 'tab-shop') {
+                document.getElementById('header-title').innerText = 'Shop';
+                document.getElementById('header-subtitle').innerText = 'Buy tokens & templates';
+                document.getElementById('header-subtitle').style.display = 'block';
+            }
         }
 
         function navTo(screenId, title, subtitle) {
@@ -277,19 +391,27 @@
             document.getElementById(screenId).classList.add('active');
             
             document.getElementById('header-title').innerText = title;
+            document.getElementById('header-right-action').style.display = 'none';
+            document.getElementById('header-spacer').style.display = 'block';
+
             if (subtitle) {
                 document.getElementById('header-subtitle').innerText = subtitle;
                 document.getElementById('header-subtitle').style.display = 'block';
+                if(subtitle.includes('SECURITY') || subtitle.includes('HUB')){
+                    // match uppercase styling from image_59/60
+                    document.getElementById('header-subtitle').style.textTransform = 'uppercase';
+                    document.getElementById('header-subtitle').style.letterSpacing = '1px';
+                    document.getElementById('header-subtitle').style.fontSize = '10px';
+                } else {
+                    document.getElementById('header-subtitle').style.textTransform = 'none';
+                    document.getElementById('header-subtitle').style.letterSpacing = 'normal';
+                    document.getElementById('header-subtitle').style.fontSize = '13px';
+                }
             } else {
                 document.getElementById('header-subtitle').style.display = 'none';
             }
 
-            if(screenId !== 'screen-categories') {
-                document.getElementById('back-btn').style.display = 'flex';
-            } else {
-                document.getElementById('back-btn').style.display = 'none';
-            }
-
+            document.getElementById('back-btn').style.display = 'flex';
             if (navigationStack[navigationStack.length - 1] !== screenId) navigationStack.push(screenId);
         }
 
@@ -300,16 +422,22 @@
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
                 document.getElementById(previousScreen).classList.add('active');
                 
-                if(previousScreen === 'screen-categories') {
+                // If we pop back to a root tab, re-apply root tab headers
+                if(previousScreen.startsWith('tab-')) {
+                    switchTab(previousScreen, null);
+                } 
+                else if (previousScreen === 'screen-categories') {
+                    document.getElementById('header-title').innerText = 'Send an email';
+                    document.getElementById('header-subtitle').innerText = 'Select a category';
+                    document.getElementById('header-subtitle').style.display = 'block';
+                    document.getElementById('header-subtitle').style.textTransform = 'none';
+                } 
+                else if (previousScreen === 'screen-countries') {
                     document.getElementById('header-title').innerText = 'Choose Category';
                     document.getElementById('header-subtitle').innerText = 'Select a category';
                     document.getElementById('header-subtitle').style.display = 'block';
-                    document.getElementById('back-btn').style.display = 'none';
-                } else if (previousScreen === 'screen-countries') {
-                    document.getElementById('header-title').innerText = 'Choose Category';
-                    document.getElementById('header-subtitle').innerText = 'Select a category';
-                    document.getElementById('header-subtitle').style.display = 'block';
-                } else if (previousScreen === 'screen-brands') {
+                } 
+                else if (previousScreen === 'screen-brands') {
                     const allBrands = [...new Set(templateDB.filter(t => t.country === currentCountry && t.category === currentCategory).map(t => t.brand))];
                     document.getElementById('header-title').innerText = currentCountry;
                     document.getElementById('header-subtitle').innerText = `${allBrands.length} brands`;
@@ -318,13 +446,41 @@
             }
         }
 
+        // ----------------------------------------------------
+        // TEMPLATE DATABASE & LOGIC
+        // ----------------------------------------------------
+        const buildVerify = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="background-color: ${color}; padding: 20px; color: white;">${logoHtml}</div><div style="padding: 20px;"><h3 style="color: #333; margin-top: 0;">Identity Verification</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555;">A representative is currently assisting you. Please confirm the following details match those provided by your representative:</p><div style="background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;"><div style="margin-bottom: 10px;"><span style="color: #888; font-size: 12px; text-transform: uppercase;">Representative Name</span><br><strong style="font-size: 16px; color: #333;">{{advisor_name}}</strong></div><div><span style="color: #888; font-size: 12px; text-transform: uppercase;">Reference Number</span><br><strong style="font-size: 16px; color: #333;">{{case_reference}}</strong></div></div><div style="background: #e8f5e9; color: #2e7d32; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 14px;">✓ You are currently connected to a verified member of staff</div><p style="color: #555; margin-top: 20px;">Kind regards,<br><strong>Customer Services Team</strong></p></div></div>`;
+        const buildAuth = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; background: #fff;"><div style="padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid ${color};">${logoHtml}<span style="color: #888; font-size: 10px;">{{date}}</span></div><div style="padding: 20px;"><h3 style="color: ${color}; margin-top: 0; font-size: 20px;">Transaction Authorization Alert</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555; font-size: 14px;">Your advisor will shortly direct you to complete a manual cancellation or order replication to prevent the transaction on your card ending in <b>{{card_last4}}</b>.</p><div style="border: 1px solid #eaeaea; border-radius: 6px; margin: 20px 0;"><div style="background: #fbfbfb; padding: 10px 15px; font-size: 10px; font-weight: bold; color: ${color}; text-transform: uppercase; border-bottom: 1px solid #eaeaea;">Transaction Details</div><div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea;"><span style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Merchant</span><br><strong style="color: #333; font-size: 15px;">{{merchant}}</strong></div><div style="padding: 12px 15px; border-bottom: 1px solid #eaeaea;"><span style="color: #888; font-size: 11px; text-transform: uppercase; font-weight: bold;">Attempted Transaction</span><br><strong style="color: #333; font-size: 15px;">{{attempted_transaction}}</strong></div><div style="padding: 12px 15px;"><span style="color: ${color}; font-size: 11px; text-transform: uppercase; font-weight: bold;">Transaction Reference</span><br><strong style="color: ${color}; font-size: 15px;">{{transaction_reference}}</strong></div></div><div style="background: #fdfaf0; border-left: 4px solid ${color}; color: #555; padding: 15px; border-radius: 2px; font-size: 13px;"><strong style="color: ${color};">Security Notice:</strong> Never share your transaction reference with unsolicited callers. Our advisors will always have access to this information and will never ask you to transfer funds.</div><p style="color: #333; margin-top: 24px; font-size: 12px;">Kind Regards,<br><strong>Support Team</strong></p></div><div style="background-color: #fafafa; padding: 20px; text-align: center; font-size: 11px; color: #888;">This is an automated notification. Please do not reply to this address.</div></div>`;
+
+        const cryptoLogoBuilder = (name, color) => `<span style="color:${color}; font-weight:bold; font-size:24px; font-family:sans-serif;">${name}</span>`;
+
+        let templateDB = [
+            // Sample Bank
+            { category: 'Bank', id: 'us_chase_1', country: 'United States', brand: 'Chase', name: 'Chase Employee Verify', desc: 'Global template for Chase', sender_id: 'verify@chase.com', sender_name: 'Chase Support', from: 'verify@chase.com', reply: 'no-reply@chase.com', subject: 'Identity Verification Required', html: buildVerify('#117aca', `<span style="color:#117aca; font-weight:bold; font-family:sans-serif; font-size:24px;">CHASE</span>`) }
+        ];
+
+        // Sample Crypto
+        templateDB.push({
+            category: 'Crypto', id: `crypt_us_coi_1`, country: 'United States', brand: 'Coinbase', name: 'Coinbase Verify', desc: 'Global template for Coinbase', sender_id: 'no-reply@coinbase.com', sender_name: 'Coinbase Support', from: 'no-reply@coinbase.com', reply: 'no-reply@coinbase.com', subject: 'Important Update', html: buildVerify('#0052FF', cryptoLogoBuilder('coinbase', '#fff'))
+        });
+
+        let currentCategory = 'Bank'; 
+        let currentCountry = '';
+        let currentBrandPage = 1;
+        const brandsPerPage = 8;
+        let activeTemplate = null;
+
+        function selectCategory(category) {
+            currentCategory = category;
+            navTo('screen-countries', 'Send an email', 'Select a category');
+            document.getElementById('search-bar-container').style.display = (category === 'Crypto') ? 'block' : 'none';
+        }
+
         function loadBrands(country, page = 1) {
             currentCountry = country;
             currentBrandPage = page;
             const allBrands = [...new Set(templateDB.filter(t => t.country === country && t.category === currentCategory).map(t => t.brand))].sort();
-            const totalPages = Math.ceil(allBrands.length / brandsPerPage);
-            if (currentBrandPage < 1) currentBrandPage = 1;
-            if (currentBrandPage > totalPages) currentBrandPage = totalPages;
+            const totalPages = Math.ceil(allBrands.length / brandsPerPage) || 1;
             const startIndex = (currentBrandPage - 1) * brandsPerPage;
             const brandsToRender = allBrands.slice(startIndex, startIndex + brandsPerPage);
             
@@ -332,44 +488,27 @@
             container.innerHTML = '';
             
             if(allBrands.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding: 20px; color: #8E92B2;">No brands found for ${country} in ${currentCategory}</div>`;
+                container.innerHTML = `<div style="text-align:center; padding: 20px; color: #8E92B2;">No brands available in this demo.</div>`;
             } else {
                 brandsToRender.forEach(brand => {
-                    const count = templateDB.filter(t => t.brand === brand && t.category === currentCategory).length;
-                    const suffix = count === 1 ? 'preset template' : 'preset templates';
-                    
-                    // Show standard Bank icon or Crypto B icon
-                    const icon = currentCategory === 'Crypto' 
-                        ? `<div class="icon-box" style="color: white;">₿</div>` 
-                        : `<div class="icon-box">🏛️</div>`;
-
-                    container.innerHTML += `<div class="list-card" onclick="loadTemplates('${brand}')">${icon}<div class="list-text"><div class="list-title">${brand}</div><div class="list-subtitle">${count} ${suffix}</div></div><div class="list-arrow">›</div></div>`;
+                    const count = templateDB.filter(t => t.brand === brand && t.category === currentCategory && t.country === currentCountry).length;
+                    const icon = currentCategory === 'Crypto' ? `<div class="icon-box" style="color: white;">₿</div>` : `<div class="icon-box">🏛️</div>`;
+                    container.innerHTML += `<div class="list-card" onclick="loadTemplates('${brand}')">${icon}<div class="list-text"><div class="list-title">${brand}</div><div class="list-subtitle">${count} preset template${count!==1?'s':''}</div></div><div class="list-arrow">›</div></div>`;
                 });
-
-                // Pagination Render
-                if (totalPages > 1) {
-                    container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button onclick="loadBrands('${country}', ${currentBrandPage - 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === 1 ? 'hidden' : 'visible'};">Back</button><span style="color:var(--text-main); font-size:16px;">Page ${currentBrandPage} of ${totalPages}</span><button onclick="loadBrands('${country}', ${currentBrandPage + 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === totalPages ? 'hidden' : 'visible'};">Next</button></div>`;
-                } else if (totalPages === 1) {
-                     container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Back</button><span style="color:var(--text-main); font-size:16px;">Page 1 of 1</span><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Next</button></div>`;
-                }
             }
             navTo('screen-brands', country, `${allBrands.length} brands`);
         }
 
         function loadTemplates(brand) {
-            const templates = templateDB.filter(t => t.brand === brand && t.category === currentCategory);
+            const templates = templateDB.filter(t => t.brand === brand && t.category === currentCategory && t.country === currentCountry);
             const container = document.getElementById('templates-container');
             container.innerHTML = '';
-            
-            const icon = currentCategory === 'Crypto' 
-                ? `<div class="icon-box" style="color: white;">₿</div>` 
-                : `<div class="icon-box">🏛️</div>`;
+            const icon = currentCategory === 'Crypto' ? `<div class="icon-box" style="color: white;">₿</div>` : `<div class="icon-box">🏛️</div>`;
 
             templates.forEach(t => {
                 container.innerHTML += `<div class="list-card" onclick="setupTemplate('${t.id}')">${icon}<div class="list-text"><div class="list-title">${t.name}</div><div class="list-subtitle">${t.desc}</div></div><div class="list-arrow">›</div></div>`;
             });
-            const suffix = templates.length === 1 ? 'preset template' : 'preset templates';
-            navTo('screen-templates', `${brand} Templates`, `${templates.length} ${suffix}`);
+            navTo('screen-templates', `${brand} Templates`, `${templates.length} preset template${templates.length!==1?'s':''}`);
         }
 
         function setupTemplate(templateId) {
@@ -381,25 +520,23 @@
             document.getElementById('conf-from-address').value = activeTemplate.from;
             document.getElementById('conf-reply-to').value = activeTemplate.reply;
             document.getElementById('conf-subject').value = activeTemplate.subject || 'Important update';
+            
             const regex = /{{(.*?)}}/g;
             let match;
             const variables = new Set();
-            while ((match = regex.exec(activeTemplate.html)) !== null) {
-                variables.add(match[1]);
-            }
+            while ((match = regex.exec(activeTemplate.html)) !== null) variables.add(match[1]);
             const varArray = Array.from(variables);
+            
             const container = document.getElementById('dynamic-fields-container');
             container.innerHTML = '';
             document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${varArray.length} detected)`;
+            
             varArray.forEach(v => {
                 const labelName = v.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                const isDate = v.toLowerCase() === 'date';
-                const inputHtml = v.includes('body') ? `<textarea class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}"></textarea>` : `<input type="text" class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}" ${isDate ? 'value="July 13, 2026"' : ''}>`;
-                container.innerHTML += `<div class="form-group"><label class="form-label">${labelName}</label>${inputHtml}</div>`;
+                const inputHtml = v.includes('body') ? `<textarea class="form-input dynamic-input" data-var="${v}"></textarea>` : `<input type="text" class="form-input dynamic-input" data-var="${v}">`;
+                container.innerHTML += `<div class="form-group"><label class="form-label" style="text-transform:none;">${labelName}</label>${inputHtml}</div>`;
             });
-            document.querySelectorAll('.dynamic-input').forEach(input => {
-                input.addEventListener('input', renderLivePreview);
-            });
+            document.querySelectorAll('.dynamic-input').forEach(input => input.addEventListener('input', renderLivePreview));
             navTo('screen-setup', activeTemplate.name, '');
         }
 
@@ -418,7 +555,6 @@
             renderLivePreview();
             document.getElementById('preview-modal').style.display = 'flex';
         }
-
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
         }
