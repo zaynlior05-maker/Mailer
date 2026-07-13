@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ONYX Mailer App</title>
+    <title>Crypto Templates - ONYX Mailer</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root{--bg-color:#080A1A;--panel-bg:#121429;--border-color:#1F2340;--text-main:#FFFFFF;--text-muted:#8E92B2;--accent:#8E54E9;--accent-glow:#A476F0}
         body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background-color:var(--bg-color);color:var(--text-main);margin:0;padding:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+        
         .header{display:flex;align-items:center;padding:16px;background-color:var(--bg-color);border-bottom:1px solid var(--border-color);z-index:10;min-height:48px;}
-        .back-btn{background-color:#1F2340;border:none;color:var(--text-main);width:38px;height:38px;border-radius:50%;cursor:pointer;display:none;align-items:center;justify-content:center;margin-right:16px;font-size:18px;flex-shrink:0;transition:background 0.2s;}
-        .back-btn:active{background-color:#2a2f4c;}
+        .back-btn{background-color:#1F2340;border:none;color:var(--text-main);width:38px;height:38px;border-radius:50%;cursor:pointer;display:none;align-items:center;justify-content:center;margin-right:16px;font-size:18px;flex-shrink:0;}
         .header-title{font-weight:bold;font-size:18px;flex-grow:1;text-align:left;}
         .header-subtitle{font-size:13px;color:var(--text-muted);font-weight:normal;margin-top:2px;}
-        .header-right-action{font-size:12px;background:#1F2340;padding:4px 10px;border-radius:8px;color:var(--text-muted);display:none;}
+        .header-spacer{width: 38px;}
         
         .screen{display:none;flex:1;overflow-y:auto;padding:16px;padding-bottom:100px}
         .screen.active{display:block}
@@ -31,353 +31,477 @@
         .form-input{width:100%;background-color:var(--panel-bg);border:1px solid var(--border-color);color:var(--text-main);padding:14px;border-radius:12px;box-sizing:border-box;font-size:15px}
         .form-input:focus{outline:none;border-color:var(--accent)}
         textarea.form-input{resize:vertical;min-height:80px}
-        .section-title{font-size:16px;font-weight:bold;margin:24px 0 16px 0;text-transform:uppercase;color:var(--text-muted);letter-spacing:1px;font-size:12px;}
+        .section-title{font-size:12px;font-weight:bold;margin:24px 0 16px 0;text-transform:uppercase;color:var(--text-muted);letter-spacing:1px;}
         
         .btn-primary{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-glow));color:white;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px}
-        .btn-secondary{width:100%;background:transparent;color:var(--accent-glow);border:none;padding:16px;font-size:14px;cursor:pointer;margin-top:5px}
-
-        /* Home & Account Styles */
-        .profile-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-        .profile-left{display:flex;align-items:center;}
-        .avatar-placeholder{width:50px;height:50px;border-radius:12px;background:#fff;margin-right:12px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:bold;font-size:20px;}
-        .profile-name{font-size:18px;font-weight:bold;}
-        .profile-username{font-size:13px;color:var(--text-muted);margin:2px 0;}
-        .badge-trial{color:#F5A623;font-size:12px;font-weight:bold;}
-        .profile-right{text-align:right;}
-        .token-label{font-size:11px;color:var(--text-muted);}
-        .token-amount{font-size:24px;font-weight:bold;color:var(--accent-glow);margin:2px 0;}
-        .btn-topup{background:transparent;border:1px solid #28A745;color:#28A745;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold;cursor:pointer;}
-        
-        .welcome-card{background:linear-gradient(135deg, #2A1B54, #48298C);border-radius:16px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden;}
-        .welcome-card::after{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:rgba(255,255,255,0.05);border-radius:50%;}
-        .send-email-large{background:linear-gradient(90deg, #8E54E9, #B388FF);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;align-items:center;cursor:pointer;box-shadow:0 8px 20px rgba(142,84,233,0.2);}
-        .send-email-icon{background:rgba(255,255,255,0.2);width:48px;height:48px;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:24px;margin-right:16px;}
-        
-        .free-tokens-card{border:1px solid #F5A623;background:rgba(245,166,35,0.05);border-radius:16px;padding:16px;display:flex;justify-content:space-between;align-items:center;}
-        .btn-upgrade{background:linear-gradient(90deg, #F5A623, #FFC107);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;cursor:pointer;}
-        .membership-card{border:1px solid #FF4D4D;background:rgba(255,77,77,0.05);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;align-items:center;}
-        
-        /* App Password & Referrals */
-        .tabs-container{display:flex;background:var(--panel-bg);border-radius:12px;padding:4px;margin-bottom:20px;}
-        .tab-btn{flex:1;text-align:center;padding:10px;border-radius:10px;font-size:14px;color:var(--text-muted);cursor:pointer;}
-        .tab-btn.active{background:#2a2f4c;color:white;font-weight:bold;}
-        .keypad{display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;margin-bottom:20px;}
-        .keypad-btn{background:var(--panel-bg);border:none;color:white;font-size:20px;padding:16px;border-radius:12px;cursor:pointer;}
-        .keypad-btn:active{background:#2a2f4c;}
-        .warning-box{background:rgba(255,77,77,0.1);border:1px solid rgba(255,77,77,0.3);color:#FF8A8A;padding:16px;border-radius:12px;font-size:13px;line-height:1.5;margin-bottom:20px;}
-        .referral-box{background:var(--panel-bg);border:1px solid #1A3B3B;border-radius:16px;padding:16px;margin-bottom:16px;}
-        .stat-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px dashed var(--border-color);}
-        .stat-row:last-child{border-bottom:none;}
-        .stat-label{color:#2E8B8B;font-size:13px;font-weight:bold;letter-spacing:1px;}
-        .stat-value{font-size:16px;font-weight:bold;}
+        .btn-secondary{width:100%;background:#1F2340;color:white;border:none;padding:16px;border-radius:14px;font-size:14px;cursor:pointer;margin-top:10px}
 
         #preview-modal{position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.9);z-index:100;display:none;flex-direction:column}
         .preview-header{display:flex;justify-content:space-between;padding:16px;background-color:var(--bg-color);align-items:center}
         .preview-close{color:white;background:none;border:none;font-size:24px;cursor:pointer}
-        #preview-frame-container{flex:1;background:#f3f4f6;margin:16px;border-radius:12px;overflow:auto;padding:20px 10px;color:black}
-        
-        .bottom-nav{position:fixed;bottom:0;width:100%;background-color:var(--bg-color);border-top:1px solid var(--border-color);display:flex;justify-content:space-around;padding:12px 0 24px 0;z-index:50}
-        .nav-item{color:var(--text-muted);text-align:center;font-size:10px;cursor:pointer;flex:1;}
-        .nav-item.active{color:var(--accent-glow)}
-        .nav-icon{font-size:20px;margin-bottom:4px;display:block}
-        .nav-fab{background:linear-gradient(135deg,var(--accent),var(--accent-glow));width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-top:-24px;box-shadow:0 4px 15px rgba(142,84,233,0.4);color:white;font-size:24px;cursor:pointer;}
+        #preview-frame-container{flex:1;background:#f4f4f4;margin:0;overflow:auto;padding:20px 10px;color:black}
     </style>
 </head>
 <body>
 
-    <div class="header" id="main-header">
+    <div class="header">
         <button class="back-btn" id="back-btn" onclick="goBack()">❮</button>
         <div class="header-title" id="header-title-container">
-            <span id="header-title">ONYX Mailer</span>
-            <div class="header-subtitle" id="header-subtitle">mini app</div>
+            <span id="header-title">Crypto Templates</span>
+            <div class="header-subtitle" id="header-subtitle">Select a category</div>
         </div>
-        <div class="header-right-action" id="header-right-action">📄 94 Total</div>
-        <div style="width: 38px;" id="header-spacer"></div>
+        <div class="header-spacer" id="header-spacer"></div>
     </div>
 
-    <!-- ROOT TAB 1: Home -->
-    <div id="tab-home" class="screen active">
-        <div class="profile-row">
-            <div class="profile-left">
-                <div class="avatar-placeholder">🤵</div>
-                <div>
-                    <div class="profile-name">MZ7</div>
-                    <div class="profile-username">@MZ78666</div>
-                    <div class="badge-trial">Trial</div>
-                </div>
-            </div>
-            <div class="profile-right">
-                <div class="token-label">1 Mail Token</div>
-                <div class="token-amount">$0.00</div>
-                <button class="btn-topup" onclick="Telegram.WebApp.showAlert('Redirecting to Payment Gateway to Top Up...')">+ Top Up</button>
-            </div>
-        </div>
-        <div class="welcome-card">
-            <div style="font-size:11px; color:#A476F0; font-weight:bold; letter-spacing:1px; margin-bottom:8px;">✉ ONYX MAILER</div>
-            <div style="font-size:24px; font-weight:bold; margin-bottom:8px;">Welcome, <span style="color:#B388FF;">MZ7</span></div>
-            <div style="font-size:14px; color:#D1C4E9;">The reliable tool for callers with no downtime.</div>
-        </div>
-        <div class="send-email-large" onclick="switchTab('tab-templates', document.getElementById('nav-templates')); navTo('screen-categories', 'Send an email', 'Select a category')">
-            <div class="send-email-icon">✉</div>
-            <div class="list-text">
-                <div class="list-title" style="font-size:22px; margin-bottom:4px;">Send an email</div>
-                <div style="color:rgba(255,255,255,0.8); font-size:14px;">Choose sender & template</div>
-            </div>
-            <div class="list-arrow" style="color:white; font-size:20px;">›</div>
-        </div>
-        <div class="free-tokens-card">
-            <div>
-                <div style="color:#F5A623; font-weight:bold; font-size:15px; margin-bottom:4px;">You have free tokens!</div>
-                <div style="color:#8E92B2; font-size:13px;">x1 mail remaining</div>
-            </div>
-            <button class="btn-upgrade" onclick="Telegram.WebApp.showAlert('Opening Upgrade Packages...')">Upgrade ★</button>
-        </div>
-    </div>
-
-    <!-- ROOT TAB 2: Templates Home -->
-    <div id="tab-templates" class="screen">
-        <div class="list-card" style="margin-bottom: 20px; cursor: default;">
-            <div class="icon-box" style="background:transparent; font-size:24px;">📥</div>
-            <div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div>
+    <!-- Screen 1: Categories -->
+    <div id="screen-categories" class="screen active">
+        <div class="section-title">Cryptocurrency Platforms</div>
+        <div class="list-card" onclick="loadBrands('Exchanges')">
+            <div class="icon-box" style="color:#A476F0;">📈</div>
+            <div class="list-text"><div class="list-title">Major Exchanges</div><div class="list-subtitle">Binance, Coinbase, etc.</div></div>
             <div class="list-arrow">›</div>
         </div>
-        <div class="list-card" onclick="navTo('screen-categories', 'Send an email', 'Select a category')">
-            <div class="icon-box">🌐</div>
-            <div class="list-text"><div class="list-title">Global Templates</div><div class="list-subtitle">Preset templates ready to use</div></div>
+        <div class="list-card" onclick="loadBrands('Hardware')">
+            <div class="icon-box" style="color:#A476F0;">🔒</div>
+            <div class="list-text"><div class="list-title">Hardware Wallets</div><div class="list-subtitle">Ledger & Trezor</div></div>
             <div class="list-arrow">›</div>
         </div>
-        <div class="list-card" onclick="Telegram.WebApp.showAlert('Active membership required to upload custom templates.')">
-            <div class="icon-box">↑</div>
-            <div class="list-text"><div class="list-title">Custom Templates</div><div class="list-subtitle">Your own uploaded HTML templates</div></div>
+        <div class="list-card" onclick="loadBrands('Brokerage')">
+            <div class="icon-box" style="color:#A476F0;">🏦</div>
+            <div class="list-text"><div class="list-title">Brokerages & Lenders</div><div class="list-subtitle">Robinhood & Nexo</div></div>
             <div class="list-arrow">›</div>
         </div>
     </div>
 
-    <!-- ROOT TAB 3: Shop -->
-    <div id="tab-shop" class="screen">
-        <div style="text-align:center; padding:50px 20px; color:var(--text-muted);">
-            <div style="font-size:48px; margin-bottom:16px;">🛒</div>
-            <h2 style="color:white; margin-bottom:8px;">Shop Store</h2>
-            <p>Purchase additional tokens, templates, and subscriptions here.</p>
-            <div style="margin-top:20px; font-size:12px; background:var(--panel-bg); padding:10px; border-radius:8px; display:inline-block;">Coming Soon</div>
-        </div>
-    </div>
-
-    <!-- ROOT TAB 4: Account -->
-    <div id="tab-account" class="screen">
-        <div class="profile-row">
-            <div class="profile-left">
-                <div class="avatar-placeholder">🤵</div>
-                <div><div class="profile-name">MZ7</div><div class="profile-username">@MZ78666</div><div class="badge-trial">Trial</div></div>
-            </div>
-            <div class="profile-right">
-                <div class="token-label">1 Mail Token</div><div class="token-amount">$0.00</div><button class="btn-topup" onclick="Telegram.WebApp.showAlert('Redirecting to Payment Gateway...')">+ Top Up</button>
-            </div>
-        </div>
-        <div class="membership-card">
-            <div class="icon-box" style="background:transparent; color:#FF4D4D; font-size:24px; border:1px solid #FF4D4D; border-radius:50%; width:40px; height:40px;">☆</div>
-            <div class="list-text">
-                <div style="color:#FFB6B6; font-size:15px; font-weight:bold; margin-bottom:4px;">Membership Status</div>
-                <div style="color:#FF4D4D; font-size:13px; font-weight:bold; margin-bottom:8px;">You have 0 days left ⏰</div>
-                <button class="btn-upgrade" style="padding:6px 16px; font-size:11px;" onclick="Telegram.WebApp.showAlert('Opening Upgrade Packages...')">★ UPGRADE</button>
-            </div>
-        </div>
-        <div class="list-card" onclick="navTo('screen-app-password', 'Set App Password', 'ACCOUNT SECURITY')">
-            <div class="icon-box" style="background:transparent; border:1px solid var(--text-muted); border-radius:8px;">🔒</div>
-            <div class="list-text"><div class="list-title">Set App Password</div></div><div class="list-arrow">›</div>
-        </div>
-        <div class="list-card" onclick="navTo('screen-referrals', 'Easy passive income', 'REFERRAL HUB')" style="border-color:#1A3B3B;">
-            <div class="icon-box" style="background:transparent; color:#2E8B8B; border:1px solid #2E8B8B; border-radius:8px;">↑</div>
-            <div class="list-text"><div class="list-title">Referrals</div><div class="list-subtitle" style="color:#2E8B8B;">Earn passive money with referrals</div></div><div class="list-arrow">›</div>
-        </div>
-        <div class="list-card" style="margin-top:20px;" onclick="Telegram.WebApp.showConfirm('Are you sure you want to delete your account? This action is irreversible.')">
-            <div class="icon-box" style="background:transparent; border:1px solid var(--text-muted); border-radius:8px;">🗑️</div>
-            <div class="list-text"><div class="list-title">Delete My Account</div></div>
-        </div>
-    </div>
-
-    <!-- SUB-SCREEN: App Password -->
-    <div id="screen-app-password" class="screen">
-        <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px; margin-top:0;">Choose PIN or text password for app lock.</p>
-        <div class="form-label">PASSWORD TYPE</div>
-        <div class="tabs-container"><div class="tab-btn active">PIN</div><div class="tab-btn">Text Password</div></div>
-        <div class="form-group">
-            <label class="form-label" style="text-transform:none; font-size:13px; color:white;">New Password</label>
-            <input type="password" class="form-input" placeholder="Enter 4-8 digit PIN" readonly value="••••">
-        </div>
-        <div class="form-group" style="margin-bottom:24px;">
-            <label class="form-label" style="text-transform:none; font-size:13px; color:white;">Confirm Password</label>
-            <input type="password" class="form-input" placeholder="Re-enter PIN" readonly value="••••">
-        </div>
-        <div class="keypad">
-            <button class="keypad-btn">1</button><button class="keypad-btn">2</button><button class="keypad-btn">3</button>
-            <button class="keypad-btn">4</button><button class="keypad-btn">5</button><button class="keypad-btn">6</button>
-            <button class="keypad-btn">7</button><button class="keypad-btn">8</button><button class="keypad-btn">9</button>
-            <button class="keypad-btn" style="font-size:14px;">Clear</button><button class="keypad-btn">0</button><button class="keypad-btn">⌫</button>
-        </div>
-        <div class="warning-box">Warning: if you lose this password, your account data will be reset.</div>
-        <button class="btn-primary" style="margin-top:0;" onclick="Telegram.WebApp.showAlert('App lock setting saved.')">Enable App Lock</button>
-    </div>
-
-    <!-- SUB-SCREEN: Referrals -->
-    <div id="screen-referrals" class="screen">
-        <p style="color:var(--text-main); font-size:15px; margin-bottom:24px; margin-top:0; line-height:1.5;">Invite people with your link and earn 10% of every deposit they make.</p>
-        <div class="referral-box">
-            <div class="form-label">YOUR REFERRAL CODE</div>
-            <input type="text" class="form-input" value="ref-ed5526dc" readonly style="margin-bottom:12px; text-align:center; font-weight:bold;">
-            <button class="btn-secondary" style="background:#1F2340; color:white; border-radius:12px; padding:12px; margin-top:0;" onclick="Telegram.WebApp.showAlert('Code settings saved.')">Save</button>
-        </div>
-        <div class="referral-box">
-            <div class="form-label">YOUR REFERRAL LINK</div>
-            <input type="text" class="form-input" id="ref-link" value="https://t.me/Onyx_MailerBot?start=ref_r" readonly style="margin-bottom:12px; font-size:13px; color:var(--text-muted);">
-            <button class="btn-primary" style="padding:12px; margin-top:0; margin-bottom:8px; border-radius:12px;" onclick="copyReferralLink()">Copy</button>
-            <button class="btn-secondary" style="background:#1F2340; color:white; border-radius:12px; padding:12px; margin-top:0;" onclick="Telegram.WebApp.showAlert('Opening share options...')">Share</button>
-        </div>
-        <div class="referral-box" style="background:rgba(46,139,139,0.05); border-color:#1A3B3B;">
-            <div class="form-label">WITHDRAW OVERVIEW</div>
-            <div class="stat-row"><div class="stat-label">BALANCE</div><div class="stat-value">$0.00</div></div>
-            <div class="stat-row"><div class="stat-label">TOTAL EARNED</div><div class="stat-value">$0.00</div></div>
-        </div>
-        <div class="referral-box" style="border-color:#1A3B3B;"><div class="form-label">TOTAL REFERRALS</div><div style="font-size:20px; font-weight:bold; color:white;">0</div></div>
-        <div class="referral-box">
-            <div class="form-label">WITHDRAW</div>
-            <button class="btn-primary" style="padding:14px; border-radius:12px; margin-top:0;" onclick="Telegram.WebApp.showAlert('No funds available to withdraw.')">Request Withdraw</button>
-        </div>
-    </div>
-
-    <!-- DYNAMIC FLOW SCREENS -->
-    <div id="screen-categories" class="screen">
-        <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
-        
-        <!-- UPDATED LINKS TO NEW FILES -->
-        <div class="list-card" onclick="window.location.href='bank_templates.html'"><div class="icon-box">🏛️</div><div class="list-text"><div class="list-title">Bank</div><div class="list-subtitle">Professional banking letters</div></div><div class="list-arrow">›</div></div>
-        <div class="list-card" onclick="window.location.href='crypto_templates.html'"><div class="icon-box" style="color:#A476F0;">₿</div><div class="list-text"><div class="list-title">Crypto</div><div class="list-subtitle">Exchanges & crypto wallets</div></div><div class="list-arrow">›</div></div>
-    </div>
-
-    <!-- The original screens are preserved here to ensure zero features are lost, even if currently unused by the external links -->
-    <div id="screen-countries" class="screen">
-        <!-- Kept intact for project memory -->
-    </div>
+    <!-- Screen 2: Brands -->
     <div id="screen-brands" class="screen">
         <div id="brands-container"></div>
     </div>
+
+    <!-- Screen 3: Templates -->
     <div id="screen-templates" class="screen">
         <div id="templates-container"></div>
     </div>
+
+    <!-- Screen 4: Setup & Preview -->
     <div id="screen-setup" class="screen">
+        <div class="list-card" style="cursor: default; margin-bottom: 24px;">
+            <div class="icon-box" style="background:transparent; font-size:24px;" id="setup-icon">₿</div>
+            <div class="list-text">
+                <div class="list-title" id="setup-title">Template Name</div>
+                <div class="list-subtitle" id="setup-subtitle">Template description</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none;">Sender Name</label>
+            <input type="text" class="form-input" id="conf-sender-name">
+        </div>
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none;">From Address</label>
+            <input type="text" class="form-input" id="conf-from-address">
+        </div>
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none;">Subject Line</label>
+            <input type="text" class="form-input" id="conf-subject">
+        </div>
+
+        <div class="section-title" id="dynamic-fields-header" style="text-transform:none; margin-top:30px;">Template Parameters</div>
         <div id="dynamic-fields-container"></div>
+
+        <div style="margin-top: 32px;">
+            <button class="btn-primary" onclick="alert('Email queued for sending successfully!')">Send Email</button>
+            <button class="btn-secondary" onclick="openPreview()">Open Live Preview</button>
+        </div>
     </div>
+
+    <!-- Live Preview Modal -->
     <div id="preview-modal">
-        <div class="preview-header"><div style="font-weight: bold; font-size: 18px;">Email Preview</div><button class="preview-close" onclick="closePreview()">×</button></div>
+        <div class="preview-header">
+            <div style="font-weight: bold; font-size: 16px; color: white;">Live HTML Preview</div>
+            <button class="preview-close" onclick="closePreview()">×</button>
+        </div>
         <div id="preview-frame-container"></div>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('tab-home', this)"><span class="nav-icon">🏠</span> Home</div>
-        <div class="nav-item" id="nav-templates" onclick="switchTab('tab-templates', this)"><span class="nav-icon">📄</span> Templates</div>
-        <div class="nav-fab" onclick="switchTab('tab-templates', document.getElementById('nav-templates')); navTo('screen-categories', 'Send an email', 'Select a category');">✉</div>
-        <div class="nav-item" onclick="switchTab('tab-shop', this)"><span class="nav-icon">🛒</span> Shop</div>
-        <div class="nav-item" onclick="switchTab('tab-account', this)"><span class="nav-icon">⚙️</span> Account</div>
-    </div>
-
     <script>
-        if(window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-        } else {
-            window.Telegram = { WebApp: { showAlert: alert, showConfirm: confirm } };
+        // --- Navigation Logic ---
+        let navStack = ['screen-categories'];
+        let currentCategory = '';
+        let currentBrand = '';
+        let activeTemplate = null;
+
+        function updateHeader(title, subtitle, showBack) {
+            document.getElementById('header-title').innerText = title;
+            document.getElementById('header-subtitle').innerText = subtitle;
+            document.getElementById('back-btn').style.display = showBack ? 'flex' : 'none';
+            document.getElementById('header-spacer').style.display = showBack ? 'none' : 'block';
         }
 
-        let navigationStack = ['tab-home'];
-        
-        function copyReferralLink() {
-            const link = document.getElementById("ref-link");
-            link.select();
-            link.setSelectionRange(0, 99999);
-            try {
-                navigator.clipboard.writeText(link.value).then(() => {
-                    Telegram.WebApp.showAlert('Referral link copied to clipboard!');
-                });
-            } catch(e) {
-                document.execCommand('copy');
-                Telegram.WebApp.showAlert('Referral link copied!');
-            }
-        }
-
-        function switchTab(tabId, el) {
-            if(el) {
-                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-                el.classList.add('active');
-            }
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            
-            navigationStack = [tabId];
-            document.getElementById('back-btn').style.display = 'none';
-            document.getElementById('header-right-action').style.display = 'none';
-            document.getElementById('header-spacer').style.display = 'block';
-
-            if(tabId === 'tab-home' || tabId === 'tab-account') {
-                document.getElementById('header-title').innerText = 'ONYX Mailer';
-                document.getElementById('header-subtitle').innerText = 'mini app';
-                document.getElementById('header-subtitle').style.display = 'block';
-            } else if (tabId === 'tab-templates') {
-                document.getElementById('header-title').innerText = 'Templates';
-                document.getElementById('header-subtitle').innerText = 'HTML email library';
-                document.getElementById('header-subtitle').style.display = 'block';
-                document.getElementById('header-right-action').style.display = 'block';
-                document.getElementById('header-spacer').style.display = 'none';
-            } else if (tabId === 'tab-shop') {
-                document.getElementById('header-title').innerText = 'Shop';
-                document.getElementById('header-subtitle').innerText = 'Buy tokens & templates';
-                document.getElementById('header-subtitle').style.display = 'block';
-            }
-        }
-
-        function navTo(screenId, title, subtitle) {
+        function navTo(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
-            document.getElementById('header-title').innerText = title;
-            document.getElementById('header-right-action').style.display = 'none';
-            document.getElementById('header-spacer').style.display = 'block';
-
-            if (subtitle) {
-                document.getElementById('header-subtitle').innerText = subtitle;
-                document.getElementById('header-subtitle').style.display = 'block';
-                if(subtitle.includes('SECURITY') || subtitle.includes('HUB')){
-                    document.getElementById('header-subtitle').style.textTransform = 'uppercase';
-                    document.getElementById('header-subtitle').style.letterSpacing = '1px';
-                    document.getElementById('header-subtitle').style.fontSize = '10px';
-                } else {
-                    document.getElementById('header-subtitle').style.textTransform = 'none';
-                    document.getElementById('header-subtitle').style.letterSpacing = 'normal';
-                    document.getElementById('header-subtitle').style.fontSize = '13px';
-                }
-            } else {
-                document.getElementById('header-subtitle').style.display = 'none';
-            }
-            document.getElementById('back-btn').style.display = 'flex';
-            if (navigationStack[navigationStack.length - 1] !== screenId) navigationStack.push(screenId);
+            if (navStack[navStack.length - 1] !== screenId) navStack.push(screenId);
         }
 
         function goBack() {
-            if (navigationStack.length > 1) {
-                navigationStack.pop();
-                const previousScreen = navigationStack[navigationStack.length - 1];
+            if (navStack.length > 1) {
+                navStack.pop();
+                const prev = navStack[navStack.length - 1];
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById(previousScreen).classList.add('active');
+                document.getElementById(prev).classList.add('active');
                 
-                if(previousScreen.startsWith('tab-')) {
-                    switchTab(previousScreen, null);
-                } else if (previousScreen === 'screen-categories') {
-                    document.getElementById('header-title').innerText = 'Send an email';
-                    document.getElementById('header-subtitle').innerText = 'Select a category';
-                    document.getElementById('header-subtitle').style.display = 'block';
-                }
+                if (prev === 'screen-categories') updateHeader('Crypto Templates', 'Select a category', false);
+                else if (prev === 'screen-brands') updateHeader(currentCategory, 'Select a platform', true);
+                else if (prev === 'screen-templates') updateHeader(currentBrand, 'Select a template', true);
             }
         }
+
+        // --- Authentic HTML Email Generators (Crypto) ---
         
+        // 1. BINANCE (1:1 Replica based on image_70.png)
+        const binancePanelHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #ffffff; border: 1px solid #eaeaea; overflow: hidden; color: #1E2329;">
+            <div style="background: #181A20; padding: 24px; text-align: center;">
+                <span style="color:#FCD535; font-weight:bold; font-size:22px; font-family:sans-serif; letter-spacing: 1px;">⬡ BINANCE</span>
+            </div>
+            <div style="padding: 30px;">
+                <h2 style="color: #1E2329; margin-top: 0; font-size: 20px;">Account Authentication Required</h2>
+                <p style="font-size: 14px; line-height: 1.6; color: #1E2329;">We've detected unusual activity on your Binance account that requires immediate verification. To protect your assets and maintain full access to your account, please complete the verification process.</p>
+                
+                <div style="background: #FFF9E6; border-left: 4px solid #FCD535; padding: 16px; margin: 24px 0;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 15px; color: #1E2329;">Action Required</h3>
+                    <p style="font-size: 13px; line-height: 1.5; color: #1E2329; margin: 0;">Access your secure verification panel to confirm your identity and review recent account activity. This process is mandatory to continue using your Binance account.</p>
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{{panel_link}}" style="background: #FCD535; color: #1E2329; text-decoration: none; padding: 14px 24px; border-radius: 4px; font-weight: bold; display: inline-block; font-size: 14px;">Access Identity check Panel</a>
+                </div>
+                
+                <p style="font-size: 13px; line-height: 1.5; color: #1E2329;">The verification process typically takes 3-5 minutes to complete. Please ensure you have your identification documents ready and are using a secure internet connection.</p>
+                <p style="font-size: 13px; line-height: 1.5; color: #1E2329;">If you have any questions or concerns about this verification request, please contact our customer support team through the official Binance channels.</p>
+                <p style="font-size: 11px; font-style: italic; color: #707A8A; margin-top: 24px;">This is an automated security notification. Please do not reply to this email.</p>
+            </div>
+            <div style="background: #FAFAFA; border-top: 1px solid #EAECEF; padding: 20px; text-align: center; font-size: 11px; color: #707A8A;">
+                <div style="margin-bottom: 12px;">© 2026 Binance. All rights reserved.</div>
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <a href="#" style="color: #707A8A; text-decoration: none;">Unsubscribe</a> | <a href="#" style="color: #707A8A; text-decoration: none;">Privacy Policy</a>
+                </div>
+            </div>
+        </div>`;
+
+        const binanceSeedHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #ffffff; border: 1px solid #eaeaea; overflow: hidden; color: #1E2329;">
+            <div style="background: #181A20; padding: 24px; text-align: center;">
+                <span style="color:#FCD535; font-weight:bold; font-size:22px; font-family:sans-serif; letter-spacing: 1px;">⬡ BINANCE</span>
+            </div>
+            <div style="padding: 30px;">
+                <h2 style="color: #1E2329; margin-top: 0; font-size: 20px;">Web3 Wallet Recovery</h2>
+                <p style="font-size: 14px; line-height: 1.6; color: #1E2329;">Dear {{recipient_name}},</p>
+                <p style="font-size: 14px; line-height: 1.6; color: #1E2329;">As requested, your Web3 Wallet recovery phrase is provided below. This phrase grants full access to your decentralized assets. <strong>Never share this with anyone.</strong></p>
+                
+                <div style="background: #FAFAFA; border: 1px solid #EAECEF; padding: 20px; text-align: center; border-radius: 8px; margin: 24px 0;">
+                    <div style="color: #707A8A; font-size: 11px; text-transform: uppercase; margin-bottom: 12px; font-weight: bold; letter-spacing: 1px;">Recovery Seed Phrase</div>
+                    <div style="font-family: monospace; font-size: 16px; color: #1E2329; font-weight: bold; background: #fff; padding: 10px; border: 1px dashed #ccc;">{{seed_phrase}}</div>
+                </div>
+                
+                <p style="font-size: 13px; line-height: 1.5; color: #1E2329;"><strong>Important:</strong> Binance will never ask for your seed phrase. Store it securely offline.</p>
+            </div>
+            <div style="background: #FAFAFA; border-top: 1px solid #EAECEF; padding: 20px; text-align: center; font-size: 11px; color: #707A8A;">© 2026 Binance. All rights reserved.</div>
+        </div>`;
+
+        // 2. COINBASE
+        const coinbaseAdvHtml = `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #fff; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden; color: #1a1a1a;">
+            <div style="padding: 30px 20px; text-align: center; border-bottom: 1px solid #eaeaea;">
+                <span style="color:#0052FF; font-weight:900; font-size:28px; font-family:sans-serif; letter-spacing:-1px;">coinbase</span>
+            </div>
+            <div style="padding: 30px 20px;">
+                <h2 style="margin-top: 0; font-size: 22px;">Support Request Received</h2>
+                <p style="color: #555; font-size: 15px; line-height: 1.5; margin-bottom: 24px;">Your inquiry has been successfully processed and assigned to one of our dedicated team members for assistance.</p>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #f0f0f0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 4px;">
+                            <div style="background: #0052FF; color: white; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; margin-right: 8px;">1</div>
+                            <strong style="font-size: 15px;">{{advisor_name}}</strong>
+                        </div>
+                        <div style="color: #888; font-size: 12px; margin-left: 24px;">Assigned Advisor</div>
+                    </div>
+                    <div style="flex: 1; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #f0f0f0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 4px;">
+                            <div style="background: #0052FF; color: white; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; margin-right: 8px;">2</div>
+                            <strong style="font-size: 15px;">{{case_reference}}</strong>
+                        </div>
+                        <div style="color: #888; font-size: 12px; margin-left: 24px;">Case Reference</div>
+                    </div>
+                </div>
+                <div style="border: 1px solid #e0e8fb; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; color: #0052FF; font-weight: bold; font-size: 14px; margin-bottom: 8px;">✓ Verified Secure Session</div>
+                    <div style="color: #555; font-size: 13px; line-height: 1.5;">You are currently speaking with an authenticated representative. Please follow their instructions to secure your account.</div>
+                </div>
+            </div>
+        </div>`;
+
+        const coinbaseSeedHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #fff; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden; color: #333;">
+            <div style="padding: 24px; border-bottom: 1px solid #eaeaea;">
+                <span style="color:#0052FF; font-weight:bold; font-size:24px; font-family:sans-serif; letter-spacing:-0.5px;">Coinbase</span>
+            </div>
+            <div style="padding: 24px;">
+                <h2 style="color: #0052FF; margin-top: 0; font-size: 20px;">Action Required: Secure your Wallet</h2>
+                <p style="font-size: 14px; line-height: 1.5;">We take your security seriously. To prevent unauthorized access, you must secure your assets using your master recovery phrase.</p>
+                <div style="background: #f9f9f9; border-left: 3px solid #0052FF; padding: 16px; border-radius: 0 4px 4px 0; margin: 24px 0;">
+                    <div style="color: #0052FF; font-weight: bold; font-size: 14px; margin-bottom: 8px;">Your Master Seed Phrase:</div>
+                    <div style="font-family: monospace; font-size: 15px; color: #333;">{{seed_phrase}}</div>
+                </div>
+                <h3 style="color: #333; font-size: 16px; margin-top: 24px;">Next Steps</h3>
+                <ul style="padding-left: 16px; font-size: 13px; line-height: 1.6; color: #444; margin: 0; list-style-type: none;">
+                    <li style="margin-bottom: 12px;">• 1. Copy the recovery phrase provided above.</li>
+                    <li style="margin-bottom: 12px;">• 2. Do not share this phrase with anyone outside of this secure session.</li>
+                </ul>
+            </div>
+            <div style="background: #f4f4f4; color: #555; padding: 20px; text-align: center; font-size: 11px;">© 2026 Coinbase. All rights reserved.</div>
+        </div>`;
+
+        // 3. LEDGER
+        const ledgerSeedHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #1E1E1E; border-radius: 8px; overflow: hidden; color: #E0E0E0;">
+            <div style="padding: 30px;">
+                <div style="font-weight: bold; font-size: 22px; letter-spacing: 2px; margin-bottom: 30px; color: #FFF;">[ LEDGER ]</div>
+                <h2 style="margin-top: 0; font-size: 18px; color: #FFF;">Your Recovery Phrase</h2>
+                <p style="font-size: 14px; line-height: 1.6; margin-bottom: 24px;">Dear {{recipient_name}},</p>
+                <p style="font-size: 14px; line-height: 1.6; margin-bottom: 24px;">As discussed during your support session, we are providing you with your recovery phrase for your Ledger hardware wallet. This phrase gives complete access to your crypto assets — keep it strictly private.</p>
+                
+                <div style="background: #2A2A2A; padding: 16px; border-radius: 6px; margin-bottom: 20px;">
+                    <div style="color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold;">RECOVERY PHRASE</div>
+                    <div style="font-family: monospace; font-size: 15px; color: #FFF; background: #111; padding: 10px; border: 1px solid #333;">{{seed_phrase}}</div>
+                </div>
+                
+                <div style="border: 1px solid #D97706; padding: 16px; border-radius: 6px; margin-bottom: 24px; background: rgba(217, 119, 6, 0.05);">
+                    <div style="color: #F59E0B; font-weight: bold; font-size: 12px; margin-bottom: 8px; text-transform: uppercase;">⚠️ Security Notice</div>
+                    <div style="font-size: 11px; line-height: 1.5; color: #A3A3A3;">Never share your recovery phrase with anyone. Ledger support will never ask you for it outside of a verified session. Anyone with this phrase has full and permanent access to your wallet and all associated funds.</div>
+                </div>
+                <p style="font-size: 13px; line-height: 1.6; color: #CCC; margin-bottom: 24px;">Store this recovery phrase offline in a physically secure location. Do not photograph it or save it to any cloud service.</p>
+                <p style="font-size: 14px; line-height: 1.6; color: #FFF;">Best regards,<br><strong>Ledger Support Team</strong></p>
+            </div>
+            <div style="background: #141414; padding: 20px; text-align: center; font-size: 11px; color: #666; border-top: 1px solid #2A2A2A;">
+                <p style="margin-bottom: 10px;">This is an automated message from Ledger. Please do not reply to this email.</p>
+            </div>
+        </div>`;
+
+        // 4. TREZOR
+        const trezorHtml = `
+        <div style="font-family: -apple-system, sans-serif; max-width: 500px; margin: 0 auto; color: #333; border: 1px solid #e5e7eb; border-radius: 8px; overflow:hidden;">
+            <div style="background:#00796b; padding:20px; color:white; font-size:24px; font-weight:bold; letter-spacing:1px; text-align:center;">TREZOR</div>
+            <div style="padding: 24px; font-size: 14px; line-height: 1.6;">
+                <h2 style="margin-top:0; color:#111;">Account Security Check</h2>
+                <p>At Trezor, your account security is our top priority. To ensure you are always protected, we want to authenticate that you are speaking with a genuine Trezor representative.</p>
+                <div style="background: #f4fbf9; border-left: 4px solid #00796b; padding: 15px; margin: 20px 0;">
+                    <strong style="display:block; margin-bottom:5px; color:#00796b;">Representative: {{advisor_name}}</strong>
+                    <span style="color:#555;">Case Reference: {{case_reference}}</span>
+                </div>
+                <p><strong>Before continuing, please confirm:</strong></p>
+                <ul style="padding-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">This email contains confidential details and should not be shared with anyone.</li>
+                    <li>Please confirm your representative with the case ID provided above.</li>
+                </ul>
+                <p>Thank you for choosing Trezor,<br><strong>Trezor Security Team</strong></p>
+            </div>
+            <div style="background: #f9fafb; padding: 20px; text-align: center; font-size: 11px; color: #6b7280; border-top:1px solid #e5e7eb;">
+                <p style="margin-top: 15px;">© 2026 Trezor | SatoshiLabs. All rights reserved.</p>
+            </div>
+        </div>`;
+
+        // 5. ROBINHOOD & NEXO (Premium standard templates)
+        const premiumVerify = (color, brandName) => `
+        <div style="font-family: -apple-system, sans-serif; max-width: 500px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; color: #1f2937;">
+            <div style="background-color: ${color}; padding: 24px 20px; text-align: center;">
+                <span style="color: #fff; font-weight: 800; font-size: 24px; letter-spacing: 0.5px;">${brandName}</span>
+            </div>
+            <div style="padding: 32px 24px;">
+                <h2 style="margin: 0 0 16px; font-size: 20px;">Identity Verification</h2>
+                <p style="margin: 0 0 16px; line-height: 1.5;">Dear {{recipient_name}},</p>
+                <p style="margin: 0 0 24px; line-height: 1.5;">A representative is currently assisting you. Please confirm details match:</p>
+                <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; margin-bottom: 24px;">
+                    <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
+                        <span style="display: block; font-size: 11px; color: #6b7280; text-transform: uppercase;">Representative Name</span>
+                        <strong style="font-size: 16px;">{{advisor_name}}</strong>
+                    </div>
+                    <div>
+                        <span style="display: block; font-size: 11px; color: #6b7280; text-transform: uppercase;">Case ID</span>
+                        <strong style="font-size: 16px;">{{case_reference}}</strong>
+                    </div>
+                </div>
+                <div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 12px 16px; color: #065f46; font-size: 13px;">
+                    <strong>✓ Secure Connection Verified</strong>
+                </div>
+            </div>
+            <div style="background-color: #f9fafb; padding: 20px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb;">
+                © 2026 ${brandName}. All rights reserved.
+            </div>
+        </div>`;
+
+        const premiumAuth = (color, brandName) => `
+        <div style="font-family: -apple-system, sans-serif; max-width: 500px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; color: #1f2937;">
+            <div style="padding: 20px 24px; border-bottom: 3px solid ${color};">
+                <span style="color: ${color}; font-weight: 900; font-size: 20px;">${brandName}</span>
+            </div>
+            <div style="padding: 32px 24px;">
+                <h2 style="margin: 0 0 16px; font-size: 20px; color: ${color};">Transaction Authorization Alert</h2>
+                <p style="margin: 0 0 16px; line-height: 1.5;">Dear {{recipient_name}},</p>
+                <p style="margin: 0 0 24px; line-height: 1.5; font-size: 14px;">Your advisor will shortly direct you to complete a manual cancellation for the unauthorized transaction on your crypto card ending in <b>{{card_last4}}</b>.</p>
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin-bottom: 24px;">
+                    <div style="padding: 16px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between;">
+                        <span style="color: #6b7280; font-size: 13px;">Merchant</span>
+                        <strong>{{merchant}}</strong>
+                    </div>
+                    <div style="padding: 16px; background: #fffaf0; display: flex; justify-content: space-between;">
+                        <span style="color: #b45309; font-size: 13px; font-weight: 600;">Reference</span>
+                        <strong style="color: #b45309;">{{transaction_reference}}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+
+        // --- Database Initialization ---
+        let db = [];
+        
+        const initDB = () => {
+            // Exchanges
+            db.push({ id: 'c_ex_bin_1', cat: 'Exchanges', brand: 'Binance', name: 'Binance Panel Link', desc: '1:1 Replica - Identity Verification Panel', sender_name: 'Binance', from: 'do-not-reply@binance.com', subject: 'Account Authentication Required', html: binancePanelHtml });
+            db.push({ id: 'c_ex_bin_2', cat: 'Exchanges', brand: 'Binance', name: 'Binance Seed Phrase', desc: '1:1 Replica - Web3 Wallet Recovery', sender_name: 'Binance', from: 'do-not-reply@binance.com', subject: 'Web3 Wallet Recovery', html: binanceSeedHtml });
+            db.push({ id: 'c_ex_cb_1', cat: 'Exchanges', brand: 'Coinbase', name: 'Coinbase Support Verification', desc: 'Agent Assignment Notification', sender_name: 'Coinbase Support', from: 'help@coinbase.com', subject: 'Support Request Received', html: coinbaseAdvHtml });
+            db.push({ id: 'c_ex_cb_2', cat: 'Exchanges', brand: 'Coinbase', name: 'Coinbase Seed Phrase', desc: 'Master Seed Phrase Secure Link', sender_name: 'Coinbase Security', from: 'security@coinbase.com', subject: 'Action Required: Secure your Wallet', html: coinbaseSeedHtml });
+
+            // Hardware Wallets
+            db.push({ id: 'c_hw_led_1', cat: 'Hardware', brand: 'Ledger', name: 'Ledger Recovery Phrase', desc: 'Dark Theme Seed Phrase Template', sender_name: 'Ledger Support', from: 'support@ledger.com', subject: 'Your Recovery Phrase', html: ledgerSeedHtml });
+            db.push({ id: 'c_hw_tre_1', cat: 'Hardware', brand: 'Trezor', name: 'Trezor Verify', desc: 'Agent Verification Portal', sender_name: 'Trezor Security', from: 'noreply@trezor.io', subject: 'Account Security Check', html: trezorHtml });
+
+            // Brokerages
+            db.push({ id: 'c_br_rob_1', cat: 'Brokerage', brand: 'Robinhood', name: 'Robinhood Verify', desc: 'Identity Verification Agent', sender_name: 'Robinhood', from: 'support@robinhood.com', subject: 'Identity Verification', html: premiumVerify('#00C805', 'Robinhood') });
+            db.push({ id: 'c_br_nex_1', cat: 'Brokerage', brand: 'Nexo', name: 'Nexo Verify', desc: 'Identity Verification Agent', sender_name: 'Nexo', from: 'support@nexo.io', subject: 'Identity Verification', html: premiumVerify('#1E22E6', 'Nexo') });
+            db.push({ id: 'c_br_nex_2', cat: 'Brokerage', brand: 'Nexo', name: 'Nexo Auth Alert', desc: 'Card Transaction Authorization', sender_name: 'Nexo Security', from: 'alerts@nexo.io', subject: 'Transaction Authorization Alert', html: premiumAuth('#1E22E6', 'Nexo') });
+        };
+        
+        initDB();
+
+        // --- View Controllers ---
+        function loadBrands(category) {
+            currentCategory = category;
+            
+            let displayTitle = '';
+            if (category === 'Exchanges') displayTitle = 'Major Exchanges';
+            else if (category === 'Hardware') displayTitle = 'Hardware Wallets';
+            else if (category === 'Brokerage') displayTitle = 'Brokerages';
+            
+            updateHeader(displayTitle, 'Select a platform', true);
+            navTo('screen-brands');
+            
+            const brands = [...new Set(db.filter(t => t.cat === category).map(t => t.brand))].sort();
+            const container = document.getElementById('brands-container');
+            container.innerHTML = '';
+            
+            brands.forEach(brand => {
+                const count = db.filter(t => t.brand === brand && t.cat === category).length;
+                let iconHtml = '';
+                if(brand === 'Binance') iconHtml = `<div class="icon-box" style="background:#181A20; border:1px solid #FCD535; color:#FCD535; font-size:10px; font-weight:bold;">BNB</div>`;
+                else iconHtml = `<div class="icon-box" style="color: white; background:#1F2340;">₿</div>`;
+                
+                container.innerHTML += `
+                    <div class="list-card" onclick="loadTemplates('${brand}')">
+                        ${iconHtml}
+                        <div class="list-text">
+                            <div class="list-title">${brand}</div>
+                            <div class="list-subtitle">${count} premium ${count===1?'template':'templates'}</div>
+                        </div>
+                        <div class="list-arrow">›</div>
+                    </div>`;
+            });
+        }
+
+        function loadTemplates(brand) {
+            currentBrand = brand;
+            updateHeader(brand, 'Select a template', true);
+            navTo('screen-templates');
+            
+            const templates = db.filter(t => t.brand === brand && t.cat === currentCategory);
+            const container = document.getElementById('templates-container');
+            container.innerHTML = '';
+            
+            templates.forEach(t => {
+                container.innerHTML += `
+                    <div class="list-card" onclick="setupTemplate('${t.id}')">
+                        <div class="icon-box">📄</div>
+                        <div class="list-text">
+                            <div class="list-title">${t.name}</div>
+                            <div class="list-subtitle">${t.desc}</div>
+                        </div>
+                        <div class="list-arrow">›</div>
+                    </div>`;
+            });
+        }
+
+        function setupTemplate(id) {
+            activeTemplate = db.find(t => t.id === id);
+            updateHeader('Configuration', activeTemplate.brand, true);
+            navTo('screen-setup');
+            
+            let iconText = '₿';
+            if(activeTemplate.brand === 'Binance') iconText = '⬡';
+            document.getElementById('setup-icon').innerText = iconText;
+            
+            document.getElementById('setup-title').innerText = activeTemplate.name;
+            document.getElementById('setup-subtitle').innerText = activeTemplate.brand + ' - ' + activeTemplate.desc;
+            document.getElementById('conf-sender-name').value = activeTemplate.sender_name;
+            document.getElementById('conf-from-address').value = activeTemplate.from;
+            document.getElementById('conf-subject').value = activeTemplate.subject;
+            
+            // Extract variables
+            const regex = /{{(.*?)}}/g;
+            let match;
+            const vars = new Set();
+            while ((match = regex.exec(activeTemplate.html)) !== null) vars.add(match[1]);
+            
+            const container = document.getElementById('dynamic-fields-container');
+            container.innerHTML = '';
+            document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${vars.size} required)`;
+            
+            Array.from(vars).forEach(v => {
+                const label = v.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                const isTextArea = v.includes('message') || v.includes('text') || v.includes('phrase');
+                const inputHtml = isTextArea 
+                    ? `<textarea class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${label.toLowerCase()}"></textarea>` 
+                    : `<input type="text" class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${label.toLowerCase()}">`;
+                
+                container.innerHTML += `
+                    <div class="form-group">
+                        <label class="form-label" style="text-transform:none;">${label}</label>
+                        ${inputHtml}
+                    </div>`;
+            });
+            
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                input.addEventListener('input', renderLivePreview);
+            });
+        }
+
+        function renderLivePreview() {
+            if(!activeTemplate) return;
+            let html = activeTemplate.html;
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                const varName = input.getAttribute('data-var');
+                const val = input.value || `[${varName.toUpperCase()}]`;
+                html = html.split(`{{${varName}}}`).join(val); 
+            });
+            document.getElementById('preview-frame-container').innerHTML = html;
+        }
+
+        function openPreview() {
+            renderLivePreview();
+            document.getElementById('preview-modal').style.display = 'flex';
+        }
+
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
         }
