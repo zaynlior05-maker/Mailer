@@ -2,635 +2,425 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dynamic Template Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONYX Mailer</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg-color: #080A1A;
-            --panel-bg: #121429;
-            --border-color: #1F2340;
-            --text-main: #FFFFFF;
-            --text-muted: #8E92B2;
-            --accent: #8E54E9;
-            --accent-glow: #A476F0;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: #0b0c0e;
+            color: #ffffff;
             margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Upgraded Header with exact styling from image */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            background-color: var(--bg-color);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 10;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for fixed nav bar */
         }
         
-        .header-content {
-            display: flex;
-            align-items: center;
-            width: 100%;
-        }
-
-        .back-btn {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            font-size: 16px;
+        /* Header & Navigation */
+        .header-top { display: flex; align-items: center; margin-bottom: 20px; }
+        .back-btn { 
+            background-color: #161a24; 
+            border: 1px solid #2d3446; 
+            border-radius: 50%; 
+            width: 35px; 
+            height: 35px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-right: 15px;
             cursor: pointer;
-            display: none; /* Controlled by JS */
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            align-items: center;
-            justify-content: center;
-            margin-right: 14px;
-        }
-        
-        .back-btn:active {
-            background-color: #1a1d36;
-        }
-
-        .title-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .header-title {
-            font-weight: bold;
-            font-size: 16px;
-            text-align: left;
-        }
-        
-        .header-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: normal;
-        }
-
-        .header-flag {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: none; /* Controlled by JS */
-            align-items: center;
-            justify-content: center;
             font-size: 18px;
         }
+        .header-title-container { display: flex; flex-direction: column; }
+        .header-title { font-size: 20px; font-weight: bold; margin: 0; }
+        .header-subtitle { font-size: 13px; color: #a0aec0; margin: 0; }
 
-        .screen {
-            display: none;
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            padding-bottom: 100px;
+        /* Search Bar */
+        .search-container { margin-bottom: 20px; display: none; }
+        .search-input {
+            width: 100%;
+            background-color: #11141d;
+            border: 1px solid #1f2533;
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-sizing: border-box;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
         }
-        .screen.active {
-            display: block;
-        }
+        .search-input::placeholder { color: #52627a; }
 
-        .list-card {
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
+        /* Upload Card */
+        .upload-card {
+            background: linear-gradient(90deg, #2a2f42 0%, #1a1e2b 100%);
+            border: 1px solid #3e465e;
             border-radius: 16px;
             padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Menu & Brand Cards */
+        .card {
+            background-color: #0f1219;
+            border: 1px solid #1f2533;
+            border-radius: 16px;
+            padding: 14px 16px;
             margin-bottom: 12px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        .list-card:active {
-            background-color: #1a1d36;
-        }
-        .icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background-color: #1F2340;
+        .card-left { display: flex; align-items: center; }
+        .bank-icon {
+            background-color: #1a2238;
+            color: #6b8cd6;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 16px;
-            font-size: 20px;
+            margin-right: 15px;
+            font-size: 18px;
         }
-        .list-text { flex-grow: 1; }
-        .list-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-        .list-subtitle { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
-        .list-arrow { color: var(--text-muted); font-weight: bold; }
+        .brand-name { font-weight: bold; font-size: 16px; margin-bottom: 4px; }
+        .brand-templates { font-size: 13px; color: #a0aec0; }
+        .arrow { color: #a0aec0; }
 
-        .form-group { margin-bottom: 16px; }
-        .form-label { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; display: block; }
-        .form-input {
-            width: 100%;
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 14px;
+        /* Pagination Layout */
+        .pagination { display: none; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .page-btn {
+            background-color: #161a24;
+            border: 1px solid #2d3446;
+            color: #ffffff;
+            padding: 10px 20px;
             border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 15px;
-        }
-        .form-input:focus { outline: none; border-color: var(--accent); }
-        textarea.form-input { resize: vertical; min-height: 80px; }
-        
-        .section-title { font-size: 16px; font-weight: bold; margin: 24px 0 16px 0; }
-
-        .btn-primary {
-            width: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
         }
-        .btn-secondary {
+        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .page-indicator { font-size: 14px; color: #ffffff; }
+
+        /* Bottom Nav Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            background: transparent;
-            color: var(--accent-glow);
-            border: none;
-            padding: 16px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 5px;
+            background-color: #0b0c0e;
+            border-top: 1px solid #1f2d3d;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 11px;
+            color: #a0aec0;
+            z-index: 1000;
         }
-
-        #preview-modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: #ffffff; font-weight: bold; }
+        .nav-center-btn {
+            background: linear-gradient(135deg, #a764ff 0%, #6b8cd6 100%);
+            width: 60px;
+            height: 45px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            top: -15px;
+            box-shadow: 0 4px 15px rgba(167, 100, 255, 0.4);
+            color: white;
+            font-size: 20px;
         }
-        .preview-header {
-            display: flex; justify-content: space-between; padding: 16px;
-            background-color: var(--bg-color); align-items: center;
-        }
-        .preview-close { color: white; background: none; border: none; font-size: 24px; cursor: pointer; }
-        #preview-frame-container {
-            flex: 1; background: white; margin: 16px; border-radius: 12px;
-            overflow: auto; padding: 16px; color: black;
-        }
-
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%;
-            background-color: var(--bg-color); border-top: 1px solid var(--border-color);
-            display: flex; justify-content: space-around; padding: 12px 0 24px 0; z-index: 50;
-        }
-        .nav-item { color: var(--text-muted); text-align: center; font-size: 10px; cursor: pointer; }
-        .nav-item.active { color: var(--accent-glow); }
-        .nav-icon { font-size: 20px; margin-bottom: 4px; display: block; }
-        .nav-fab {
-            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
-            width: 48px; height: 48px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            margin-top: -24px; box-shadow: 0 4px 15px rgba(142, 84, 233, 0.4);
-            color: white; font-size: 24px;
-        }
+        
+        /* Views visibility handler */
+        .view-section { display: none; }
+        .view-section.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="header-content">
-            <button class="back-btn" id="back-btn" onclick="goBack()">❮</button>
-            <div class="title-container">
-                <div class="header-title" id="header-title">Templates</div>
-                <div class="header-subtitle" id="header-subtitle">HTML email library</div>
-            </div>
-            <div id="header-flag" class="header-flag">🇦🇺</div>
+    <!-- Dynamic Header -->
+    <div class="header-top">
+        <div id="global-back-btn" class="back-btn" onclick="goBack()" style="visibility: hidden;">&lt;</div>
+        <div class="header-title-container">
+            <h2 id="global-title" class="header-title">Choose Category</h2>
+            <p id="global-subtitle" class="header-subtitle">Select a category</p>
         </div>
     </div>
 
-    <!-- Screen 1: Categories -->
-    <div id="screen-categories" class="screen active">
-        <div class="list-card" onclick="navTo('screen-countries', 'Choose Country', 'Select a country')">
-            <div class="icon-box">🏛️</div>
-            <div class="list-text">
-                <div class="list-title">Bank</div>
-                <div class="list-subtitle">Professional banking letters</div>
-            </div>
-            <div class="list-arrow">›</div>
-        </div>
-        <div class="list-card">
-            <div class="icon-box">₿</div>
-            <div class="list-text">
-                <div class="list-title">Crypto</div>
-                <div class="list-subtitle">Exchanges & crypto wallets</div>
-            </div>
-            <div class="list-arrow">›</div>
-        </div>
-    </div>
-
-    <!-- Screen 2: Countries -->
-    <div id="screen-countries" class="screen">
-        <div class="list-card" onclick="loadBrands('Australia', '🇦🇺')">
-            <div class="icon-box">🇦🇺</div>
-            <div class="list-text">
-                <div class="list-title">Australia</div>
-            </div>
-            <div class="list-arrow">›</div>
-        </div>
-        <div class="list-card" onclick="loadBrands('United Kingdom', '🇬🇧')">
-            <div class="icon-box">🇬🇧</div>
-            <div class="list-text">
-                <div class="list-title">United Kingdom</div>
-            </div>
-            <div class="list-arrow">›</div>
-        </div>
-    </div>
-
-    <!-- Screen 3: Brands -->
-    <div id="screen-brands" class="screen">
-        <div id="brands-container"></div>
-    </div>
-
-    <!-- Screen 4: Templates -->
-    <div id="screen-templates" class="screen">
-        <!-- Replicated List Header from image_20 -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <div style="font-weight: bold; font-size: 16px;" id="template-list-title">Templates</div>
-            <div style="color: var(--text-muted); font-size: 13px;" id="template-list-count">Showing 0 templates</div>
-        </div>
-        <div id="templates-container"></div>
-    </div>
-
-    <!-- Screen 5: Dynamic Send Setup -->
-    <div id="screen-setup" class="screen">
-        <div class="list-card" style="cursor: default;">
-            <div class="icon-box">🏛️</div>
-            <div class="list-text">
-                <div class="list-title" id="setup-title">Template Name</div>
-                <div class="list-subtitle" id="setup-subtitle">Template send setup</div>
+    <!-- Global Upload Card -->
+    <div class="upload-card">
+        <div class="card-left">
+            <div class="bank-icon" style="background-color: transparent; border: 1px solid #4a5568;">↑</div>
+            <div>
+                <div style="font-weight: bold; font-size: 15px;">Upload a template</div>
+                <div style="font-size: 13px; color: #a0aec0;">Active membership required</div>
             </div>
         </div>
-
-        <div class="form-group">
-            <label class="form-label">Preset sender ID</label>
-            <input type="text" class="form-input" id="conf-sender-id">
-        </div>
-        <div class="form-group">
-            <label class="form-label">Sender name</label>
-            <input type="text" class="form-input" id="conf-sender-name">
-        </div>
-        <div class="form-group">
-            <label class="form-label">From address</label>
-            <input type="text" class="form-input" id="conf-from-address">
-        </div>
-        <div class="form-group">
-            <label class="form-label">Reply-To address</label>
-            <input type="text" class="form-input" id="conf-reply-to">
-        </div>
-        <div class="form-group">
-            <label class="form-label">Subject</label>
-            <input type="text" class="form-input" id="conf-subject">
-        </div>
-
-        <div class="section-title" id="dynamic-fields-header">Template Parameters</div>
-        <div id="dynamic-fields-container"></div>
-
-        <div class="form-group" style="margin-top: 24px;">
-            <label class="form-label">Recipient email</label>
-            <input type="email" class="form-input" placeholder="recipient@example.com">
-        </div>
-
-        <button class="btn-primary" onclick="Telegram.WebApp.showAlert('Email queued for sending!')">Send Email</button>
-        <button class="btn-secondary" onclick="openPreview()">Preview Email</button>
+        <div class="arrow">&gt;</div>
     </div>
 
-    <!-- Live Preview Modal -->
-    <div id="preview-modal">
-        <div class="preview-header">
-            <div style="font-weight: bold; font-size: 18px;">Email Preview</div>
-            <button class="preview-close" onclick="closePreview()">×</button>
-        </div>
-        <div id="preview-frame-container"></div>
+    <!-- Search Input Container (Visible mainly in Australia view) -->
+    <div id="search-container" class="search-container">
+        <input type="text" id="search-bar" class="search-input" placeholder="🔍 Search templates" onkeyup="filterAusBrands()">
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <div class="nav-item"><span class="nav-icon">🏠</span> Home</div>
-        <div class="nav-item active"><span class="nav-icon">📄</span> Templates</div>
-        <div class="nav-fab">✉</div>
-        <div class="nav-item"><span class="nav-icon">🛒</span> Shop</div>
-        <div class="nav-item"><span class="nav-icon">⚙️</span> Account</div>
+
+    <!-- SECTION 1: MAIN CATEGORIES VIEW -->
+    <div id="view-categories" class="view-section active">
+        <div class="card" onclick="switchView('countries')">
+            <div class="card-left">
+                <div class="bank-icon">🏛</div>
+                <div>
+                    <div class="brand-name">Bank</div>
+                    <div class="brand-templates">Professional banking letters</div>
+                </div>
+            </div>
+            <div class="arrow">&gt;</div>
+        </div>
+        <div class="card" onclick="alert('Crypto features loaded')">
+            <div class="card-left">
+                <div class="bank-icon">₿</div>
+                <div>
+                    <div class="brand-name">Crypto</div>
+                    <div class="brand-templates">Exchanges & crypto wallets</div>
+                </div>
+            </div>
+            <div class="arrow">&gt;</div>
+        </div>
+        <div class="card" onclick="alert('Other features coming soon')">
+            <div class="card-left">
+                <div class="bank-icon">❓</div>
+                <div>
+                    <div class="brand-name">Others</div>
+                    <div class="brand-templates">Other categories — coming soon</div>
+                </div>
+            </div>
+            <div class="arrow">&gt;</div>
+        </div>
+    </div>
+
+
+    <!-- SECTION 2: CHOOSE COUNTRY VIEW -->
+    <div id="view-countries" class="view-section">
+        <div class="card" onclick="switchView('australia')">
+            <div class="card-left">
+                <div class="bank-icon">🇦🇺</div>
+                <div>
+                    <div class="brand-name">Australia</div>
+                    <div class="brand-templates">Global templates included</div>
+                </div>
+            </div>
+            <div class="arrow">&gt;</div>
+        </div>
+        <div class="card" onclick="switchView('uk')">
+            <div class="card-left">
+                <div class="bank-icon">🇬🇧</div>
+                <div>
+                    <div class="brand-name">United Kingdom</div>
+                    <div class="brand-templates">Global templates included</div>
+                </div>
+            </div>
+            <div class="arrow">&gt;</div>
+        </div>
+        <div class="card" onclick="alert('United States templates coming soon')">
+            <div class="card-left">
+                <div class="bank-icon">🇺🇸</div>
+                <div>
+                    <div class="brand-name">United States</div>
+                    <div class="brand-templates">Global templates included</div>
+                </div>
+            </div>
+            <div class="arrow">&gt;</div>
+        </div>
+    </div>
+
+
+    <!-- SECTION 3: AUSTRALIA BRANDS VIEW -->
+    <div id="view-australia" class="view-section">
+        <div id="aus-brands-list"></div>
+        <div class="pagination-indicator" style="text-align: center; color: #a0aec0; font-size: 14px; margin-top: 20px;">Page 1 of 1</div>
+    </div>
+
+
+    <!-- SECTION 4: UNITED KINGDOM BRANDS VIEW -->
+    <div id="view-uk" class="view-section">
+        <div id="uk-brands-list"></div>
+        <!-- Pagination Controls for UK -->
+        <div id="uk-pagination" class="pagination">
+            <button id="prev-btn" class="page-btn" onclick="changeUKPage(-1)">Back</button>
+            <div id="page-text" class="page-indicator">Page 1 of 2</div>
+            <button id="next-btn" class="page-btn" onclick="changeUKPage(1)">Next</button>
+        </div>
+    </div>
+
+
+    <!-- Bottom Global Menu Bar -->
+    <div class="nav-bar">
+        <div class="nav-item">
+            <span style="font-size: 18px;">🏠</span>
+            Home
+        </div>
+        <div class="nav-item active">
+            <span style="font-size: 18px; color: #a764ff;">📄</span>
+            Templates
+        </div>
+        <div class="nav-center-btn">✉</div>
+        <div class="nav-item">
+            <span style="font-size: 18px;">🛒</span>
+            Shop
+        </div>
+        <div class="nav-item">
+            <span style="font-size: 18px;">⚙</span>
+            Account
+        </div>
     </div>
 
     <script>
-        {% raw %}
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
 
-        // -------------------------------------------------------------------------
-        // INTELLIGENT TEMPLATE GENERATOR
-        // This builds gorgeous, perfect HTML blocks tailored to each bank's colors
-        // -------------------------------------------------------------------------
+        // View tracking stack history
+        let currentView = 'categories';
+        let viewHistory = ['categories'];
 
-        function verifyHTML(brand, color, legal) {
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333; padding: 10px;">
-                    <div style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 30px;">
-                        <span style="color: ${color}; font-size: 24px; font-weight: bold; letter-spacing: 1px;">${brand}</span>
-                    </div>
-                    <h3 style="color: ${color};">Employee Verification</h3>
-                    <p style="font-size: 14px; color: #333;">You are receiving this email because you have requested verification of a ${brand} employee who is assisting you.</p>
-                    
-                    <div style="background-color: #f5f5f5; border-radius: 6px; padding: 16px; margin: 20px 0;">
-                        <div style="margin-bottom: 12px;">
-                            <span style="font-size: 12px; color: #888;">Employee Name</span><br>
-                            <strong style="font-size: 15px;">{{employee_name}}</strong>
-                        </div>
-                        <div>
-                            <span style="font-size: 12px; color: #888;">Reference Number</span><br>
-                            <strong style="font-size: 15px;">{{case_id}}</strong>
-                        </div>
-                    </div>
-
-                    <p style="font-size: 13px; color: #333; margin-bottom: 30px; line-height: 1.5;">This confirms that the person named above is a verified employee of ${legal} and is authorised to assist you with your enquiry.</p>
-                    
-                    <div style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888;">
-                        © 2026 ${legal}<br><br>
-                        This is an automated message from ${brand} Security.
-                    </div>
-                </div>
-            `;
-        }
-
-        function alertHTML(brand, color, legal) {
-            return `
-                <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: ${color};">
-                    <div style="border-bottom: 2px solid ${color}; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline;">
-                        <h2 style="margin: 0; color: ${color}; font-size: 28px;">${brand}</h2>
-                        <span style="font-size: 12px; color: #666;">{{date}}</span>
-                    </div>
-                    <h2 style="color: ${color};">Transaction Authorization Alert</h2>
-                    <p style="color: #333;">Dear {{recipient_name}},</p>
-                    <p style="color: #333;">Your advisor will shortly direct you to complete a manual cancellation or order replication to prevent the transaction on your card ending in <b>{{card_last4}}</b>.</p>
-                    
-                    <div style="background-color: #f5f7f9; border-radius: 8px; padding: 16px; margin: 20px 0;">
-                        <p style="font-size: 11px; font-weight: bold; color: ${color}; margin-top:0;">TRANSACTION DETAILS</p>
-                        <div style="margin-bottom: 12px;">
-                            <span style="font-size: 12px; color: #666;">MERCHANT</span><br>
-                            <strong style="color: #333;">{{merchant}}</strong>
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <span style="font-size: 12px; color: #666;">ATTEMPTED TRANSACTION</span><br>
-                            <strong style="color: #333;">{{attempted_transaction}}</strong>
-                        </div>
-                        <div>
-                            <span style="font-size: 12px; color: ${color}; font-weight:bold;">TRANSACTION REFERENCE</span><br>
-                            <strong style="color: ${color};">{{transaction_reference}}</strong>
-                        </div>
-                    </div>
-
-                    <div style="background-color: #fff9e6; border-left: 4px solid ${color}; padding: 12px; font-size: 13px; color: #333;">
-                        <strong>Security Notice:</strong> Never share your transaction reference with unsolicited callers.
-                    </div>
-
-                    <p style="margin-top: 30px; font-size: 14px; color: #333;">Kind Regards,<br><strong>${brand} Support Team</strong></p>
-                    
-                    <div style="text-align: center; font-size: 11px; color: #999; margin-top: 30px;">
-                        This is an automated notification. Please do not reply to this address.<br>
-                        © 2026 ${legal}. All rights reserved.
-                    </div>
-                </div>
-            `;
-        }
-
-        // Database Configuration Data
-        const brandsData = [
-            { brand: 'ANZ', color: '#004165', legal: 'Australia and New Zealand Banking Group Limited', country: 'Australia' },
-            { brand: 'Barclays', color: '#00AEEF', legal: 'Barclays Bank PLC', country: 'Australia' },
-            { brand: 'ASB', color: '#FFB600', legal: 'ASB Bank Limited', country: 'Australia' },
-            { brand: 'BNZ', color: '#00194A', legal: 'Bank of New Zealand', country: 'Australia' },
-            { brand: 'Commonwealth', color: '#FFCC00', legal: 'Commonwealth Bank of Australia', country: 'Australia' },
-            { brand: 'Kiwibank', color: '#739600', legal: 'Kiwibank Limited', country: 'Australia' },
-            { brand: 'Latitude', color: '#0087A5', legal: 'Latitude Financial Services', country: 'Australia' },
-            { brand: 'NAB', color: '#E31837', legal: 'National Australia Bank Limited', country: 'Australia' },
-            { brand: 'ING', color: '#FF6200', legal: 'ING Bank (Australia) Limited', country: 'Australia' }
+        // Brand Datasets
+        const ausBrands = [
+            { name: "Barclays", templates: 1 }, { name: "ANZ", templates: 2 },
+            { name: "ASB", templates: 2 }, { name: "BNZ", templates: 2 },
+            { name: "Commonwealth", templates: 2 }, { name: "Kiwibank", templates: 2 },
+            { name: "Latitude", templates: 2 }, { name: "NAB", templates: 4 },
+            { name: "ING", templates: 2 }
         ];
 
-        // Compile Database
-        const templateDB = [];
-        brandsData.forEach(b => {
-            templateDB.push({
-                id: b.brand.toLowerCase() + '_1',
-                country: b.country,
-                brand: b.brand,
-                name: b.brand + ' Bank Employee Verify',
-                desc: 'Global template for ' + b.brand,
-                sender_id: 'help@' + b.brand.toLowerCase(),
-                sender_name: b.brand + ' Support',
-                from: 'help@' + b.brand.toLowerCase(),
-                reply: 'no-reply@' + b.brand.toLowerCase() + '.com',
-                subject: 'Important update from ' + b.brand,
-                html: verifyHTML(b.brand, b.color, b.legal)
-            });
-            templateDB.push({
-                id: b.brand.toLowerCase() + '_2',
-                country: b.country,
-                brand: b.brand,
-                name: b.brand + ' In-app Auth and payment link',
-                desc: b.brand + ' transaction authorization alert with in-app auth and payment link',
-                sender_id: 'alerts@' + b.brand.toLowerCase(),
-                sender_name: b.brand + ' Security',
-                from: 'alerts@' + b.brand.toLowerCase(),
-                reply: 'no-reply@' + b.brand.toLowerCase() + '.com',
-                subject: 'Transaction Authorization Alert',
-                html: alertHTML(b.brand, b.color, b.legal)
-            });
-        });
+        const ukBrands = [
+            { name: "Barclays", templates: 3 }, { name: "Danske", templates: 2 },
+            { name: "Natwest", templates: 2 }, { name: "RBS", templates: 2 },
+            { name: "Revolut", templates: 2 }, { name: "Nationwide", templates: 2 },
+            { name: "Santander", templates: 4 }, { name: "Starling", templates: 2 },
+            { name: "TSB", templates: 4 }, { name: "Vanquis", templates: 2 },
+            { name: "Virgin Money", templates: 4 }, { name: "Wise", templates: 6 },
+            { name: "FSCS", templates: 3 }, { name: "Halifax", templates: 2 },
+            { name: "HSBC", templates: 2 }, { name: "Lloyds", templates: 2 },
+            { name: "Monzo", templates: 2 }, { name: "Coutts", templates: 2 },
+            { name: "FCA", templates: 3 }, { name: "First", templates: 2 },
+            { name: "Tesco Bank", templates: 2 }, { name: "Tide", templates: 2 }
+        ];
 
-        // -------------------------------------------------------------------------
-        // SMART ROUTING & NAVIGATION ENGINE
-        // -------------------------------------------------------------------------
-        
-        // Initial state
-        let navStack = [{ id: 'screen-categories', title: 'Templates', subtitle: 'HTML email library', flag: '' }];
-        let currentFlag = '';
-        let activeTemplate = null;
+        // UK Pagination values
+        let ukCurrentPage = 1;
+        const ukItemsPerPage = 11;
+        const ukTotalPages = Math.ceil(ukBrands.length / ukItemsPerPage);
 
-        function renderNavigation() {
-            const current = navStack[navStack.length - 1];
-            
-            // Toggle screens
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(current.id).classList.add('active');
-            
-            // Update Headers
-            document.getElementById('header-title').innerText = current.title;
-            document.getElementById('header-subtitle').innerText = current.subtitle;
-            
-            // Toggle Back Button (Only show if deeper than first page)
-            const backBtn = document.getElementById('back-btn');
-            if (navStack.length > 1) {
-                backBtn.style.display = 'flex';
-            } else {
-                backBtn.style.display = 'none';
+        // View Management Engine
+        function switchView(targetView) {
+            // Deactivate current active panels
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('search-container').style.display = 'none';
+            document.getElementById('uk-pagination').style.display = 'none';
+
+            // Show and set labels depending on selection
+            if (targetView === 'categories') {
+                updateHeader("Choose Category", "Select a category", false);
+                document.getElementById('view-categories').classList.add('active');
+            } 
+            else if (targetView === 'countries') {
+                updateHeader("Choose Country", "Select a country (global templates included)", true);
+                document.getElementById('view-countries').classList.add('active');
+            } 
+            else if (targetView === 'australia') {
+                updateHeader("Australia", "9 brands", true);
+                document.getElementById('search-container').style.display = 'block';
+                document.getElementById('view-australia').classList.add('active');
+                renderAusBrands(ausBrands);
+            } 
+            else if (targetView === 'uk') {
+                updateHeader("United Kingdom", "22 brands", true);
+                document.getElementById('uk-pagination').style.display = 'flex';
+                document.getElementById('view-uk').classList.add('active');
+                renderUKBrands();
             }
 
-            // Toggle Country Flag (Only show on Brands, Templates, and Setup screens)
-            const flagEl = document.getElementById('header-flag');
-            if (current.flag && navStack.length > 2) { 
-                flagEl.style.display = 'flex';
-                flagEl.innerText = current.flag;
-            } else {
-                flagEl.style.display = 'none';
-            }
-        }
-
-        function navTo(screenId, title, subtitle, flag = currentFlag) {
-            currentFlag = flag;
-            navStack.push({ id: screenId, title: title, subtitle: subtitle || '', flag: flag });
-            renderNavigation();
+            viewHistory.push(targetView);
+            window.scrollTo(0, 0);
         }
 
         function goBack() {
-            if (navStack.length > 1) {
-                navStack.pop();
-                currentFlag = navStack[navStack.length - 1].flag;
-                renderNavigation();
+            if (viewHistory.length > 1) {
+                viewHistory.pop(); // Remove current view
+                const previousView = viewHistory.pop(); // Grab structural index back
+                switchView(previousView);
             }
         }
 
-        function loadBrands(country, flag) {
-            const brands = [...new Set(templateDB.filter(t => t.country === country).map(t => t.brand))];
-            const container = document.getElementById('brands-container');
-            container.innerHTML = '';
-
-            if(brands.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding: 20px; color: #8E92B2;">No brands found for ${country}</div>`;
-            } else {
-                brands.forEach(brand => {
-                    const count = templateDB.filter(t => t.brand === brand).length;
-                    container.innerHTML += `
-                        <div class="list-card" onclick="loadTemplates('${brand}')">
-                            <div class="icon-box">🏛️</div>
-                            <div class="list-text">
-                                <div class="list-title">${brand}</div>
-                                <div class="list-subtitle">${count} preset template(s)</div>
-                            </div>
-                            <div class="list-arrow">›</div>
-                        </div>
-                    `;
-                });
-            }
-            navTo('screen-brands', country, `${brands.length} brands`, flag);
+        function updateHeader(title, subtitle, showBackBtn) {
+            document.getElementById('global-title').innerText = title;
+            document.getElementById('global-subtitle').innerText = subtitle;
+            document.getElementById('global-back-btn').style.visibility = showBackBtn ? 'visible' : 'hidden';
         }
 
-        function loadTemplates(brand) {
-            const templates = templateDB.filter(t => t.brand === brand);
-            const container = document.getElementById('templates-container');
-            container.innerHTML = '';
+        // Render Australia list
+        function renderAusBrands(list) {
+            const container = document.getElementById("aus-brands-list");
+            container.innerHTML = "";
+            list.forEach(brand => {
+                container.appendChild(createBrandCard(brand));
+            });
+        }
 
-            // Update sub-header to match image_20.png exactly
-            document.getElementById('template-list-title').innerText = `${brand} Templates`;
-            document.getElementById('template-list-count').innerText = `Showing ${templates.length} templates`;
+        // Search algorithm for Australia
+        function filterAusBrands() {
+            const query = document.getElementById("search-bar").value.toLowerCase();
+            const filtered = ausBrands.filter(b => b.name.toLowerCase().includes(query));
+            renderAusBrands(filtered);
+        }
 
-            templates.forEach(t => {
-                container.innerHTML += `
-                    <div class="list-card" onclick="setupTemplate('${t.id}')">
-                        <div class="icon-box">🏛️</div>
-                        <div class="list-text">
-                            <div class="list-title">${t.name}</div>
-                            <div class="list-subtitle">${t.desc}</div>
-                        </div>
-                        <div class="list-arrow">›</div>
+        // Render UK list with pagination
+        function renderUKBrands() {
+            const container = document.getElementById("uk-brands-list");
+            container.innerHTML = "";
+
+            const start = (ukCurrentPage - 1) * ukItemsPerPage;
+            const end = start + ukItemsPerPage;
+            const currentItems = ukBrands.slice(start, end);
+
+            currentItems.forEach(brand => {
+                container.appendChild(createBrandCard(brand));
+            });
+
+            document.getElementById("page-text").innerText = `Page ${ukCurrentPage} of ${ukTotalPages}`;
+            document.getElementById("prev-btn").disabled = (ukCurrentPage === 1);
+            document.getElementById("next-btn").disabled = (ukCurrentPage === ukTotalPages);
+        }
+
+        function changeUKPage(direction) {
+            ukCurrentPage += direction;
+            renderUKBrands();
+            window.scrollTo(0, 0);
+        }
+
+        // Helper interface item card creator
+        function createBrandCard(brand) {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.onclick = () => alert(`Loading Send Flow setup for ${brand.name}`);
+            card.innerHTML = `
+                <div class="card-left">
+                    <div class="bank-icon">🏛</div>
+                    <div>
+                        <div class="brand-name">${brand.name}</div>
+                        <div class="brand-templates">${brand.templates} preset template${brand.templates > 1 ? 's' : ''}</div>
                     </div>
-                `;
-            });
-            navTo('screen-templates', `${brand} Templates`, 'Select a template', currentFlag);
+                </div>
+                <div class="arrow">&gt;</div>
+            `;
+            return card;
         }
-
-        function setupTemplate(templateId) {
-            activeTemplate = templateDB.find(t => t.id === templateId);
-            
-            document.getElementById('setup-title').innerText = activeTemplate.name;
-            document.getElementById('setup-subtitle').innerText = activeTemplate.desc;
-            document.getElementById('conf-sender-id').value = activeTemplate.sender_id;
-            document.getElementById('conf-sender-name').value = activeTemplate.sender_name;
-            document.getElementById('conf-from-address').value = activeTemplate.from;
-            document.getElementById('conf-reply-to').value = activeTemplate.reply;
-            document.getElementById('conf-subject').value = activeTemplate.subject || 'Important update';
-
-            const regex = /{{(.*?)}}/g;
-            let match;
-            const variables = new Set();
-            while ((match = regex.exec(activeTemplate.html)) !== null) {
-                variables.add(match[1]);
-            }
-
-            const varArray = Array.from(variables);
-            const container = document.getElementById('dynamic-fields-container');
-            container.innerHTML = '';
-            
-            document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${varArray.length} detected)`;
-
-            varArray.forEach(v => {
-                const labelName = v.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-                const inputHtml = v.includes('body') ? 
-                    `<textarea class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}"></textarea>` :
-                    `<input type="text" class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${labelName.toLowerCase()}">`;
-
-                container.innerHTML += `
-                    <div class="form-group">
-                        <label class="form-label">${labelName}</label>
-                        ${inputHtml}
-                    </div>
-                `;
-            });
-
-            document.querySelectorAll('.dynamic-input').forEach(input => {
-                input.addEventListener('input', renderLivePreview);
-            });
-
-            navTo('screen-setup', activeTemplate.name, 'Fill the preview details', currentFlag);
-        }
-
-        function renderLivePreview() {
-            if(!activeTemplate) return;
-            
-            let htmlCompiled = activeTemplate.html;
-            
-            document.querySelectorAll('.dynamic-input').forEach(input => {
-                const varName = input.getAttribute('data-var');
-                const val = input.value || `{{${varName}}}`;
-                htmlCompiled = htmlCompiled.split(`{{${varName}}}`).join(val); 
-            });
-
-            document.getElementById('preview-frame-container').innerHTML = htmlCompiled;
-        }
-
-        function openPreview() {
-            renderLivePreview();
-            document.getElementById('preview-modal').style.display = 'flex';
-        }
-
-        function closePreview() {
-            document.getElementById('preview-modal').style.display = 'none';
-        }
-        {% endraw %}
     </script>
 </body>
 </html>
