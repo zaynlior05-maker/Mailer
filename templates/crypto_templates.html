@@ -1,3 +1,4 @@
+{% raw %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -159,7 +160,7 @@
 
         // --- Authentic HTML Email Generators (Crypto) ---
         
-        // 1. BINANCE (1:1 Replica based on image_70.png)
+        // 1. BINANCE
         const binancePanelHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; background: #ffffff; border: 1px solid #eaeaea; overflow: hidden; color: #1E2329;">
             <div style="background: #181A20; padding: 24px; text-align: center;">
@@ -457,7 +458,6 @@
             document.getElementById('conf-from-address').value = activeTemplate.from;
             document.getElementById('conf-subject').value = activeTemplate.subject;
             
-            // Extract variables
             const regex = /{{(.*?)}}/g;
             let match;
             const vars = new Set();
@@ -508,3 +508,4 @@
     </script>
 </body>
 </html>
+{% endraw %}
