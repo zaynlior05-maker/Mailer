@@ -249,24 +249,16 @@
     <div id="screen-categories" class="screen">
         <div class="list-card" style="margin-bottom: 20px; cursor: default;"><div class="icon-box" style="background:transparent; font-size:24px;">📥</div><div class="list-text"><div class="list-title" style="color:var(--text-main);">Upload a template</div><div class="list-subtitle">Active membership required</div></div><div class="list-arrow">›</div></div>
         
-        <!-- UPDATED LINKS TO NEW FILES -->
-        <div class="list-card" onclick="window.location.href='bank_templates.html'"><div class="icon-box">🏛️</div><div class="list-text"><div class="list-title">Bank</div><div class="list-subtitle">Professional banking letters</div></div><div class="list-arrow">›</div></div>
-        <div class="list-card" onclick="window.location.href='crypto_templates.html'"><div class="icon-box" style="color:#A476F0;">₿</div><div class="list-text"><div class="list-title">Crypto</div><div class="list-subtitle">Exchanges & crypto wallets</div></div><div class="list-arrow">›</div></div>
+        <!-- UPDATED LINKS TO NEW PYTHON ROUTES -->
+        <div class="list-card" onclick="window.location.href='/bank'"><div class="icon-box">🏛️</div><div class="list-text"><div class="list-title">Bank</div><div class="list-subtitle">Professional banking letters</div></div><div class="list-arrow">›</div></div>
+        <div class="list-card" onclick="window.location.href='/crypto'"><div class="icon-box" style="color:#A476F0;">₿</div><div class="list-text"><div class="list-title">Crypto</div><div class="list-subtitle">Exchanges & crypto wallets</div></div><div class="list-arrow">›</div></div>
     </div>
 
-    <!-- The original screens are preserved here to ensure zero features are lost, even if currently unused by the external links -->
-    <div id="screen-countries" class="screen">
-        <!-- Kept intact for project memory -->
-    </div>
-    <div id="screen-brands" class="screen">
-        <div id="brands-container"></div>
-    </div>
-    <div id="screen-templates" class="screen">
-        <div id="templates-container"></div>
-    </div>
-    <div id="screen-setup" class="screen">
-        <div id="dynamic-fields-container"></div>
-    </div>
+    <!-- The original screens are preserved here to ensure zero features are lost -->
+    <div id="screen-countries" class="screen"></div>
+    <div id="screen-brands" class="screen"><div id="brands-container"></div></div>
+    <div id="screen-templates" class="screen"><div id="templates-container"></div></div>
+    <div id="screen-setup" class="screen"><div id="dynamic-fields-container"></div></div>
     <div id="preview-modal">
         <div class="preview-header"><div style="font-weight: bold; font-size: 18px;">Email Preview</div><button class="preview-close" onclick="closePreview()">×</button></div>
         <div id="preview-frame-container"></div>
