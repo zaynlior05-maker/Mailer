@@ -280,7 +280,7 @@
         </div>
     </div>
 
-    <!-- Screen 3: Brands -->
+    <!-- Screen 3: Brands (Paginated) -->
     <div id="screen-brands" class="screen">
         <div id="brands-container"></div>
     </div>
@@ -366,412 +366,148 @@
         window.Telegram.WebApp.expand();
 
         const templateDB = [
+            
             // =========================================================
             // ==================== UNITED KINGDOM =====================
             // =========================================================
             
-            // 1. FCA
-            {
-                id: 'fca_1', country: 'United Kingdom', brand: 'FCA', name: 'FCA — Callback Scheduled', desc: 'Callback confirmation letter',
-                sender_id: 'appointments@fca.org.uk', sender_name: 'Financial Conduct Authority', from: 'appointments@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Callback Successfully Scheduled Confirmation',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.5; padding: 20px;">
-                        <div style="display: flex; align-items: center; margin-bottom: 40px;">
-                            <div style="color: #72243D; font-size: 42px; font-weight: bold; letter-spacing: -2px; margin-right: 15px; font-family: 'Trebuchet MS', sans-serif;">FCA</div>
-                            <div style="color: #72243D; font-size: 11px; font-weight: bold; line-height: 1.2; border-left: 2px solid #72243D; padding-left: 10px; font-family: 'Trebuchet MS', sans-serif;">FINANCIAL<br>CONDUCT<br>AUTHORITY</div>
-                        </div>
-                        <p>{{date}}</p>
-                        <p style="margin-bottom: 25px;">Dear {{customer_name}},</p>
-                        <h3 style="color: #72243D; margin-bottom: 15px; font-size: 16px;">Callback Successfully Scheduled Confirmation</h3>
-                        <hr style="border: 0; border-top: 1px solid #eaeaea; margin-bottom: 25px;">
-                        <p>Your callback with the Financial Conduct Authority has been arranged. The call may come from a withheld or private number.</p>
-                        <p>Thank you for arranging a callback with the Financial Conduct Authority. We are writing to confirm that your appointment has been successfully scheduled.</p>
-                        <p style="margin-top: 25px;"><strong>The assigned representative is authorised to:</strong></p>
-                        <ul style="margin-bottom: 25px; padding-left: 20px;">
-                            <li style="margin-bottom: 8px;">Assist you with your scheduled callback</li>
-                            <li style="margin-bottom: 8px;">Answer queries related to your callback</li>
-                        </ul>
-                        <p>Please keep your reference number ready for your call.</p>
-                        <p style="margin-top: 30px;">Yours faithfully,<br><br>Financial Conduct Authority</p>
-                        <div style="background-color: #f2f3f5; padding: 30px; text-align: center; font-size: 11px; color: #666; margin-top: 50px;">
-                            <p style="line-height: 1.5; margin-bottom: 20px;">Financial Conduct Authority<br>12 Endeavour Square<br>London E20 1JN</p>
-                            <p style="margin-bottom: 0;">© {{current_year}} Financial Conduct Authority. All rights reserved.</p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'fca_2', country: 'United Kingdom', brand: 'FCA', name: 'FCA — Regulatory Update', desc: 'Custom regulatory notice',
-                sender_id: 'notices@fca.org.uk', sender_name: 'Financial Conduct Authority', from: 'notices@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Important Regulatory Update',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; padding: 20px;">
-                        <div style="display: flex; align-items: center; margin-bottom: 40px;">
-                            <div style="color: #72243D; font-size: 42px; font-weight: bold; letter-spacing: -2px; margin-right: 15px; font-family: 'Trebuchet MS', sans-serif;">FCA</div>
-                            <div style="color: #72243D; font-size: 11px; font-weight: bold; line-height: 1.2; border-left: 2px solid #72243D; padding-left: 10px; font-family: 'Trebuchet MS', sans-serif;">FINANCIAL<br>CONDUCT<br>AUTHORITY</div>
-                        </div>
-                        <p>Dear {{customer_name}},</p>
-                        <h3 style="color: #72243D;">Important Information Regarding Your Profile</h3>
-                        <p style="line-height: 1.6;">{{body_text}}</p>
-                        <p style="margin-top: 30px;">Yours faithfully,<br><br>Financial Conduct Authority</p>
-                    </div>
-                `
-            },
+            // FCA
+            { id: 'fca_1', country: 'United Kingdom', brand: 'FCA', name: 'FCA — Callback Scheduled', desc: 'Callback confirmation letter', sender_id: 'appointments@fca.org.uk', sender_name: 'Financial Conduct Authority', from: 'appointments@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Callback Successfully Scheduled Confirmation', html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;"><div style="display:flex;align-items:center;margin-bottom:40px;"><div style="color:#72243D;font-size:42px;font-weight:bold;margin-right:15px;">FCA</div><div style="color:#72243D;font-size:11px;font-weight:bold;border-left:2px solid #72243D;padding-left:10px;">FINANCIAL<br>CONDUCT<br>AUTHORITY</div></div><p>{{date}}</p><p>Dear {{customer_name}},</p><h3 style="color:#72243D;">Callback Scheduled Confirmation</h3><hr style="border-top:1px solid #eaeaea;margin-bottom:25px;"><p>Your callback with the Financial Conduct Authority has been arranged.</p><ul style="padding-left:20px;"><li>Assist you with your scheduled callback</li><li>Answer queries related to your callback</li></ul><p>Yours faithfully,<br><br>Financial Conduct Authority</p></div>` },
+            { id: 'fca_2', country: 'United Kingdom', brand: 'FCA', name: 'FCA — Regulatory Update', desc: 'Custom regulatory notice', sender_id: 'notices@fca.org.uk', sender_name: 'Financial Conduct Authority', from: 'notices@fca.org.uk', reply: 'no-reply@fca.org.uk', subject: 'Important Regulatory Update', html: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;"><div style="display:flex;align-items:center;margin-bottom:40px;"><div style="color:#72243D;font-size:42px;font-weight:bold;margin-right:15px;">FCA</div><div style="color:#72243D;font-size:11px;font-weight:bold;border-left:2px solid #72243D;padding-left:10px;">FINANCIAL<br>CONDUCT<br>AUTHORITY</div></div><p>Dear {{customer_name}},</p><h3 style="color:#72243D;">Important Information</h3><p>{{body_text}}</p><p>Yours faithfully,<br><br>Financial Conduct Authority</p></div>` },
 
-            // 2. BARCLAYS UK
-            {
-                id: 'barc_uk_1', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays — Security Notice', desc: 'UK Security verification layout',
-                sender_id: 'security@barclays.co.uk', sender_name: 'Barclays Bank UK', from: 'security@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Security Notification: Verification Needed',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
-                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px; letter-spacing: 2px;">BARCLAYS</div>
-                        <div style="padding: 20px; border: 1px solid #eaeaea; border-top: none;">
-                            <h3>Security Review Required</h3>
-                            <p>Dear {{recipient_name}},</p>
-                            <p>We need you to verify a recent change on your Online Banking login credentials. If you did not make this modification, action is required immediately.</p>
-                            <div style="background: #f4f6f8; padding: 15px; border-radius: 6px; margin: 15px 0;">
-                                <strong>Temporary Reference:</strong> {{reference_id}}<br>
-                                <strong>Date Registered:</strong> {{date}}
-                            </div>
-                            <p>Please log on to your application or call support to review this entry.</p>
-                            <p>Kind regards,<br><strong>Barclays Digital Security</strong></p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'barc_uk_2', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays — Statement Updated', desc: 'Standard monthly billing info',
-                sender_id: 'statements@barclays.co.uk', sender_name: 'Barclays Bank UK', from: 'statements@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Your Monthly Statement is Available',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
-                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px; letter-spacing: 2px;">BARCLAYS</div>
-                        <div style="padding: 20px; border: 1px solid #eaeaea; border-top: none;">
-                            <p>Dear {{recipient_name}},</p>
-                            <p>Your latest digital statement for your account ending in <b>{{account_last4}}</b> is now ready to view inside your online portal.</p>
-                            <p style="line-height: 1.6;">{{body_text}}</p>
-                            <hr style="border: 0; border-top: 1px solid #eaeaea; margin: 20px 0;">
-                            <p style="text-align: center; font-size: 11px; color: #999;">Barclays Bank UK PLC. Registered in England No. 9740322.</p>
-                        </div>
-                    </div>
-                `
-            },
+            // Barclays UK
+            { id: 'barc_uk_1', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays — Security Notice', desc: 'UK Security verification layout', sender_id: 'security@barclays.co.uk', sender_name: 'Barclays Bank UK', from: 'security@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Security Notification: Verification Needed', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#333;"><div style="background-color:#00AEEF;height:60px;display:flex;align-items:center;padding-left:20px;color:white;font-weight:bold;font-size:24px;letter-spacing:2px;">BARCLAYS</div><div style="padding:20px;border:1px solid #eaeaea;border-top:none;"><h3>Security Review Required</h3><p>Dear {{recipient_name}},</p><p>We need you to verify a recent change on your Online Banking login credentials.</p><div style="background:#f4f6f8;padding:15px;border-radius:6px;margin:15px 0;"><strong>Temporary Reference:</strong> {{reference_id}}<br><strong>Date Registered:</strong> {{date}}</div><p>Kind regards,<br><strong>Barclays Digital Security</strong></p></div></div>` },
+            { id: 'barc_uk_2', country: 'United Kingdom', brand: 'Barclays', name: 'Barclays — Statement Updated', desc: 'Standard monthly billing info', sender_id: 'statements@barclays.co.uk', sender_name: 'Barclays Bank UK', from: 'statements@barclays.co.uk', reply: 'no-reply@barclays.co.uk', subject: 'Your Monthly Statement is Available', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#333;"><div style="background-color:#00AEEF;height:60px;display:flex;align-items:center;padding-left:20px;color:white;font-weight:bold;font-size:24px;letter-spacing:2px;">BARCLAYS</div><div style="padding:20px;border:1px solid #eaeaea;border-top:none;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
 
-            // 3. DANSKE
-            {
-                id: 'danske_1', country: 'United Kingdom', brand: 'Danske', name: 'Danske — Device Registration', desc: 'New system verification notice',
-                sender_id: 'security@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'security@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Security Notice: New Mobile Device Detected',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002F6C;">
-                        <div style="background-color: #002F6C; padding: 20px; color: white; font-weight: bold; font-size: 24px;">Danske Bank</div>
-                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
-                            <h3>New Device Login Notification</h3>
-                            <p>Hello {{recipient_name}},</p>
-                            <p>A new electronic identity card profile or application device has linked to your ID number ending in <b>{{id_ending}}</b>.</p>
-                            <table style="width: 100%; font-size: 14px; margin: 15px 0; background: #f9f9f9; padding: 12px; border-radius: 4px;">
-                                <tr><td><strong>Device Type:</strong></td><td>{{device_name}}</td></tr>
-                                <tr><td><strong>Location/IP:</strong></td><td>{{location}}</td></tr>
-                            </table>
-                            <p>If this log was not performed by you, contact our customer helpdesk immediately to prevent unauthorized activity.</p>
-                            <p>Sincerely,<br><strong>Danske Bank Security Operations</strong></p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'danske_2', country: 'United Kingdom', brand: 'Danske', name: 'Danske — Account Alert', desc: 'Custom parameter update alert',
-                sender_id: 'info@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'info@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Important Information Regarding Your Account',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002F6C;">
-                        <div style="background-color: #002F6C; padding: 20px; color: white; font-weight: bold; font-size: 24px;">Danske Bank</div>
-                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
-                            <p>Dear {{recipient_name}},</p>
-                            <p style="line-height: 1.6;">{{body_text}}</p>
-                            <p>For more specific details relative to this notification, reference tracking index: <b>{{reference_number}}</b></p>
-                            <p>Regards,<br><strong>Danske Bank Support Team</strong></p>
-                        </div>
-                    </div>
-                `
-            },
+            // Danske
+            { id: 'danske_1', country: 'United Kingdom', brand: 'Danske', name: 'Danske — Device Registration', desc: 'New system verification notice', sender_id: 'security@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'security@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Security Notice: New Mobile Device Detected', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#002F6C;"><div style="background-color:#002F6C;padding:20px;color:white;font-weight:bold;font-size:24px;">Danske Bank</div><div style="padding:20px;border:1px solid #ddd;color:#333;"><h3>New Device Login</h3><p>Hello {{recipient_name}},</p><p>A new device {{device_name}} linked to your ID ending in <b>{{id_ending}}</b> from IP {{location}}.</p><p>Sincerely,<br><strong>Danske Security</strong></p></div></div>` },
+            { id: 'danske_2', country: 'United Kingdom', brand: 'Danske', name: 'Danske — Blank Notice', desc: 'Custom alert', sender_id: 'info@danskebank.co.uk', sender_name: 'Danske Bank UK', from: 'info@danskebank.co.uk', reply: 'no-reply@danskebank.co.uk', subject: 'Important Information', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#002F6C;"><div style="background-color:#002F6C;padding:20px;color:white;font-weight:bold;font-size:24px;">Danske Bank</div><div style="padding:20px;border:1px solid #ddd;color:#333;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
 
-            // 4. NATWEST
-            {
-                id: 'natwest_1', country: 'United Kingdom', brand: 'Natwest', name: 'NatWest — Outgoing Transfer Hold', desc: 'Transaction pending review',
-                sender_id: 'alerts@natwest.com', sender_name: 'NatWest Security', from: 'alerts@natwest.com', reply: 'no-reply@natwest.com', subject: 'Urgent: Outgoing Payment Placed On Hold',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #42145F;">
-                        <div style="background-color: #42145F; padding: 15px; color: white; font-weight: bold; font-size: 26px; letter-spacing: -1px;">NatWest</div>
-                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
-                            <h3 style="color: #42145F;">Transaction Pending Security Release</h3>
-                            <p>Dear {{recipient_name}},</p>
-                            <p>An outgoing transaction from your card/profile has been temporarily suspended by our automated verification system.</p>
-                            <div style="background-color: #fdf8e2; border-left: 4px solid #42145F; padding: 12px; margin: 15px 0;">
-                                <strong>Destination Payee:</strong> {{payee_name}}<br>
-                                <strong>Transfer Value:</strong> {{amount}}<br>
-                                <strong>Hold Reference:</strong> {{hold_ref}}
-                            </div>
-                            <p>Please authorize this item immediately via your application dashboard or visit an official branch office to confirm authorization rules.</p>
-                            <p>Sincerely,<br><strong>NatWest Security Team</strong></p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'natwest_2', country: 'United Kingdom', brand: 'Natwest', name: 'NatWest — Custom Update', desc: 'Standard structural notice',
-                sender_id: 'info@natwest.com', sender_name: 'NatWest Services', from: 'info@natwest.com', reply: 'no-reply@natwest.com', subject: 'Account Security Review Update',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #42145F;">
-                        <div style="background-color: #42145F; padding: 15px; color: white; font-weight: bold; font-size: 26px; letter-spacing: -1px;">NatWest</div>
-                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
-                            <p>Dear {{recipient_name}},</p>
-                            <p style="line-height: 1.6;">{{body_text}}</p>
-                            <p>Thank you for choosing NatWest as your financial partner.</p>
-                            <p style="font-size: 11px; color: #999; margin-top: 30px;">National Westminster Bank PLC. Registered in England and Wales No. 929027.</p>
-                        </div>
-                    </div>
-                `
-            },
+            // Natwest
+            { id: 'natwest_1', country: 'United Kingdom', brand: 'Natwest', name: 'NatWest — Transfer Hold', desc: 'Transaction pending review', sender_id: 'alerts@natwest.com', sender_name: 'NatWest Security', from: 'alerts@natwest.com', reply: 'no-reply@natwest.com', subject: 'Urgent: Payment On Hold', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#42145F;"><div style="background-color:#42145F;padding:15px;color:white;font-weight:bold;font-size:26px;">NatWest</div><div style="padding:20px;border:1px solid #ddd;color:#333;"><h3 style="color:#42145F;">Transaction Hold</h3><p>Dear {{recipient_name}},</p><p>Transfer to {{payee_name}} for {{amount}} is on hold. Ref: {{hold_ref}}.</p></div></div>` },
+            { id: 'natwest_2', country: 'United Kingdom', brand: 'Natwest', name: 'NatWest — Custom Update', desc: 'Standard structural notice', sender_id: 'info@natwest.com', sender_name: 'NatWest Services', from: 'info@natwest.com', reply: 'no-reply@natwest.com', subject: 'Account Update', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#42145F;"><div style="background-color:#42145F;padding:15px;color:white;font-weight:bold;font-size:26px;">NatWest</div><div style="padding:20px;border:1px solid #ddd;color:#333;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
 
-            // 5. RBS
-            {
-                id: 'rbs_1', country: 'United Kingdom', brand: 'RBS', name: 'RBS — Irregular Login Warning', desc: 'Profile access tracking setup',
-                sender_id: 'security@rbs.co.uk', sender_name: 'Royal Bank of Scotland', from: 'security@rbs.co.uk', reply: 'no-reply@rbs.co.uk', subject: 'Alert: Unrecognized Device Access Detected',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002C53;">
-                        <div style="background-color: #002C53; padding: 20px; color: white; font-weight: bold; font-size: 22px;">The Royal Bank of Scotland</div>
-                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
-                            <h3>Access Warning Notification</h3>
-                            <p>Dear {{recipient_name}},</p>
-                            <p>We monitored a digital session initiating from outside your routine location parameters for account ending in <b>{{account_suffix}}</b>.</p>
-                            <div style="background: #f7f7f7; padding: 12px; margin: 15px 0; border-radius: 4px; font-size: 14px;">
-                                <strong>Operating Platform:</strong> {{platform}}<br>
-                                <strong>Network Location:</strong> {{location_ip}}
-                            </div>
-                            <p>If you do not recognize this verification prompt, reset your personal PIN code immediately via our official channels.</p>
-                            <p>Regards,<br><strong>RBS Customer Protection Group</strong></p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'rbs_2', country: 'United Kingdom', brand: 'RBS', name: 'RBS — General Notice', desc: 'Standard communications form',
-                sender_id: 'notices@rbs.co.uk', sender_name: 'Royal Bank of Scotland', from: 'notices@rbs.co.uk', reply: 'no-reply@rbs.co.uk', subject: 'Important Notice from Royal Bank of Scotland',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #002C53;">
-                        <div style="background-color: #002C53; padding: 20px; color: white; font-weight: bold; font-size: 22px;">The Royal Bank of Scotland</div>
-                        <div style="padding: 20px; border: 1px solid #ddd; color: #333;">
-                            <p>Dear {{recipient_name}},</p>
-                            <p style="line-height: 1.6;">{{body_text}}</p>
-                            <p>Should you require further clarity, reach out to our team citing document tracker: <b>{{doc_id}}</b></p>
-                        </div>
-                    </div>
-                `
-            },
+            // RBS
+            { id: 'rbs_1', country: 'United Kingdom', brand: 'RBS', name: 'RBS — Irregular Login', desc: 'Profile access tracking', sender_id: 'security@rbs.co.uk', sender_name: 'Royal Bank of Scotland', from: 'security@rbs.co.uk', reply: 'no-reply@rbs.co.uk', subject: 'Alert: Unrecognized Access', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#002C53;"><div style="background-color:#002C53;padding:20px;color:white;font-weight:bold;font-size:22px;">The Royal Bank of Scotland</div><div style="padding:20px;border:1px solid #ddd;color:#333;"><p>Dear {{recipient_name}},</p><p>Login detected on {{platform}} from {{location_ip}} for account {{account_suffix}}.</p></div></div>` },
+            { id: 'rbs_2', country: 'United Kingdom', brand: 'RBS', name: 'RBS — Blank Notice', desc: 'Standard communications', sender_id: 'notices@rbs.co.uk', sender_name: 'Royal Bank of Scotland', from: 'notices@rbs.co.uk', reply: 'no-reply@rbs.co.uk', subject: 'Important Notice', html: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;color:#002C53;"><div style="background-color:#002C53;padding:20px;color:white;font-weight:bold;font-size:22px;">The Royal Bank of Scotland</div><div style="padding:20px;border:1px solid #ddd;color:#333;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
 
-            // 6. REVOLUT
-            {
-                id: 'rev_1', country: 'United Kingdom', brand: 'Revolut', name: 'Revolut — Operation Confirmation', desc: 'High-value crypto/asset auth',
-                sender_id: 'no-reply@revolut.com', sender_name: 'Revolut Security', from: 'no-reply@revolut.com', reply: 'no-reply@revolut.com', subject: 'Action Needed: Approve Transaction Authorization Request',
-                html: `
-                    <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 480px; margin: 0 auto; color: #000000; padding: 15px;">
-                        <div style="margin-bottom: 30px; font-weight: 800; font-size: 26px; letter-spacing: -0.5px;">R<span style="font-weight:300;">evolut</span></div>
-                        <h2>Confirm Payment Request</h2>
-                        <p>Hi {{recipient_name}},</p>
-                        <p>A request to transfer funds from your digital wallet configuration has been staged for processing clearance.</p>
-                        <div style="background-color: #f4f4f6; border-radius: 12px; padding: 20px; margin: 24px 0;">
-                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">TRANSACTION AMOUNT</div>
-                            <div style="font-size: 28px; font-weight: bold; margin-bottom: 16px;">{{amount}}</div>
-                            <div style="font-size: 13px; color: #666; margin-bottom: 4px;">TARGET MERCHANT / BENEFICIARY</div>
-                            <div style="font-size: 16px; font-weight: bold;">{{merchant_payee}}</div>
-                        </div>
-                        <p>If this parameter was not initiated by your personal application device, reject the configuration protocol inside your dashboard at once.</p>
-                        <p style="color: #666; font-size: 14px; margin-top: 30px;">The Revolut Security Protocol Team</p>
-                    </div>
-                `
-            },
-            {
-                id: 'rev_2', country: 'United Kingdom', brand: 'Revolut', name: 'Revolut — Security Lock Reset', desc: 'Access token configuration prompt',
-                sender_id: 'no-reply@revolut.com', sender_name: 'Revolut Support', from: 'no-reply@revolut.com', reply: 'no-reply@revolut.com', subject: 'Your Access Passcode Configuration',
-                html: `
-                    <div style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 480px; margin: 0 auto; color: #000000; padding: 15px;">
-                        <div style="margin-bottom: 30px; font-weight: 800; font-size: 26px; letter-spacing: -0.5px;">R<span style="font-weight:300;">evolut</span></div>
-                        <h2>Verification Code Required</h2>
-                        <p>Hi {{recipient_name}},</p>
-                        <p>Use the temporary authorization variable code listed below to proceed with your authentication loop or security changes.</p>
-                        <div style="text-align: center; background: #000000; color: #ffffff; font-size: 32px; font-weight: bold; padding: 15px; border-radius: 8px; letter-spacing: 4px; margin: 25px 0;">
-                            {{one_time_passcode}}
-                        </div>
-                        <p>This entry token code remains valid for a limited timeframe. Never disclose this value string to helpdesk agents.</p>
-                        <p style="color: #666; font-size: 13px; margin-top: 40px;">© 2026 Revolut Ltd. All rights reserved.</p>
-                    </div>
-                `
-            },
+            // Revolut
+            { id: 'rev_1', country: 'United Kingdom', brand: 'Revolut', name: 'Revolut — Operation Confirmation', desc: 'High-value auth', sender_id: 'no-reply@revolut.com', sender_name: 'Revolut Security', from: 'no-reply@revolut.com', reply: 'no-reply@revolut.com', subject: 'Action Needed: Approve Transaction', html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;color:#000;padding:15px;"><div style="font-weight:800;font-size:26px;">R<span style="font-weight:300;">evolut</span></div><h2>Confirm Payment</h2><p>Hi {{recipient_name}},</p><div style="background-color:#f4f4f6;border-radius:12px;padding:20px;">Amount: <b>{{amount}}</b><br>To: <b>{{merchant_payee}}</b></div></div>` },
+            { id: 'rev_2', country: 'United Kingdom', brand: 'Revolut', name: 'Revolut — Security Lock Reset', desc: 'Access token prompt', sender_id: 'no-reply@revolut.com', sender_name: 'Revolut Support', from: 'no-reply@revolut.com', reply: 'no-reply@revolut.com', subject: 'Your Access Passcode', html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;color:#000;padding:15px;"><div style="font-weight:800;font-size:26px;">R<span style="font-weight:300;">evolut</span></div><h2>Verification Code</h2><p>Hi {{recipient_name}},</p><div style="background:#000;color:#fff;font-size:32px;font-weight:bold;padding:15px;text-align:center;border-radius:8px;letter-spacing:4px;">{{one_time_passcode}}</div></div>` },
+
+            // Coutts
+            { id: 'coutts_1', country: 'United Kingdom', brand: 'Coutts', name: 'Coutts — Security Alert', desc: 'High Net-worth Security', sender_id: 'security@coutts.com', sender_name: 'Coutts & Co', from: 'security@coutts.com', reply: 'no-reply@coutts.com', subject: 'Security Notification', html: `<div style="font-family:Georgia,serif;max-width:500px;margin:0 auto;color:#333;"><div style="background:#00204A;padding:25px;color:#fff;font-size:32px;">Coutts</div><div style="padding:20px;border:1px solid #eee;"><p>Dear {{recipient_name}},</p><p>We write to inform you of a recent security event regarding your profile {{account_ending}}.</p><p>Ref: {{reference_number}}.</p><p>Yours sincerely,<br>Coutts Security</p></div></div>` },
+            { id: 'coutts_2', country: 'United Kingdom', brand: 'Coutts', name: 'Coutts — Blank Notice', desc: 'Formal client communication', sender_id: 'clients@coutts.com', sender_name: 'Coutts & Co', from: 'clients@coutts.com', reply: 'no-reply@coutts.com', subject: 'Important Client Update', html: `<div style="font-family:Georgia,serif;max-width:500px;margin:0 auto;color:#333;"><div style="background:#00204A;padding:25px;color:#fff;font-size:32px;">Coutts</div><div style="padding:20px;border:1px solid #eee;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p><p>Yours sincerely,<br>Coutts & Co.</p></div></div>` },
+
+            // First Direct
+            { id: 'first_1', country: 'United Kingdom', brand: 'First', name: 'First Direct — Fraud Check', desc: 'Standard fraud warning', sender_id: 'fraud@firstdirect.com', sender_name: 'first direct', from: 'fraud@firstdirect.com', reply: 'no-reply@firstdirect.com', subject: 'Suspicious Activity Detected', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#000;"><div style="background:#000;padding:20px;color:#fff;font-weight:bold;font-size:24px;">first direct</div><div style="padding:20px;border:1px solid #000;"><h2 style="margin-top:0;">Fraud Warning</h2><p>Hi {{recipient_name}},</p><p>We blocked a payment to {{merchant}} for {{amount}}.</p></div></div>` },
+            { id: 'first_2', country: 'United Kingdom', brand: 'First', name: 'First Direct — Blank Text', desc: 'Custom message', sender_id: 'hello@firstdirect.com', sender_name: 'first direct', from: 'hello@firstdirect.com', reply: 'no-reply@firstdirect.com', subject: 'Message from first direct', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#000;"><div style="background:#000;padding:20px;color:#fff;font-weight:bold;font-size:24px;">first direct</div><div style="padding:20px;border:1px solid #000;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Tesco Bank
+            { id: 'tesco_1', country: 'United Kingdom', brand: 'Tesco Bank', name: 'Tesco Bank — Statement', desc: 'Monthly statement alert', sender_id: 'statements@tescobank.com', sender_name: 'Tesco Bank', from: 'statements@tescobank.com', reply: 'no-reply@tescobank.com', subject: 'Your Statement is Ready', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#00539F;padding:20px;color:#fff;font-weight:bold;font-size:24px;">TESCO <span style="color:#ED1C24;">Bank</span></div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>Your statement for account {{account_last4}} is ready.</p><p>Payment Due: <b>{{due_date}}</b></p></div></div>` },
+            { id: 'tesco_2', country: 'United Kingdom', brand: 'Tesco Bank', name: 'Tesco Bank — Blank Text', desc: 'Custom alert', sender_id: 'info@tescobank.com', sender_name: 'Tesco Bank', from: 'info@tescobank.com', reply: 'no-reply@tescobank.com', subject: 'Tesco Bank Update', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#00539F;padding:20px;color:#fff;font-weight:bold;font-size:24px;">TESCO <span style="color:#ED1C24;">Bank</span></div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Tide
+            { id: 'tide_1', country: 'United Kingdom', brand: 'Tide', name: 'Tide — Business Security', desc: 'Business account lock', sender_id: 'security@tide.co', sender_name: 'Tide Security', from: 'security@tide.co', reply: 'no-reply@tide.co', subject: 'Business Account Locked', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#001A3B;padding:20px;color:#fff;font-weight:bold;font-size:28px;">tide</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>Your business account {{business_name}} has been temporarily locked due to irregular activity.</p><p>Ref: {{case_id}}</p></div></div>` },
+            { id: 'tide_2', country: 'United Kingdom', brand: 'Tide', name: 'Tide — Blank Notice', desc: 'Standard business notice', sender_id: 'hello@tide.co', sender_name: 'Tide', from: 'hello@tide.co', reply: 'no-reply@tide.co', subject: 'Tide Business Update', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#001A3B;padding:20px;color:#fff;font-weight:bold;font-size:28px;">tide</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Nationwide
+            { id: 'nw_1', country: 'United Kingdom', brand: 'Nationwide', name: 'Nationwide — Fraud Alert', desc: 'Standard fraud warning', sender_id: 'fraud@nationwide.co.uk', sender_name: 'Nationwide', from: 'fraud@nationwide.co.uk', reply: 'no-reply@nationwide.co.uk', subject: 'Fraud Prevention Alert', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#003A70;padding:20px;color:#fff;font-weight:bold;font-size:24px;">Nationwide <span style="color:#F52828;">O</span></div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>We prevented a transaction of {{amount}} at {{merchant}}.</p></div></div>` },
+            { id: 'nw_2', country: 'United Kingdom', brand: 'Nationwide', name: 'Nationwide — Blank Text', desc: 'Custom layout', sender_id: 'info@nationwide.co.uk', sender_name: 'Nationwide', from: 'info@nationwide.co.uk', reply: 'no-reply@nationwide.co.uk', subject: 'Nationwide Update', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#003A70;padding:20px;color:#fff;font-weight:bold;font-size:24px;">Nationwide <span style="color:#F52828;">O</span></div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Santander
+            { id: 'san_1', country: 'United Kingdom', brand: 'Santander', name: 'Santander — OTP Code', desc: 'Verification token', sender_id: 'security@santander.co.uk', sender_name: 'Santander UK', from: 'security@santander.co.uk', reply: 'no-reply@santander.co.uk', subject: 'Your One Time Passcode', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#EC0000;padding:20px;color:#fff;font-weight:bold;font-size:28px;">Santander</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>Your OTP code is: <b style="font-size:20px;">{{otp_code}}</b></p></div></div>` },
+            { id: 'san_2', country: 'United Kingdom', brand: 'Santander', name: 'Santander — Blank Notice', desc: 'Custom layout', sender_id: 'info@santander.co.uk', sender_name: 'Santander UK', from: 'info@santander.co.uk', reply: 'no-reply@santander.co.uk', subject: 'Santander Notification', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#EC0000;padding:20px;color:#fff;font-weight:bold;font-size:28px;">Santander</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Starling
+            { id: 'star_1', country: 'United Kingdom', brand: 'Starling', name: 'Starling — App Pairing', desc: 'New device alert', sender_id: 'security@starlingbank.com', sender_name: 'Starling Bank', from: 'security@starlingbank.com', reply: 'no-reply@starlingbank.com', subject: 'New Device Paired', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#21CE99;padding:20px;color:#000;font-weight:bold;font-size:28px;">Starling Bank</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>A new device ({{device}}) was paired with your Starling account.</p></div></div>` },
+            { id: 'star_2', country: 'United Kingdom', brand: 'Starling', name: 'Starling — Blank Text', desc: 'Custom text', sender_id: 'hello@starlingbank.com', sender_name: 'Starling Bank', from: 'hello@starlingbank.com', reply: 'no-reply@starlingbank.com', subject: 'Message from Starling', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#21CE99;padding:20px;color:#000;font-weight:bold;font-size:28px;">Starling Bank</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // TSB
+            { id: 'tsb_1', country: 'United Kingdom', brand: 'TSB', name: 'TSB — Fraud Alert', desc: 'Urgent fraud block', sender_id: 'fraud@tsb.co.uk', sender_name: 'TSB Bank', from: 'fraud@tsb.co.uk', reply: 'no-reply@tsb.co.uk', subject: 'Urgent: Fraud Prevention Block', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#001C53;padding:20px;color:#fff;font-weight:bold;font-size:32px;">TSB</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>We blocked a suspicious payment of {{amount}}.</p></div></div>` },
+            { id: 'tsb_2', country: 'United Kingdom', brand: 'TSB', name: 'TSB — Blank Notice', desc: 'General Notice', sender_id: 'info@tsb.co.uk', sender_name: 'TSB Bank', from: 'info@tsb.co.uk', reply: 'no-reply@tsb.co.uk', subject: 'Important Account Info', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#001C53;padding:20px;color:#fff;font-weight:bold;font-size:32px;">TSB</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Vanquis
+            { id: 'vanq_1', country: 'United Kingdom', brand: 'Vanquis', name: 'Vanquis — Credit Alert', desc: 'Credit limit or lock alert', sender_id: 'security@vanquis.co.uk', sender_name: 'Vanquis Bank', from: 'security@vanquis.co.uk', reply: 'no-reply@vanquis.co.uk', subject: 'Credit Card Security Alert', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#004B87;padding:20px;color:#fff;font-weight:bold;font-size:28px;">VANQUIS</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>Your card ending in {{card_last4}} has a security block applied.</p></div></div>` },
+            { id: 'vanq_2', country: 'United Kingdom', brand: 'Vanquis', name: 'Vanquis — Blank Text', desc: 'Custom body', sender_id: 'info@vanquis.co.uk', sender_name: 'Vanquis Bank', from: 'info@vanquis.co.uk', reply: 'no-reply@vanquis.co.uk', subject: 'Vanquis Update', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#004B87;padding:20px;color:#fff;font-weight:bold;font-size:28px;">VANQUIS</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Virgin Money
+            { id: 'virg_1', country: 'United Kingdom', brand: 'Virgin Money', name: 'Virgin Money — Security', desc: 'Login block alert', sender_id: 'security@virginmoney.com', sender_name: 'Virgin Money', from: 'security@virginmoney.com', reply: 'no-reply@virginmoney.com', subject: 'Action Required: Security Alert', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#E10A14;padding:20px;color:#fff;font-weight:bold;font-size:28px;">Virgin Money</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>Unusual login attempt from {{location}}.</p></div></div>` },
+            { id: 'virg_2', country: 'United Kingdom', brand: 'Virgin Money', name: 'Virgin Money — Blank Notice', desc: 'Standard Notice', sender_id: 'info@virginmoney.com', sender_name: 'Virgin Money', from: 'info@virginmoney.com', reply: 'no-reply@virginmoney.com', subject: 'Update from Virgin Money', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#E10A14;padding:20px;color:#fff;font-weight:bold;font-size:28px;">Virgin Money</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Wise
+            { id: 'wise_1', country: 'United Kingdom', brand: 'Wise', name: 'Wise — Transfer Suspended', desc: 'Money transfer block', sender_id: 'security@wise.com', sender_name: 'Wise Security', from: 'security@wise.com', reply: 'no-reply@wise.com', subject: 'Transfer Paused', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#00B9FF;padding:20px;color:#fff;font-weight:bold;font-size:28px;">Wise</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>Your transfer of {{amount}} is paused pending a security check.</p></div></div>` },
+            { id: 'wise_2', country: 'United Kingdom', brand: 'Wise', name: 'Wise — Blank Text', desc: 'Custom alert', sender_id: 'hello@wise.com', sender_name: 'Wise', from: 'hello@wise.com', reply: 'no-reply@wise.com', subject: 'Update from Wise', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#00B9FF;padding:20px;color:#fff;font-weight:bold;font-size:28px;">Wise</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // FSCS
+            { id: 'fscs_1', country: 'United Kingdom', brand: 'FSCS', name: 'FSCS — Claim Update', desc: 'Protection claim alert', sender_id: 'claims@fscs.org.uk', sender_name: 'FSCS', from: 'claims@fscs.org.uk', reply: 'no-reply@fscs.org.uk', subject: 'Claim Status Update', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#101C66;padding:20px;color:#fff;font-weight:bold;font-size:32px;">FSCS</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>Status update on claim: {{claim_id}}.</p></div></div>` },
+            { id: 'fscs_2', country: 'United Kingdom', brand: 'FSCS', name: 'FSCS — Blank Notice', desc: 'Formal Notice', sender_id: 'info@fscs.org.uk', sender_name: 'FSCS', from: 'info@fscs.org.uk', reply: 'no-reply@fscs.org.uk', subject: 'Important FSCS Notice', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#101C66;padding:20px;color:#fff;font-weight:bold;font-size:32px;">FSCS</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Halifax
+            { id: 'hali_1', country: 'United Kingdom', brand: 'Halifax', name: 'Halifax — Fraud Alert', desc: 'Standard security warning', sender_id: 'security@halifax.co.uk', sender_name: 'Halifax', from: 'security@halifax.co.uk', reply: 'no-reply@halifax.co.uk', subject: 'Security Alert', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#004791;padding:20px;color:#fff;font-weight:bold;font-size:28px;">HALIFAX</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>We detected unusual activity. Reference: {{reference_code}}.</p></div></div>` },
+            { id: 'hali_2', country: 'United Kingdom', brand: 'Halifax', name: 'Halifax — Blank Text', desc: 'Custom body', sender_id: 'info@halifax.co.uk', sender_name: 'Halifax', from: 'info@halifax.co.uk', reply: 'no-reply@halifax.co.uk', subject: 'Halifax Update', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#004791;padding:20px;color:#fff;font-weight:bold;font-size:28px;">HALIFAX</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // HSBC
+            { id: 'hsbc_1', country: 'United Kingdom', brand: 'HSBC', name: 'HSBC — Payment Block', desc: 'Transaction block notice', sender_id: 'security@hsbc.co.uk', sender_name: 'HSBC UK', from: 'security@hsbc.co.uk', reply: 'no-reply@hsbc.co.uk', subject: 'Payment Suspended', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#DB0011;padding:20px;color:#fff;font-weight:bold;font-size:28px;">HSBC</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>Payment of {{amount}} is blocked for review.</p></div></div>` },
+            { id: 'hsbc_2', country: 'United Kingdom', brand: 'HSBC', name: 'HSBC — Blank Text', desc: 'Standard Notice', sender_id: 'info@hsbc.co.uk', sender_name: 'HSBC UK', from: 'info@hsbc.co.uk', reply: 'no-reply@hsbc.co.uk', subject: 'Account Notification', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#DB0011;padding:20px;color:#fff;font-weight:bold;font-size:28px;">HSBC</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Lloyds
+            { id: 'lloyds_1', country: 'United Kingdom', brand: 'Lloyds', name: 'Lloyds — Verification', desc: 'Account verification required', sender_id: 'security@lloydsbank.co.uk', sender_name: 'Lloyds Bank', from: 'security@lloydsbank.co.uk', reply: 'no-reply@lloydsbank.co.uk', subject: 'Action Required: Verification', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#006533;padding:20px;color:#fff;font-weight:bold;font-size:28px;">LLOYDS BANK</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>Verify your details by {{deadline}}.</p></div></div>` },
+            { id: 'lloyds_2', country: 'United Kingdom', brand: 'Lloyds', name: 'Lloyds — Blank Notice', desc: 'General Info', sender_id: 'info@lloydsbank.co.uk', sender_name: 'Lloyds Bank', from: 'info@lloydsbank.co.uk', reply: 'no-reply@lloydsbank.co.uk', subject: 'Account Notification', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#333;"><div style="background:#006533;padding:20px;color:#fff;font-weight:bold;font-size:28px;">LLOYDS BANK</div><div style="padding:20px;border:1px solid #ddd;"><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
+            // Monzo
+            { id: 'monzo_1', country: 'United Kingdom', brand: 'Monzo', name: 'Monzo — Magic Link', desc: 'Magic login link style', sender_id: 'hello@monzo.com', sender_name: 'Monzo', from: 'hello@monzo.com', reply: 'no-reply@monzo.com', subject: 'Log in to Monzo', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#14233C;"><div style="background:#FD5A5F;padding:20px;color:#fff;font-weight:bold;font-size:28px;">monzo</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>Your login token is {{login_token}}.</p></div></div>` },
+            { id: 'monzo_2', country: 'United Kingdom', brand: 'Monzo', name: 'Monzo — Blank Text', desc: 'Custom alert', sender_id: 'help@monzo.com', sender_name: 'Monzo', from: 'help@monzo.com', reply: 'no-reply@monzo.com', subject: 'Update from Monzo', html: `<div style="font-family:Arial;max-width:500px;margin:0 auto;color:#14233C;"><div style="background:#FD5A5F;padding:20px;color:#fff;font-weight:bold;font-size:28px;">monzo</div><div style="padding:20px;border:1px solid #ddd;"><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div></div>` },
+
 
             // =========================================================
             // ======================= AUSTRALIA =======================
             // =========================================================
-            // 1. ANZ
-            {
-                id: 'anz_1', country: 'Australia', brand: 'ANZ', name: 'ANZ Employee Verify', desc: 'ANZ template send setup',
-                sender_id: 'help@anz', sender_name: 'Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Important update from anz',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333; padding: 10px;">
-                        <div style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 30px;">
-                            <span style="color: #004165; font-size: 24px; font-weight: bold; letter-spacing: 1px;">ANZ</span>
-                        </div>
-                        <h3 style="color: #004165;">Employee Verification</h3>
-                        <p style="font-size: 14px; color: #333;">You are receiving this email because you have requested verification of an ANZ employee who is assisting you.</p>
-                        <div style="background-color: #f5f5f5; border-radius: 6px; padding: 16px; margin: 20px 0;">
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-size: 12px; color: #888;">Employee Name</span><br>
-                                <strong style="font-size: 15px;">{{employee_name}}</strong>
-                            </div>
-                            <div>
-                                <span style="font-size: 12px; color: #888;">Reference Number</span><br>
-                                <strong style="font-size: 15px;">{{case_id}}</strong>
-                            </div>
-                        </div>
-                        <p style="font-size: 13px; color: #333; margin-bottom: 30px; line-height: 1.5;">This confirms that the person named above is a verified employee of Australia and New Zealand Banking Group Limited and is authorised to assist you with your enquiry.</p>
-                        <div style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888;">
-                            © 2026 Australia and New Zealand Banking Group Limited ABN 11 005 357 522<br><br>
-                            This is an automated message from ANZ Security.
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'anz_2', country: 'Australia', brand: 'ANZ', name: 'Transaction Authorization Alert', desc: 'In-app Auth and payment link',
-                sender_id: 'help@anz', sender_name: 'ANZ Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Transaction Authorization Alert',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #004165;">
-                        <div style="border-bottom: 2px solid #004165; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline;">
-                            <h2 style="margin: 0; color: #004165; font-size: 28px;">ANZ</h2>
-                            <span style="font-size: 12px; color: #666;">{{date}}</span>
-                        </div>
-                        <h2 style="color: #004165;">Transaction Authorization Alert</h2>
-                        <p>Dear {{recipient_name}},</p>
-                        <p>Your advisor will shortly direct you to complete a manual cancellation or order replication to prevent the transaction on your card ending in <b>{{card_last4}}</b>.</p>
-                        <div style="background-color: #f5f7f9; border-radius: 8px; padding: 16px; margin: 20px 0;">
-                            <p style="font-size: 11px; font-weight: bold; color: #004165; margin-top:0;">TRANSACTION DETAILS</p>
-                            <div style="margin-bottom: 12px;"><strong>{{merchant}}</strong></div>
-                            <div><strong>{{transaction_reference}}</strong></div>
-                        </div>
-                        <p style="margin-top: 30px; font-size: 14px;">Kind Regards,<br><strong>ANZ Support Team</strong></p>
-                    </div>
-                `
-            },
+            
+            // ANZ
+            { id: 'anz_1', country: 'Australia', brand: 'ANZ', name: 'ANZ Employee Verify', desc: 'ANZ template send setup', sender_id: 'help@anz', sender_name: 'Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Important update from anz', html: `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333; padding: 10px;"><div style="border-bottom: 1px solid #eaeaea; padding-bottom: 10px; margin-bottom: 30px;"><span style="color: #004165; font-size: 24px; font-weight: bold; letter-spacing: 1px;">ANZ</span></div><h3 style="color: #004165;">Employee Verification</h3><p style="font-size: 14px; color: #333;">You are receiving this email because you have requested verification of an ANZ employee who is assisting you.</p><div style="background-color: #f5f5f5; border-radius: 6px; padding: 16px; margin: 20px 0;"><div style="margin-bottom: 12px;"><span style="font-size: 12px; color: #888;">Employee Name</span><br><strong style="font-size: 15px;">{{employee_name}}</strong></div><div><span style="font-size: 12px; color: #888;">Reference Number</span><br><strong style="font-size: 15px;">{{case_id}}</strong></div></div><p style="font-size: 13px; color: #333; margin-bottom: 30px; line-height: 1.5;">This confirms that the person named above is a verified employee of Australia and New Zealand Banking Group Limited and is authorised to assist you with your enquiry.</p><div style="background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #888;">© 2026 Australia and New Zealand Banking Group Limited ABN 11 005 357 522<br><br>This is an automated message from ANZ Security.</div></div>` },
+            { id: 'anz_2', country: 'Australia', brand: 'ANZ', name: 'Transaction Authorization Alert', desc: 'In-app Auth and payment link', sender_id: 'help@anz', sender_name: 'ANZ Support Team', from: 'help@anz', reply: 'no-reply@anz.com', subject: 'Transaction Authorization Alert', html: `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #004165;"><div style="border-bottom: 2px solid #004165; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline;"><h2 style="margin: 0; color: #004165; font-size: 28px;">ANZ</h2><span style="font-size: 12px; color: #666;">{{date}}</span></div><h2 style="color: #004165;">Transaction Authorization Alert</h2><p>Dear {{recipient_name}},</p><p>Your advisor will shortly direct you to complete a manual cancellation or order replication to prevent the transaction on your card ending in <b>{{card_last4}}</b>.</p><div style="background-color: #f5f7f9; border-radius: 8px; padding: 16px; margin: 20px 0;"><p style="font-size: 11px; font-weight: bold; color: #004165; margin-top:0;">TRANSACTION DETAILS</p><div style="margin-bottom: 12px;"><strong>{{merchant}}</strong></div><div><strong>{{transaction_reference}}</strong></div></div><p style="margin-top: 30px; font-size: 14px;">Kind Regards,<br><strong>ANZ Support Team</strong></p></div>` },
 
-            // 2. BARCLAYS AUS
-            {
-                id: 'barclays_1', country: 'Australia', brand: 'Barclays', name: 'Barclays — Blank Text', desc: 'Standard custom body layout',
-                sender_id: 'help@barclays', sender_name: 'Support Team', from: 'help@barclays', reply: 'no-reply@barclays.com.au', subject: 'Account Update',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
-                        <h3 style="margin-bottom: 5px;">Your account matters to us</h3>
-                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px;">BARCLAYS</div>
-                        <p>Dear {{recipient_name}},</p>
-                        <p>{{body_text}}</p>
-                    </div>
-                `
-            },
-            {
-                id: 'barclays_2', country: 'Australia', brand: 'Barclays', name: 'Barclays — Security Alert', desc: 'Urgent account notification',
-                sender_id: 'security@barclays', sender_name: 'Security Team', from: 'security@barclays', reply: 'no-reply@barclays.com.au', subject: 'Urgent Security Alert',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;">
-                        <div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px;">BARCLAYS</div>
-                        <h2>Security Alert: Action Required</h2>
-                        <p>Dear {{recipient_name}},</p>
-                        <p>We recently detected unusual activity on your account ending in <b>{{account_ending}}</b>.</p>
-                    </div>
-                `
-            },
+            // BARCLAYS AUS
+            { id: 'barclays_1', country: 'Australia', brand: 'Barclays', name: 'Barclays — Blank Text', desc: 'Standard custom body layout', sender_id: 'help@barclays', sender_name: 'Support Team', from: 'help@barclays', reply: 'no-reply@barclays.com.au', subject: 'Account Update', html: `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;"><h3 style="margin-bottom: 5px;">Your account matters to us</h3><div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px;">BARCLAYS</div><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>` },
+            { id: 'barclays_2', country: 'Australia', brand: 'Barclays', name: 'Barclays — Security Alert', desc: 'Urgent account notification', sender_id: 'security@barclays', sender_name: 'Security Team', from: 'security@barclays', reply: 'no-reply@barclays.com.au', subject: 'Urgent Security Alert', html: `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; color: #333;"><div style="background-color: #00AEEF; height: 60px; display: flex; align-items: center; padding-left: 20px; color: white; font-weight: bold; font-size: 24px;">BARCLAYS</div><h2>Security Alert: Action Required</h2><p>Dear {{recipient_name}},</p><p>We recently detected unusual activity on your account ending in <b>{{account_ending}}</b>.</p></div>` },
 
-            // 3. ASB
-            {
-                id: 'asb_1', country: 'Australia', brand: 'ASB', name: 'ASB — Account Notice', desc: 'General account information',
-                sender_id: 'info@asb', sender_name: 'ASB Info', from: 'info@asb', reply: 'no-reply@asb.co.nz', subject: 'Important Account Notice',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFB600; padding:20px; font-size:32px; font-weight:bold;">ASB</div><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div>`
-            },
-            {
-                id: 'asb_2', country: 'Australia', brand: 'ASB', name: 'ASB — Payment Confirmation', desc: 'Transaction alert layout',
-                sender_id: 'payments@asb', sender_name: 'ASB Payments', from: 'payments@asb', reply: 'no-reply@asb.co.nz', subject: 'Payment Confirmation',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFB600; padding:20px; font-size:32px; font-weight:bold;">ASB</div><p>Hi {{recipient_name}},</p><p>Processed {{amount}} to {{payee_name}}.</p></div>`
-            },
+            // ASB
+            { id: 'asb_1', country: 'Australia', brand: 'ASB', name: 'ASB — Account Notice', desc: 'General account information', sender_id: 'info@asb', sender_name: 'ASB Info', from: 'info@asb', reply: 'no-reply@asb.co.nz', subject: 'Important Account Notice', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFB600; padding:20px; font-size:32px; font-weight:bold;">ASB</div><p>Hi {{recipient_name}},</p><p>{{body_text}}</p></div>` },
+            { id: 'asb_2', country: 'Australia', brand: 'ASB', name: 'ASB — Payment Confirmation', desc: 'Transaction alert layout', sender_id: 'payments@asb', sender_name: 'ASB Payments', from: 'payments@asb', reply: 'no-reply@asb.co.nz', subject: 'Payment Confirmation', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFB600; padding:20px; font-size:32px; font-weight:bold;">ASB</div><p>Hi {{recipient_name}},</p><p>Processed {{amount}} to {{payee_name}}.</p></div>` },
 
-            // 4. BNZ
-            {
-                id: 'bnz_1', country: 'Australia', brand: 'BNZ', name: 'BNZ — Blank Text', desc: 'Customizable body email',
-                sender_id: 'support@bnz', sender_name: 'BNZ Support', from: 'support@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Message from BNZ',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#00194A;">bnz</h2><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>`
-            },
-            {
-                id: 'bnz_2', country: 'Australia', brand: 'BNZ', name: 'BNZ — Verification', desc: 'Verification alert setup',
-                sender_id: 'verify@bnz', sender_name: 'BNZ Verification', from: 'verify@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Identity Verification Required',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#00194A;">bnz</h2><p>Dear {{recipient_name}},</p><p>Please confirm profile data by {{deadline_date}}.</p></div>`
-            },
+            // BNZ
+            { id: 'bnz_1', country: 'Australia', brand: 'BNZ', name: 'BNZ — Blank Text', desc: 'Customizable body email', sender_id: 'support@bnz', sender_name: 'BNZ Support', from: 'support@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Message from BNZ', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#00194A;">bnz</h2><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>` },
+            { id: 'bnz_2', country: 'Australia', brand: 'BNZ', name: 'BNZ — Verification', desc: 'Verification alert setup', sender_id: 'verify@bnz', sender_name: 'BNZ Verification', from: 'verify@bnz', reply: 'no-reply@bnz.co.nz', subject: 'Identity Verification Required', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#00194A;">bnz</h2><p>Dear {{recipient_name}},</p><p>Please confirm profile data by {{deadline_date}}.</p></div>` },
 
-            // 5. COMMONWEALTH
-            {
-                id: 'comm_1', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Security Alert', desc: 'Security hold notification',
-                sender_id: 'security@commbank', sender_name: 'CommBank Security', from: 'security@commbank', reply: 'no-reply@commbank.com.au', subject: 'Security Hold',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFCC00; padding:20px; font-weight:bold;">Commonwealth Bank</div><p>Dear {{recipient_name}},</p><p>Hold on account profile {{case_id}}.</p></div>`
-            },
-            {
-                id: 'comm_2', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Blank Text', desc: 'Standard layout',
-                sender_id: 'help@commbank', sender_name: 'CommBank Help', from: 'help@commbank', reply: 'no-reply@commbank.com.au', subject: 'CommBank Update',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFCC00; padding:20px; font-weight:bold;">Commonwealth Bank</div><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>`
-            },
+            // COMMONWEALTH
+            { id: 'comm_1', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Security Alert', desc: 'Security hold notification', sender_id: 'security@commbank', sender_name: 'CommBank Security', from: 'security@commbank', reply: 'no-reply@commbank.com.au', subject: 'Security Hold', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFCC00; padding:20px; font-weight:bold;">Commonwealth Bank</div><p>Dear {{recipient_name}},</p><p>Hold on account profile {{case_id}}.</p></div>` },
+            { id: 'comm_2', country: 'Australia', brand: 'Commonwealth', name: 'CommBank — Blank Text', desc: 'Standard layout', sender_id: 'help@commbank', sender_name: 'CommBank Help', from: 'help@commbank', reply: 'no-reply@commbank.com.au', subject: 'CommBank Update', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FFCC00; padding:20px; font-weight:bold;">Commonwealth Bank</div><p>Dear {{recipient_name}},</p><p>{{body_text}}</p></div>` },
 
-            // 6. KIWIBANK
-            {
-                id: 'kiwi_1', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Account Notice', desc: 'Standard layout',
-                sender_id: 'help@kiwibank', sender_name: 'Kiwibank Support', from: 'help@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Account Notice',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#739600;">Kiwibank.</h2><p>{{body_text}}</p></div>`
-            },
-            {
-                id: 'kiwi_2', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Fraud Alert', desc: 'Urgent fraud notification',
-                sender_id: 'fraud@kiwibank', sender_name: 'Kiwibank Fraud Dept', from: 'fraud@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Urgent: Fraud Alert',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#739600;">Kiwibank.</h2><p>Suspicious transaction at {{merchant_name}} for {{amount}}.</p></div>`
-            },
+            // KIWIBANK
+            { id: 'kiwi_1', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Account Notice', desc: 'Standard layout', sender_id: 'help@kiwibank', sender_name: 'Kiwibank Support', from: 'help@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Account Notice', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#739600;">Kiwibank.</h2><p>{{body_text}}</p></div>` },
+            { id: 'kiwi_2', country: 'Australia', brand: 'Kiwibank', name: 'Kiwibank — Fraud Alert', desc: 'Urgent fraud notification', sender_id: 'fraud@kiwibank', sender_name: 'Kiwibank Fraud Dept', from: 'fraud@kiwibank', reply: 'no-reply@kiwibank.co.nz', subject: 'Urgent: Fraud Alert', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#739600;">Kiwibank.</h2><p>Suspicious transaction at {{merchant_name}} for {{amount}}.</p></div>` },
 
-            // 7. LATITUDE
-            {
-                id: 'lat_1', country: 'Australia', brand: 'Latitude', name: 'Latitude — Blank Text', desc: 'Custom body template',
-                sender_id: 'support@latitude', sender_name: 'Latitude Support', from: 'support@latitude', reply: 'no-reply@latitude.com.au', subject: 'Latitude Notification',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#0087A5; padding:20px; color:white;">LATITUDE</div><p>{{body_text}}</p></div>`
-            },
-            {
-                id: 'lat_2', country: 'Australia', brand: 'Latitude', name: 'Latitude — Statement Ready', desc: 'Financial statement layout',
-                sender_id: 'statements@latitude', sender_name: 'Latitude Financial', from: 'statements@latitude', reply: 'no-reply@latitude.com.au', subject: 'Your Statement is Ready',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#0087A5; padding:20px; color:white;">LATITUDE</div><p>Minimum Payment: {{minimum_payment}} due on {{due_date}}.</p></div>`
-            },
+            // LATITUDE
+            { id: 'lat_1', country: 'Australia', brand: 'Latitude', name: 'Latitude — Blank Text', desc: 'Custom body template', sender_id: 'support@latitude', sender_name: 'Latitude Support', from: 'support@latitude', reply: 'no-reply@latitude.com.au', subject: 'Latitude Notification', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#0087A5; padding:20px; color:white;">LATITUDE</div><p>{{body_text}}</p></div>` },
+            { id: 'lat_2', country: 'Australia', brand: 'Latitude', name: 'Latitude — Statement Ready', desc: 'Financial statement layout', sender_id: 'statements@latitude', sender_name: 'Latitude Financial', from: 'statements@latitude', reply: 'no-reply@latitude.com.au', subject: 'Your Statement is Ready', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#0087A5; padding:20px; color:white;">LATITUDE</div><p>Minimum Payment: {{minimum_payment}} due on {{due_date}}.</p></div>` },
 
-            // 8. NAB
-            {
-                id: 'nab_1', country: 'Australia', brand: 'NAB', name: 'NAB — Transaction Alert', desc: 'Transaction verification',
-                sender_id: 'alerts@nab', sender_name: 'NAB Alerts', from: 'alerts@nab', reply: 'no-reply@nab.com.au', subject: 'Transaction Alert',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#E31837;">nab</h2><p>Unrecognised activity for amount {{amount}} on {{date}}.</p></div>`
-            },
-            {
-                id: 'nab_2', country: 'Australia', brand: 'NAB', name: 'NAB — Blank Text', desc: 'Standard custom body layout',
-                sender_id: 'help@nab', sender_name: 'NAB Support', from: 'help@nab', reply: 'no-reply@nab.com.au', subject: 'NAB Update',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#E31837;">nab</h2><p>{{body_text}}</p></div>`
-            },
+            // NAB
+            { id: 'nab_1', country: 'Australia', brand: 'NAB', name: 'NAB — Transaction Alert', desc: 'Transaction verification', sender_id: 'alerts@nab', sender_name: 'NAB Alerts', from: 'alerts@nab', reply: 'no-reply@nab.com.au', subject: 'Transaction Alert', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#E31837;">nab</h2><p>Unrecognised activity for amount {{amount}} on {{date}}.</p></div>` },
+            { id: 'nab_2', country: 'Australia', brand: 'NAB', name: 'NAB — Blank Text', desc: 'Standard custom body layout', sender_id: 'help@nab', sender_name: 'NAB Support', from: 'help@nab', reply: 'no-reply@nab.com.au', subject: 'NAB Update', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><h2 style="color:#E31837;">nab</h2><p>{{body_text}}</p></div>` },
 
-            // 9. ING
-            {
-                id: 'ing_1', country: 'Australia', brand: 'ING', name: 'ING — Security Alert', desc: 'Urgent security message',
-                sender_id: 'security@ing', sender_name: 'ING Security', from: 'security@ing', reply: 'no-reply@ing.com.au', subject: 'Important Security Update',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FF6200; padding:15px; color:white;">ING</div><p>New device {{device_name}} near {{location}}.</p></div>`
-            },
-            {
-                id: 'ing_2', country: 'Australia', brand: 'ING', name: 'ING — Blank Text', desc: 'Customizable ING template',
-                sender_id: 'contact@ing', sender_name: 'ING Contact', from: 'contact@ing', reply: 'no-reply@ing.com.au', subject: 'Message from ING',
-                html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FF6200; padding:15px; color:white;">ING</div><p>{{body_text}}</p></div>`
-            }
+            // ING
+            { id: 'ing_1', country: 'Australia', brand: 'ING', name: 'ING — Security Alert', desc: 'Urgent security message', sender_id: 'security@ing', sender_name: 'ING Security', from: 'security@ing', reply: 'no-reply@ing.com.au', subject: 'Important Security Update', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FF6200; padding:15px; color:white;">ING</div><p>New device {{device_name}} near {{location}}.</p></div>` },
+            { id: 'ing_2', country: 'Australia', brand: 'ING', name: 'ING — Blank Text', desc: 'Customizable ING template', sender_id: 'contact@ing', sender_name: 'ING Contact', from: 'contact@ing', reply: 'no-reply@ing.com.au', subject: 'Message from ING', html: `<div style="font-family: Arial; max-width: 500px; margin: 0 auto;"><div style="background:#FF6200; padding:15px; color:white;">ING</div><p>{{body_text}}</p></div>` }
         ];
 
         let navigationStack = ['screen-categories'];
         let activeTemplate = null;
+
+        // PAGINATION VARIABLES
+        let currentCountry = '';
+        let currentBrandPage = 1;
+        const brandsPerPage = 8;
 
         function navTo(screenId, title, subtitle) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -781,7 +517,9 @@
             document.getElementById('header-subtitle').innerText = subtitle || '';
             document.getElementById('back-btn').style.display = 'block';
             
-            navigationStack.push(screenId);
+            if (navigationStack[navigationStack.length - 1] !== screenId) {
+                navigationStack.push(screenId);
+            }
         }
 
         function goBack() {
@@ -800,15 +538,29 @@
             }
         }
 
-        function loadBrands(country) {
-            const brands = [...new Set(templateDB.filter(t => t.country === country).map(t => t.brand))];
+        // ==========================================
+        // PAGINATION ENGINE
+        // ==========================================
+        function loadBrands(country, page = 1) {
+            currentCountry = country;
+            currentBrandPage = page;
+            
+            const allBrands = [...new Set(templateDB.filter(t => t.country === country).map(t => t.brand))].sort();
+            const totalPages = Math.ceil(allBrands.length / brandsPerPage);
+            
+            if (currentBrandPage < 1) currentBrandPage = 1;
+            if (currentBrandPage > totalPages) currentBrandPage = totalPages;
+
+            const startIndex = (currentBrandPage - 1) * brandsPerPage;
+            const brandsToRender = allBrands.slice(startIndex, startIndex + brandsPerPage);
+
             const container = document.getElementById('brands-container');
             container.innerHTML = '';
 
-            if(brands.length === 0) {
+            if(allBrands.length === 0) {
                 container.innerHTML = `<div style="text-align:center; padding: 20px; color: #8E92B2;">No brands found for ${country}</div>`;
             } else {
-                brands.forEach(brand => {
+                brandsToRender.forEach(brand => {
                     const count = templateDB.filter(t => t.brand === brand).length;
                     container.innerHTML += `
                         <div class="list-card" onclick="loadTemplates('${brand}')">
@@ -821,8 +573,27 @@
                         </div>
                     `;
                 });
+                
+                // Render Pagination Controls if needed
+                if (totalPages > 1) {
+                    container.innerHTML += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;">
+                            <button onclick="loadBrands('${country}', ${currentBrandPage - 1})" 
+                                class="btn-secondary" 
+                                style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === 1 ? 'hidden' : 'visible'};">Back</button>
+                                
+                            <span style="color:var(--text-main); font-size:16px;">Page ${currentBrandPage} of ${totalPages}</span>
+                            
+                            <button onclick="loadBrands('${country}', ${currentBrandPage + 1})" 
+                                class="btn-secondary" 
+                                style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === totalPages ? 'hidden' : 'visible'};">Next</button>
+                        </div>
+                    `;
+                }
             }
-            navTo('screen-brands', country, `${brands.length} brands`);
+            
+            // Adjust header to show total brands (not just the page count)
+            navTo('screen-brands', country, `${allBrands.length} brands`);
         }
 
         function loadTemplates(brand) {
