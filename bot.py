@@ -7,10 +7,13 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    # Serves our new dynamic frontend
-    return render_template('index.html')
+@app.route('/bank')
+def bank_templates():
+    return render_template('bank_templates.html')
+
+@app.route('/crypto')
+def crypto_templates():
+    return render_template('crypto_templates.html')
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     web_app_url = os.environ.get("RAILWAY_PUBLIC_DOMAIN", "")
